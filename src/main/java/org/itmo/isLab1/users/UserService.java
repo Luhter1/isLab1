@@ -1,10 +1,13 @@
 package org.itmo.isLab1.users;
 
 import lombok.RequiredArgsConstructor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.itmo.isLab1.common.errors.UserWithThisUsernameAlreadyExists;
 
@@ -31,5 +34,28 @@ public class UserService {
         user.setRole(Role.USER);
     }
     return save(user);
+    }
+
+    // Получение пользователя по имени пользователя
+    public User getByUsername(String username) {
+        return repository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+    }
+
+    // TODO: убрать
+    // Получение пользователя по имени пользователя
+    public UserDetailsService userDetailsService() {
+        return this::getByUsername;
+    }
+
+    // Получение текущего пользователя
+    public String getCurrentUsername() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    // Получение имени текущего пользователя из контекста Spring Security
+    public User getCurrentUser() {
+        var username = getCurrentUsername();
+        return getByUsername(username);
     }
 }
