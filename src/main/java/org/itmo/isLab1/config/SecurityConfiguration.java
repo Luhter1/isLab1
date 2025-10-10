@@ -77,11 +77,6 @@ public class SecurityConfiguration {
                     .requestMatchers(HttpMethod.PUT, "/api/admin-requests/**").hasRole("ADMIN"); // рассматривать запросы могут только админы
 
                 request
-                    // Доступ к данным операций импорта
-                    .requestMatchers(HttpMethod.GET, "/api/import/**").authenticated() // только авторизованные пользователи могут читать данные
-                    .requestMatchers(HttpMethod.POST, "/api/import/**").authenticated(); // только авторизованные пользователи могут создавать операции импорта
-
-                request
                     // Доступ к специальным операциям над объектами
                     .requestMatchers(HttpMethod.GET, "/api/special-operations/average-age").permitAll() // рассчитать среднее значение поля age для всех объектов
                     .requestMatchers(HttpMethod.GET, "/api/special-operations/oldest-dragon").permitAll() // вернуть один (любой) объект, значение поля age которого является максимальным
@@ -90,14 +85,14 @@ public class SecurityConfiguration {
                     .requestMatchers(HttpMethod.POST, "/api/special-operations/kill-dragon/**").permitAll(); // убить указанного дракона
 
                 crudResources.forEach(resource ->
-                request
-                    // Доступ к данным ресурса
-                    .requestMatchers(HttpMethod.GET, "/api/" + resource + "/**").permitAll() // все пользователи могут читать данные
-                    .requestMatchers(HttpMethod.POST, "/api/" + resource + "/search").permitAll() // все пользователи могут искать данные
-                    .requestMatchers(HttpMethod.POST, "/api/" + resource + "/**").authenticated() // только авторизованные могут создавать данные
-                    .requestMatchers(HttpMethod.PUT, "/api/" + resource + "/**").authenticated() // обновление доступно только авторам или администраторам
-                    .requestMatchers(HttpMethod.PATCH, "/api/" + resource + "/**").authenticated() // обновление доступно только авторам или администраторам
-                    .requestMatchers(HttpMethod.DELETE, "/api/" + resource + "/**").authenticated() // удаление доступно только авторам или администраторам
+                    request
+                        // Доступ к данным ресурса
+                        .requestMatchers(HttpMethod.GET, "/api/" + resource + "/**").permitAll() // все пользователи могут читать данные
+                        .requestMatchers(HttpMethod.POST, "/api/" + resource + "/search").permitAll() // все пользователи могут искать данные
+                        .requestMatchers(HttpMethod.POST, "/api/" + resource + "/**").authenticated() // только авторизованные могут создавать данные
+                        .requestMatchers(HttpMethod.PUT, "/api/" + resource + "/**").authenticated() // обновление доступно только авторам или администраторам
+                        .requestMatchers(HttpMethod.PATCH, "/api/" + resource + "/**").authenticated() // обновление доступно только авторам или администраторам
+                        .requestMatchers(HttpMethod.DELETE, "/api/" + resource + "/**").authenticated() // удаление доступно только авторам или администраторам
                 );
 
                 request
