@@ -42,7 +42,6 @@ public class UserService {
             .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
     }
 
-    // TODO: убрать
     // Получение пользователя по имени пользователя
     public UserDetailsService userDetailsService() {
         return this::getByUsername;
