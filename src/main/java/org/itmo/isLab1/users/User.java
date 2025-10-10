@@ -39,7 +39,7 @@ public class User implements UserDetails, BaseEntity {
 
     @JsonIgnore
     @ToString.Exclude
-    @Column(name="password_hash", nullable=false, unique=true)
+    @Column(name="password_hash", nullable=false)
     private String password;
 
     @CreationTimestamp
