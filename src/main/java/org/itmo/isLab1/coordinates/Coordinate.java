@@ -29,5 +29,5 @@ public class Coordinate extends CrudEntity {
     @NotNull
     @Max(844)
     @Column(name = "y", nullable = false)
-    private Float y;
+    private Double y;
 }

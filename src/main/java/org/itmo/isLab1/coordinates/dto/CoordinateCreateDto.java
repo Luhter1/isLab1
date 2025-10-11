@@ -11,5 +11,5 @@ public class CoordinateCreateDto {
 
     @NotNull
     @Max(844)
-    private Float y;
+    private Double y;
 }

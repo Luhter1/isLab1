@@ -9,5 +9,5 @@ import org.itmo.isLab1.common.framework.dto.CrudDto;
 public class CoordinateDto extends CrudDto {
   private int id;
   private Integer x;
-  private Float y;
+  private Double y;
 }

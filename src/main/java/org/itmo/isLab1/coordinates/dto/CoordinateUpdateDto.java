@@ -12,5 +12,5 @@ public class CoordinateUpdateDto {
 
     @NotNull
     @Max(844)
-    private JsonNullable<Float> y;
+    private JsonNullable<Double> y;
 }
