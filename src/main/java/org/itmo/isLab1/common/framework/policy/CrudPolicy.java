@@ -1,0 +1,44 @@
+package org.itmo.isLab1.common.framework.policy;
+
+import org.springframework.stereotype.Component;
+import org.itmo.isLab1.common.framework.CrudEntity;
+import org.itmo.isLab1.common.policies.Policy;
+import org.itmo.isLab1.users.User;
+
+@Component
+public abstract class CrudPolicy<T extends CrudEntity> extends Policy<T> {
+
+    @Override
+    public boolean canShowAll(User user) {
+        return true;
+    }
+
+    @Override
+    public boolean canSearch(User user) {
+        return true;
+    }
+
+    @Override
+    public boolean canShow(User user, T object) {
+        return true;
+    }
+
+    @Override
+    public boolean canCreate(User user) {
+        return true;
+    }
+
+    @Override
+    public boolean canDelete(User user, T object) {
+        return canManage(user, object);
+    }
+
+    @Override
+    public boolean canUpdate(User user, T object) {
+        return canManage(user, object);
+    }
+
+    private boolean canManage(User user, T object) {
+        return user.isAdmin() || user.equals(object.getCreatedBy());
+    }
+}
