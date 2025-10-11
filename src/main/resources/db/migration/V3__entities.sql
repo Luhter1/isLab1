@@ -11,4 +11,14 @@ CREATE TABLE coordinates (
   updated_at TIMESTAMP WITH TIME ZONE                              -- Время последнего обновления
 );
 
+-- Таблица пещер драконов
+CREATE TABLE dragon_caves (
+  id SERIAL PRIMARY KEY,                                           -- Уникальный идентификатор пещеры
+  depth INTEGER,                                                      -- Глубина пещеры
+  created_by INTEGER NOT NULL REFERENCES users(id),                -- Идентификатор пользователя, создавшего пещеру дракона
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),      -- Время создания персоны
+  updated_by INTEGER REFERENCES users(id),                         -- Идентификатор пользователя, последнего обновившего пещеру дракона
+  updated_at TIMESTAMP WITH TIME ZONE                              -- Время последнего обновления
+);
+
 COMMIT;
