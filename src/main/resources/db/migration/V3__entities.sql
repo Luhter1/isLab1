@@ -31,4 +31,16 @@ CREATE TABLE dragon_heads (
   updated_at TIMESTAMP WITH TIME ZONE                              -- Время последнего обновления
 );
 
+-- Таблица локаций
+CREATE TABLE locations (
+  id SERIAL PRIMARY KEY,                                           -- Уникальный идентификатор местоположения
+  x BIGINT NOT NULL,                                               -- Координата X
+  y INTEGER ,                                                      -- Координата Y
+  z DOUBLE PRECISION NOT NULL,                                     -- Координата Z
+  name VARCHAR(240) NOT NULL,                                      -- Имя локации (не может быть пустым)
+  created_by INTEGER NOT NULL REFERENCES users(id),                -- Идентификатор пользователя, создавшего местоположение
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),      -- Время создания персоны
+  updated_by INTEGER REFERENCES users(id),                         -- Идентификатор пользователя, последнего обновившего местоположение
+  updated_at TIMESTAMP WITH TIME ZONE                              -- Время последнего обновления
+);
 COMMIT;

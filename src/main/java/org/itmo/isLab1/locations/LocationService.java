@@ -1,0 +1,31 @@
+package org.itmo.isLab1.locations;
+
+import org.springframework.stereotype.Service;
+import org.itmo.isLab1.common.framework.CrudService;
+import org.itmo.isLab1.events.EventService;
+import org.itmo.isLab1.locations.dto.*;
+import org.itmo.isLab1.locations.mapper.LocationMapper;
+import org.itmo.isLab1.locations.policy.LocationPolicy;
+import org.itmo.isLab1.users.UserService;
+
+@Service
+public class LocationService
+    extends CrudService<
+        Location,
+        LocationRepository,
+        LocationMapper,
+        LocationPolicy,
+        LocationDto,
+        LocationCreateDto,
+        LocationUpdateDto> {
+
+    public LocationService(
+        LocationRepository repository,
+        LocationMapper mapper,
+        LocationPolicy policy,
+        UserService userService,
+        EventService<Location> eventService
+    ) {
+        super(repository, mapper, policy, userService, eventService);
+    }
+}
