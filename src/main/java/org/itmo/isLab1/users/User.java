@@ -55,7 +55,7 @@ public class User implements UserDetails, BaseEntity {
 
     @JsonIgnore
     public boolean isAdmin() {
-        return this.role.equals(Role.ADMIN);
+        return this.role.equals(Role.ROLE_ADMIN);
     }
 
     @JsonIgnore

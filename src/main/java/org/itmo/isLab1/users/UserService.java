@@ -29,9 +29,9 @@ public class UserService {
 
     if (repository.count() == 0) {
         logger.info("Creating first user with ADMIN role");
-        user.setRole(Role.ADMIN);
+        user.setRole(Role.ROLE_ADMIN);
     } else {
-        user.setRole(Role.USER);
+        user.setRole(Role.ROLE_USER);
     }
     return save(user);
     }

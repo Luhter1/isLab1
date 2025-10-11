@@ -1,7 +1,7 @@
 BEGIN;
 
 -- Вспомогательный тип для ролей пользователей (enum Role)
-CREATE TYPE user_role AS ENUM ('USER', 'ADMIN');
+CREATE TYPE user_role AS ENUM ('ROLE_USER', 'ROLE_ADMIN');
 
 -- Таблица пользователей системы
 CREATE TABLE users (
