@@ -14,10 +14,20 @@ CREATE TABLE coordinates (
 -- Таблица пещер драконов
 CREATE TABLE dragon_caves (
   id SERIAL PRIMARY KEY,                                           -- Уникальный идентификатор пещеры
-  depth INTEGER,                                                      -- Глубина пещеры
+  depth INTEGER,                                                   -- Глубина пещеры
   created_by INTEGER NOT NULL REFERENCES users(id),                -- Идентификатор пользователя, создавшего пещеру дракона
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),      -- Время создания персоны
   updated_by INTEGER REFERENCES users(id),                         -- Идентификатор пользователя, последнего обновившего пещеру дракона
+  updated_at TIMESTAMP WITH TIME ZONE                              -- Время последнего обновления
+);
+
+-- Таблица голов драконов
+CREATE TABLE dragon_heads (
+  id SERIAL PRIMARY KEY,                                           -- Уникальный идентификатор головы дракона
+  size REAL,                                                       -- Размер головы
+  created_by INTEGER NOT NULL REFERENCES users(id),                -- Идентификатор пользователя, создавшего голову дракона
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),      -- Время создания персоны
+  updated_by INTEGER REFERENCES users(id),                         -- Идентификатор пользователя, последнего обновившего голову дракона
   updated_at TIMESTAMP WITH TIME ZONE                              -- Время последнего обновления
 );
 
