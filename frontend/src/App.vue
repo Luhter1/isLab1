@@ -1,85 +1,61 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router'
+import MenuAuth from './components/MenuAuth.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <el-container class="app-container">
+    <el-header>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <div class="header-content">
+        <h1>Dragon Management System</h1>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+        <el-menu mode="horizontal" router="true" :ellipsis="false">
+          <el-menu-item index="/">Dashboard</el-menu-item>
+          <el-menu-item index="/analytics">Analytics</el-menu-item>
+          <el-menu-item index="/killer">Killer</el-menu-item>
+        </el-menu>
 
-  <RouterView />
+        <MenuAuth />
+      </div>
+    </el-header>
+
+    <el-main>
+      <RouterView />
+    </el-main>
+  </el-container>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+<style lang="scss">
+.app-container {
+  height: 100vh;
+  
+  .el-header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      
+      h1 {
+        margin: 10px;
+        font-size: 24px;
+        color: #303133;
+      }
+      
+      .el-menu {
+        border: none;
+      }
+    }
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  
+  .el-main {
+    background-color: #f5f7fa;
+    padding: 20px;
   }
 }
 </style>
