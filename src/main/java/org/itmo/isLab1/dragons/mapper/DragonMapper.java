@@ -19,7 +19,14 @@ public abstract class DragonMapper implements CrudMapper<Dragon, DragonDto, Drag
     @Mapping(source = "killerId", target = "killer")
     @Mapping(source = "headId", target = "head")
     public abstract Dragon map(DragonCreateDto dto);
+
     public abstract DragonDto map(Dragon model);
+
     public abstract Dragon map(DragonDto model);
+    
+    @Mapping(source = "coordinatesId", target = "coordinates")
+    @Mapping(source = "caveId", target = "cave")
+    @Mapping(source = "killerId", target = "killer")
+    @Mapping(source = "headId", target = "head")
     public abstract void update(DragonUpdateDto dto, @MappingTarget Dragon model);
 }

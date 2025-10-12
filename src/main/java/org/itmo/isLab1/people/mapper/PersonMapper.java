@@ -17,7 +17,11 @@ import org.itmo.isLab1.people.Person;
 public abstract class PersonMapper implements CrudMapper<Person, PersonDto, PersonCreateDto, PersonUpdateDto> {
     @Mapping(source = "locationId", target = "location")
     public abstract Person map(PersonCreateDto dto);
+    
     public abstract PersonDto map(Person model);
+
     public abstract Person map(PersonDto model);
+
+    @Mapping(source = "locationId", target = "location")
     public abstract void update(PersonUpdateDto dto, @MappingTarget Person model);
 }
