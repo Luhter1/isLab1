@@ -64,6 +64,7 @@ public class Dragon extends CrudEntity {
     @Column(name = "type")
     private DragonType type;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @ColumnTransformer(write="?::dragon_character")
     @JoinColumn(name = "character", nullable = false)

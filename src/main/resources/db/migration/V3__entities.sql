@@ -23,7 +23,7 @@ CREATE TABLE coordinates (
 -- Таблица пещер драконов
 CREATE TABLE dragon_caves (
   id SERIAL PRIMARY KEY,                                           -- Уникальный идентификатор пещеры
-  depth INTEGER,                                                   -- Глубина пещеры
+  depth INTEGER NOT NULL,                                          -- Глубина пещеры
   created_by INTEGER NOT NULL REFERENCES users(id),                -- Идентификатор пользователя, создавшего пещеру дракона
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),      -- Время создания персоны
   updated_by INTEGER REFERENCES users(id),                         -- Идентификатор пользователя, последнего обновившего пещеру дракона
@@ -44,7 +44,7 @@ CREATE TABLE dragon_heads (
 CREATE TABLE locations (
   id SERIAL PRIMARY KEY,                                           -- Уникальный идентификатор местоположения
   x BIGINT NOT NULL,                                               -- Координата X
-  y INTEGER ,                                                      -- Координата Y
+  y INTEGER,                                                       -- Координата Y
   z DOUBLE PRECISION NOT NULL,                                     -- Координата Z
   name VARCHAR(240) NOT NULL,                                      -- Имя локации
   created_by INTEGER NOT NULL REFERENCES users(id),                -- Идентификатор пользователя, создавшего местоположение
@@ -63,7 +63,7 @@ CREATE TABLE people (
   birthday TIMESTAMP,                                               -- Дата рождения персонажа
   height REAL NOT NULL CHECK (height > 0),                         -- Рост персонажа (больше 0)
   weight INTEGER CHECK (weight > 0),                               -- Вес персонажа (больше 0)
-  passport_id VARCHAR(255) NOT NULL CHECK (passport_id <> ''),     -- Паспорт персонажа (может быть NULL, уникален)
+  passport_id VARCHAR(23) NOT NULL CHECK (passport_id <> ''),      -- Паспорт персонажа
   created_by INTEGER NOT NULL REFERENCES users(id),                -- Идентификатор пользователя, создавшего персону
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),      -- Время создания персоны
   updated_by INTEGER REFERENCES users(id),                         -- Идентификатор пользователя, последнего обновившего персону
@@ -81,7 +81,7 @@ CREATE TABLE dragons (
   age INTEGER CHECK (age IS NULL OR age > 0),                     -- Возраст дракона (больше 0), может быть NULL
   color color,                                                    -- Цвет дракона
   type dragon_type,                                               -- Тип дракона
-  character dragon_character,                                            -- Характер дракона
+  character dragon_character NOT NULL,                            -- Характер дракона
   head_id INTEGER REFERENCES dragon_heads(id) ON DELETE RESTRICT, -- Идентификатор головы дракона
   created_by INTEGER NOT NULL REFERENCES users(id),               -- Идентификатор пользователя, создавшего дракона
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),     -- Время создания дракона

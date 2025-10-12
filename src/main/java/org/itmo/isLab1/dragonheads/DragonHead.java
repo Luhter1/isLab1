@@ -19,6 +19,6 @@ public class DragonHead extends CrudEntity {
     @SequenceGenerator(name = "dragon_heads_id_seq", sequenceName = "dragon_heads_id_seq", allocationSize = 1)
     private int id;
 
-    @Column(name = "size", nullable = false)
+    @Column(name = "size")
     private Float size;
 }

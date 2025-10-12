@@ -48,7 +48,7 @@ public class Person extends CrudEntity {
 
     @Past
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "birthday", columnDefinition = "DATETIME")
+    @Column(name = "birthday", columnDefinition = "TIMESTAMP")
     private LocalDateTime birthday;
 
     @NotNull
