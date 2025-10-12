@@ -59,7 +59,7 @@ CREATE TABLE people (
   name VARCHAR(255) NOT NULL CHECK (name <> ''),                   -- Имя персонажа (не может быть пустым)
   eye_color color,                                                 -- Цвет глаз
   hair_color color NOT NULL,                                       -- Цвет волос
-  location_id INTEGER REFERENCES locations(id) ON DELETE RESTRICT, -- Идентификатор местоположения (ссылка на таблицу location)
+  location_id INTEGER REFERENCES locations(id) ON DELETE CASCADE, -- Идентификатор местоположения (ссылка на таблицу location)
   birthday TIMESTAMP,                                               -- Дата рождения персонажа
   height REAL NOT NULL CHECK (height > 0),                         -- Рост персонажа (больше 0)
   weight INTEGER CHECK (weight > 0),                               -- Вес персонажа (больше 0)
@@ -75,14 +75,14 @@ CREATE TABLE dragons (
   id SERIAL PRIMARY KEY,                                          -- Уникальный идентификатор дракона (генерируется автоматически)
   name VARCHAR(255) NOT NULL CHECK (name <> ''),                  -- Имя дракона (не может быть пустым)
   coordinates_id INTEGER NOT NULL
-    REFERENCES coordinates(id) ON DELETE RESTRICT,                -- Идентификатор координат
-  cave_id INTEGER REFERENCES dragon_caves(id) ON DELETE SET NULL, -- Идентификатор пещеры дракона
-  killer_id INTEGER REFERENCES people(id) ON DELETE SET NULL,     -- Идентификатор убийцы дракона
+    REFERENCES coordinates(id) ON DELETE CASCADE,                -- Идентификатор координат
+  cave_id INTEGER REFERENCES dragon_caves(id) ON DELETE CASCADE, -- Идентификатор пещеры дракона
+  killer_id INTEGER REFERENCES people(id) ON DELETE CASCADE,     -- Идентификатор убийцы дракона
   age INTEGER CHECK (age IS NULL OR age > 0),                     -- Возраст дракона (больше 0), может быть NULL
   color color,                                                    -- Цвет дракона
   type dragon_type,                                               -- Тип дракона
   character dragon_character NOT NULL,                            -- Характер дракона
-  head_id INTEGER REFERENCES dragon_heads(id) ON DELETE RESTRICT, -- Идентификатор головы дракона
+  head_id INTEGER REFERENCES dragon_heads(id) ON DELETE CASCADE, -- Идентификатор головы дракона
   created_by INTEGER NOT NULL REFERENCES users(id),               -- Идентификатор пользователя, создавшего дракона
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),     -- Время создания дракона
   updated_by INTEGER REFERENCES users(id),                        -- Идентификатор пользователя, последнего обновившего дракона
