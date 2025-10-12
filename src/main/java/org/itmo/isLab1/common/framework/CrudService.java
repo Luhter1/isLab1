@@ -54,7 +54,7 @@ public abstract class CrudService<
     }
 
     public TDto getById(int id) {
-        var obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
+        var obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: id=" + id));
         policy.show(currentUser(), obj);
 
         return mapper.map(obj);
@@ -62,7 +62,7 @@ public abstract class CrudService<
 
     @Transactional
     public TDto update(TUpdateDto objData, int id) {
-        var obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
+        var obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: id=" + id));
         policy.update(currentUser(), obj);
 
         mapper.update(objData, obj);
