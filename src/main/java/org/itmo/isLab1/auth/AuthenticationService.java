@@ -42,16 +42,12 @@ public class AuthenticationService {
      */
     @Transactional
     public AuthenticationDto signIn(SignInUpDto request) {
+        var user = userService.getByUsername(request.getUsername());
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
             request.getUsername(),
             request.getPassword()
         ));
-
-        // var user = userService
-        //     .userDetailsService()
-        //     .loadUserByUsername(request.getUsername());
-
-        var user = userService.getByUsername(request.getUsername());
 
         var jwt = jwtService.generateToken(user);
         return new AuthenticationDto(jwt, user);
