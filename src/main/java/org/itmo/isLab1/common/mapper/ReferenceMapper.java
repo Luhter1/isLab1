@@ -6,6 +6,8 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.TargetType;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.itmo.isLab1.common.entity.BaseEntity;
 
@@ -18,6 +20,19 @@ public abstract class ReferenceMapper {
     private EntityManager entityManager;
 
     public <T extends BaseEntity> T toEntity(Integer id, @TargetType Class<T> entityClass) {
-        return id != null ? entityManager.find(entityClass, id) : null;
+        if (id == null) {
+            return null;
+        }
+
+        T entity = entityManager.find(entityClass, id);
+
+        if (entity == null) {
+            throw new EntityNotFoundException(
+                String.format("No %s found with id %d", entityClass.getSimpleName(), id)
+            );
+        }
+
+        return entity;
     }
+
 }
