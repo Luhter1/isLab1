@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus'
 
 const getErrorMessage = error => error?.response?.data?.message || 'ERROR';
 
-const  CrudService = <TDto, TCreateDto, TUpdateDto>(
+export const  CrudService = <TDto, TCreateDto, TUpdateDto>(
     name: string,
     Controller: CrudController<TDto, TCreateDto, TUpdateDto>
 ) => {
