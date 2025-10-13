@@ -19,7 +19,7 @@ public class PersonCreateDto {
     @NotNull
     private Color hairColor;
 
-    private int locationId;
+    private Integer locationId;
 
     @Past
     private LocalDateTime birthday;

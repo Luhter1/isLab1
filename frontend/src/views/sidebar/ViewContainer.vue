@@ -16,6 +16,9 @@ import { getDragonHead } from '@/services/DragonHeadService'
 import CardDragonCave from '@/components/DragonCave/Card.vue'
 import { getDragonCave } from '@/services/DragonCaveService'
 
+import CardPerson from '@/components/Person/Card.vue'
+import { getPerson } from '@/services/PeopleService'
+
 
 
 interface ComponentConfig {
@@ -31,19 +34,12 @@ const route = useRoute()
 const router = useRouter()
 
 const viewConfigs: Record<string, ComponentConfig> = {
-  Location: {
+  Person: {
     component: markRaw(GenericGetById),
-    getT: getLocation,
-    cardT: markRaw(CardLocation),
-    formLabel: "Location",
+    getT: getPerson,
+    cardT: markRaw(CardPerson),
+    formLabel: "Person",
 
-  },
-
-  Coordinate: {
-    component: markRaw(GenericGetById),
-    getT: getCoordinate,
-    cardT: markRaw(CardCoordinate),
-    formLabel: "Coordinate",
   },
 
   DragonHead: {
@@ -57,7 +53,21 @@ const viewConfigs: Record<string, ComponentConfig> = {
     component: markRaw(GenericGetById),
     getT: getDragonCave,
     cardT: markRaw(CardDragonCave),
-    formLabel: "DragonHead",
+    formLabel: "DragonCave",
+  },
+
+  Location: {
+    component: markRaw(GenericGetById),
+    getT: getLocation,
+    cardT: markRaw(CardLocation),
+    formLabel: "Location",
+  },
+
+  Coordinate: {
+    component: markRaw(GenericGetById),
+    getT: getCoordinate,
+    cardT: markRaw(CardCoordinate),
+    formLabel: "Coordinate",
   },
 }
 

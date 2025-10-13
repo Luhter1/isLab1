@@ -18,6 +18,7 @@ const data = toRef(props, 'obj')
     </template>
     <p :key="data.id" class="text item">{{ 'ID: ' + data.id }}</p>
     <template #footer>
+        <p :key="data.x" class="text item">{{ 'Name: ' + data.name }}</p>
         <p :key="data.x" class="text item">{{ 'X: ' + data.x }}</p>
         <p :key="data.y" class="text item">{{ 'Y: ' + data.y }}</p>
         <p :key="data.z" class="text item">{{ 'Z: ' + data.z }}</p>

@@ -4,5 +4,5 @@ export interface LocationUpdateDto {
     x: JsonNullable<number>;
     y?: JsonNullable<number>;
     z: JsonNullable<number>;
-    name: JsonNullable<String>;
+    name: JsonNullable<string>;
 }
