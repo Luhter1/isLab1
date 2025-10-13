@@ -10,7 +10,7 @@ import { LocationDto } from '@/interfaces/dto/locations/LocationDto'
 interface ComponentConfig {
   component: any
   props: {
-    getT: (id: number) => Promise<LocationDto>
+    getT: (id: number) => Promise<any>
     cardT: any
     formLabel?: string
   }

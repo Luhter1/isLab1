@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import SingIn from '@/views/SingIn.vue'
 import SingUp from '@/views/SingUp.vue'
-import ViewObject from '@/views/sidebar/ViewObject.vue'
+import ViewObject from '@/views/sidebar/ViewContainer.vue'
 import { logout } from '@/services/AuthService'
 
 const router = createRouter({
