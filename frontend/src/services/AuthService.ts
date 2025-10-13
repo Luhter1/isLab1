@@ -14,7 +14,12 @@ export const login = (credentials: SingInUpDto) => {
       return Promise.resolve();
     },
     error => {
-      ElMessage.error(getErrorMessage(error));
+      ElMessage({
+          message: getErrorMessage(error),
+          showClose: true,
+          grouping: true,
+          type: 'error',
+      });
       return Promise.reject();
     }
   );
@@ -29,14 +34,23 @@ export const register = (credentials: SingInUpDto) => {
       return Promise.resolve();
     },
     error => {
-      ElMessage.error(getErrorMessage(error));
+      ElMessage({
+          message: getErrorMessage(error),
+          showClose: true,
+          grouping: true,
+          type: 'error',
+      });
       return Promise.reject();
     }
   );
 };
 
 export const logout = () => {
-        const userStore = useUserStore()
-        userStore.clearAuthentication()
-        ElMessage.success('Successfully logged out!')
+  const userStore = useUserStore()
+  userStore.clearAuthentication()
+  ElMessage({
+    message: 'Successfully logged out!',
+    showClose: true,
+    type: 'success',
+  });
 };
