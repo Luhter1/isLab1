@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../config/constants';
-// import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/userStore';
 
-// const userStore = useUserStore()
 
 const instance = axios.create({
   baseURL: API_BASE_URL,
@@ -14,9 +13,13 @@ const instance = axios.create({
   timeout: 10000,
 });
 
+
 // instance.interceptors.request.use(
 //   config => {
-//     const token = userStore.getToken();
+    
+//     const userStore = useUserStore();
+//     const token = userStore.currentUser;
+//     console.log(token)
 //     if (token) {
 //       config.headers.Authorization = `Bearer ${token}`;
 //     }

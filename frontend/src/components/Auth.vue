@@ -1,10 +1,12 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import type { FormInstance, FormRules } from 'element-plus'
 import { SingInUpDto } from '../interfaces/dto/auth/SingInUpDto'
 import { useUserStore } from '@/stores/userStore'
 
+const router = useRouter()
 
 interface Props {
   msg: string
@@ -37,6 +39,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid) => {
     if (valid) {
       userStore.setAuthentication(await props.auth_func(user))
+      setTimeout(() => {
+        router.push('/')
+      }, 500)
     } else {
       console.log('error submit!')
     }

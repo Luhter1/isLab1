@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore'
+import { UserFilled } from '@element-plus/icons-vue'
 
 const userStore = useUserStore()
 </script>
@@ -17,5 +18,18 @@ const userStore = useUserStore()
         sing-up
       </el-button>
     </RouterLink>
+  </el-space>
+
+  <el-space wrap v-else>
+    <RouterLink to="/">
+      <el-button type="danger">
+        +ADD Dragon
+      </el-button>
+    </RouterLink>
+
+    <el-menu mode="horizontal" :router="true" :collapse="true" :ellipsis="true" :ellipsis-icon="UserFilled">
+      <el-menu-item index="/">Dashboard</el-menu-item>
+      <el-menu-item index="/logout">Выход</el-menu-item>
+    </el-menu>
   </el-space>
 </template>
