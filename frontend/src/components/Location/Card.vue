@@ -1,11 +1,12 @@
 <script lang="ts" setup>
+import { toRef } from 'vue'
 import { LocationDto } from '@/interfaces/dto/locations/LocationDto'
 
 interface Props {
   obj: LocationDto
 }
 const props = defineProps<Props>()
-const data = props.obj
+const data = toRef(props, 'obj')
 </script>
 
 <template>
