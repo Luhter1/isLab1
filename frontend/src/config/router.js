@@ -2,9 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import SingIn from '@/views/SingIn.vue'
 import SingUp from '@/views/SingUp.vue'
+import ViewObject from '@/views/ViewObject.vue'
 import { logout } from '@/services/AuthService'
-import { useUserStore } from '@/stores/userStore'
-import { ElMessage } from 'element-plus'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +31,11 @@ const router = createRouter({
         next('/')
       },
       component: () => null,
+    },
+    {
+      path: '/view',
+      name: 'view',
+      component: ViewObject,
     },
   ],
 })

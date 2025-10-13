@@ -5,13 +5,9 @@ import MenuAuth from './components/MenuAuth.vue'
 import { 
   Fold, 
   Expand,
-  Plus,
   Edit,
   Delete,
-  Search,
-  Download,
-  Upload,
-  Setting
+  View
 } from '@element-plus/icons-vue'
 
 const isCollapse = ref(true)
@@ -52,6 +48,10 @@ const handleToggle = () => {
           :collapse-transition="false"
           class="sidebar-menu"
         >
+          <el-menu-item index="/view">
+            <el-icon><View /></el-icon>
+            <template #title>View</template>
+          </el-menu-item>
           <el-menu-item index="/create">
             <el-icon><DocumentAdd /></el-icon>
             <template #title>Create</template>
