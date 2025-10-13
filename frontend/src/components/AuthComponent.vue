@@ -4,7 +4,6 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInstance, FormRules } from 'element-plus'
 import { SingInUpDto } from '../interfaces/dto/auth/SingInUpDto'
-import { useUserStore } from '@/stores/userStore'
 
 const router = useRouter()
 
@@ -13,8 +12,6 @@ interface Props {
   auth_func: (userData: SingInUpDto) => Promise<any>
 }
 const props = defineProps<Props>()
-
-const userStore = useUserStore()
 
 const ruleFormRef = ref<FormInstance>()
 const user = reactive<SingInUpDto>({
@@ -38,7 +35,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid) => {
     if (valid) {
-      userStore.setAuthentication(await props.auth_func(user))
+      props.auth_func(user)
       setTimeout(() => {
         router.push('/')
       }, 500)

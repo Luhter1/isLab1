@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import SingIn from '../views/SingIn.vue'
-import SingUp from '../views/SingUp.vue'
+import HomeView from '@/views/HomeView.vue'
+import SingIn from '@/views/SingIn.vue'
+import SingUp from '@/views/SingUp.vue'
+import { logout } from '@/services/AuthService'
 import { useUserStore } from '@/stores/userStore'
 import { ElMessage } from 'element-plus'
 
@@ -31,11 +32,11 @@ const router = createRouter({
     {
       path: '/logout',
       name: 'logout',
-      component: () => {
-        const userStore = useUserStore()
-        userStore.clearAuthentication()
-        ElMessage.success('Successfully logged out!')
+      beforeEnter: (to, from, next) => {
+        logout()
+        next('/')
       },
+      component: () => null,
     },
   ],
 })

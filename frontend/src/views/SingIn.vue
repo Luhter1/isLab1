@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import Auth from '../components/Auth.vue'
-import AuthService from '../controllers/AuthController'
+import Auth from '@/components/AuthComponent.vue'
+import { login } from '@/services/AuthService'
 </script>
 
 <template>
-  <Auth msg="Вход" :auth_func="AuthService.login"/>
+  <Auth msg="Вход" :auth_func="login"/>
 </template>
