@@ -4,7 +4,7 @@ import GenericGetById from '@/components/Common/GenericGetById.vue'
 
 import CardLocation from '@/components/Location/Card.vue'
 import { getLocation } from '@/services/LocationService'
-import { LocationDto } from '@/interfaces/dto/locations/LocationDto'
+
 
 
 interface ComponentConfig {
