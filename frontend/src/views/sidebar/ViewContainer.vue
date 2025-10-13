@@ -13,6 +13,9 @@ import { getCoordinate } from '@/services/CoordinatesService'
 import CardDragonHead from '@/components/DragonHead/Card.vue'
 import { getDragonHead } from '@/services/DragonHeadService'
 
+import CardDragonCave from '@/components/DragonCave/Card.vue'
+import { getDragonCave } from '@/services/DragonCaveService'
+
 
 
 interface ComponentConfig {
@@ -47,6 +50,13 @@ const viewConfigs: Record<string, ComponentConfig> = {
     component: markRaw(GenericGetById),
     getT: getDragonHead,
     cardT: markRaw(CardDragonHead),
+    formLabel: "DragonHead",
+  },
+
+  DragonCave: {
+    component: markRaw(GenericGetById),
+    getT: getDragonCave,
+    cardT: markRaw(CardDragonCave),
     formLabel: "DragonHead",
   },
 }
