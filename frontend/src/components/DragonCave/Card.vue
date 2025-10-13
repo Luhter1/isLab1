@@ -13,7 +13,7 @@ const data = toRef(props, 'obj')
   <el-card style="max-width: 480px">
     <template #header>
       <div class="card-header">
-        <span>Location</span>
+        <b>DragonCave</b>
       </div>
     </template>
     <p :key="data.id" class="text item">{{ 'ID: ' + data.id }}</p>
