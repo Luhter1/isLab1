@@ -1,70 +1,111 @@
 <script lang="ts" setup>
-import { shallowRef, markRaw, type Component } from 'vue';
+import { ref, computed, watch } from 'vue'
+import { shallowRef, markRaw } from 'vue';
+import { useRoute, useRouter } from 'vue-router'
 import GenericGetById from '@/components/Common/GenericGetById.vue'
 
 import CardLocation from '@/components/Location/Card.vue'
 import { getLocation } from '@/services/LocationService'
 
+import CardCoordinate from '@/components/Coordinates/Card.vue'
+import { getCoordinate } from '@/services/CoordinatesService'
+
 
 
 interface ComponentConfig {
   component: any
-  props: {
-    getT: (id: number) => Promise<any>
-    cardT: any
-    formLabel?: string
-  }
+  getT: (id: number) => Promise<any>
+  cardT: any
+  formLabel?: string
+  initialId?: number | null
+
 }
 
-const componentMap: Record<string, ComponentConfig> = {
+const route = useRoute()
+const router = useRouter()
+
+const viewConfigs: Record<string, ComponentConfig> = {
   Location: {
     component: markRaw(GenericGetById),
-    props: {
-      getT: getLocation,
-      cardT: markRaw(CardLocation),
-      formLabel: "Location",
-    }
+    getT: getLocation,
+    cardT: markRaw(CardLocation),
+    formLabel: "Location",
+
   },
 
+  Coordinate: {
+    component: markRaw(GenericGetById),
+    getT: getCoordinate,
+    cardT: markRaw(CardCoordinate),
+    formLabel: "Coordinate",
+  },
 }
 
-const activeComponentConfig = shallowRef(componentMap.Location)
+// Текущий тип из URL
+const currentType = computed(() => route.params.type as string)
+const currentConfig = computed(() => viewConfigs[currentType.value])
 
-const handleMenuSelect = (index: string) => {
-  activeComponentConfig.value = componentMap[index]
+// Переход к другому типу
+const handleMenuSelect = (type: string) => {
+  router.push({
+    path: `/view/${type}`,
+    query: {}
+  })
 }
+
+// Если тип не найден, редирект на первый доступный
+watch(currentType, (type) => {
+  if (!viewConfigs[type]) {
+    const firstType = Object.keys(viewConfigs)[0]
+    router.replace(`/view/${firstType}`)
+  }
+}, { immediate: true })
 </script>
 
 <template>
-  <el-container>
+  <el-container v-if="currentConfig">
     <el-aside :width="'200px'">
       <el-menu 
         :collapse="false" 
         class="sidebar-menu"
         @select="handleMenuSelect"
-        default-active="Location">
-        
-        <el-menu-item index="Location">
-          <span>Location</span>
-        </el-menu-item>
+        :default-active="currentType">
 
-        <el-menu-item index="User">
-          <span>User</span>
-        </el-menu-item>
-
-        <el-menu-item index="Product">
-          <span>Product</span>
+        <el-menu-item 
+          v-for="(config, key) in viewConfigs" 
+          :key="key"
+          :index="key">
+          <span>{{ key }}</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
 
     <el-main>
-      <KeepAlive>
-        <component 
-          :is="activeComponentConfig.component" 
-          v-bind="activeComponentConfig.props"
-        />
-      </KeepAlive>
+      <h3>{{ currentConfig.formLabel }}</h3>
+
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
+        <el-breadcrumb-item>View</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ currentType }}</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="route.query.id">
+          ID: {{ route.query.id }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+
+      <el-divider />
+
+      <GenericGetById
+        :key="`${currentType}-${route.query.id || 'new'}`"
+        :getT="currentConfig.getT"
+        :cardT="currentConfig.cardT"
+        :formLabel="currentConfig.formLabel"
+      />
     </el-main>
   </el-container>
 </template>
+
+<style scoped>
+.el-breadcrumb {
+  margin-bottom: 20px;
+}
+</style>

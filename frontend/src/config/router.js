@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import SingIn from '@/views/SingIn.vue'
 import SingUp from '@/views/SingUp.vue'
-import ViewObject from '@/views/sidebar/ViewContainer.vue'
+import ViewContainer from '@/views/sidebar/ViewContainer.vue'
 import { logout } from '@/services/AuthService'
 
 const router = createRouter({
@@ -33,9 +33,13 @@ const router = createRouter({
       component: () => null,
     },
     {
-      path: '/view',
+      path: '/view/:type',
       name: 'view',
-      component: ViewObject,
+      component: ViewContainer,
+      props: route => ({ 
+        type: route.params.type,
+        id: route.query.id ? Number(route.query.id) : null
+      })
     },
   ],
 })
