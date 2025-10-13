@@ -1,15 +1,20 @@
-<script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import { getLocation } from '@/services/LocationService'
+// File: GenericGetByIdForm.vue
+
+<script lang="ts" setup generic="TDto extends { id: any }">
+import { reactive, ref, type Component } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import { LocationDto } from '@/interfaces/dto/locations/LocationDto'
-import cardLocation from './Card.vue'
 
 interface ViewId {
   id: number;
 }
-const getData = ref<LocationDto>()
 
+const props = defineProps<{
+  getT: (id: number) => Promise<TDto>,
+  cardT: Component,
+  formLabel?: string
+}>()
+
+const data = ref<TDto>()
 const ruleFormRef = ref<FormInstance>()
 const view = reactive<ViewId>({
   id: null
@@ -26,22 +31,25 @@ const validateId = (rule: any, value: number, callback: any) => {
 }
 
 const rules = reactive<FormRules<ViewId>>({
-  id: [
-    { validator: validateId, trigger: 'blur' },
-  ]
+  id: [{ validator: validateId, trigger: 'blur' }]
 })
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid) => {
     if (valid) {
-      getData.value = await getLocation(view.id)
+      try {
+        data.value = await props.getT(view.id!)
+      } catch (error) {
+        data.value = undefined
+      }
     }
   })
 }
 </script>
 
 <template>
+  <h3 v-if="formLabel">{{ formLabel }}</h3>
   <el-form
     ref="ruleFormRef"
     style="max-width: 600px"
@@ -49,16 +57,18 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     :rules="rules"
     label-width="auto"
   >
-
     <el-form-item label="ID" prop="id">
-      <el-input v-model="view.id" type="number"/>
+      <el-input v-model.number="view.id" type="number" placeholder="Enter ID"/>
     </el-form-item>
 
     <el-form-item>
       <el-button type="primary" @click="submitForm(ruleFormRef)">Submit</el-button>
     </el-form-item>
-
   </el-form>
 
-  <cardLocation :obj="getData" v-if="getData"/>
+  <component
+    :is="props.cardT"
+    :obj="data"
+    v-if="data"
+  />
 </template>
