@@ -17,6 +17,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
         .addHandler(webSocketHandler, "/ws")
-        .setAllowedOrigins("*", "http://localhost:3000", "http://localhost:5000");
+        .setAllowedOrigins("http://localhost:3000", "http://localhost:5000");
     }
 }

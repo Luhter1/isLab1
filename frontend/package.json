@@ -18,6 +18,7 @@
     "axios": "^1.12.2",
     "dayjs": "^1.11.18",
     "element-plus": "^2.11.4",
+    "luxon": "^3.7.2",
     "pinia": "^3.0.3",
     "socket.io-client": "^4.8.1",
     "vue": "^3.5.22",

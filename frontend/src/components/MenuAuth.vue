@@ -1,5 +1,11 @@
+<script setup lang="ts">
+import { useUserStore } from '@/stores/userStore'
+
+const userStore = useUserStore()
+</script>
+
 <template>
-  <el-space wrap>
+  <el-space wrap v-if="!userStore.isLoggedIn">
     <RouterLink to="/sing-in">
       <el-button type="primary" round>
         sing-in

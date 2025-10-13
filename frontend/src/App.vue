@@ -10,7 +10,7 @@ import MenuAuth from './components/MenuAuth.vue'
       <div class="header-content">
         <h1>Dragon Management System</h1>
 
-        <el-menu mode="horizontal" router="true" :ellipsis="false">
+        <el-menu mode="horizontal" :router="true" :ellipsis="false">
           <el-menu-item index="/">Dashboard</el-menu-item>
           <el-menu-item index="/analytics">Analytics</el-menu-item>
           <el-menu-item index="/killer">Killer</el-menu-item>
