@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_BASE_URL } from '../config/constants';
+import { API_BASE_URL } from '@/config/constants';
 import { useUserStore } from '@/stores/userStore';
 
 
@@ -14,21 +14,20 @@ const instance = axios.create({
 });
 
 
-// instance.interceptors.request.use(
-//   config => {
-    
-//     const userStore = useUserStore();
-//     const token = userStore.currentUser;
-//     console.log(token)
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   error => {
-//     return Promise.reject(error);
-//   }
-// );
+instance.interceptors.request.use(
+  config => {
+    const userStore = useUserStore();
+    const token = userStore.getToken;
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
 
 // instance.interceptors.response.use(
 //   response => {

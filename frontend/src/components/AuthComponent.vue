@@ -39,8 +39,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       setTimeout(() => {
         router.push('/')
       }, 500)
-    } else {
-      console.log('error submit!')
     }
   })
 }
