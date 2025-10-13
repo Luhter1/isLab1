@@ -3,11 +3,11 @@ import { AxiosResponse } from 'axios';
 import { PersonDto } from '@/interfaces/dto/people/PersonDto';
 import { PersonCreateDto } from '@/interfaces/dto/people/PersonCreateDto';
 import { PersonUpdateDto } from '@/interfaces/dto/people/PersonUpdateDto';
-import CrudService, { staticImplements } from '@/interfaces/crud/CrudService';
+import CrudController, { staticImplements } from '@/interfaces/crud/CrudController';
 import Paged from '@/interfaces/models/Paged';
 import { createCrudUri } from './utils/uri';
 
-@staticImplements<CrudService<PersonDto, PersonCreateDto, PersonUpdateDto>>()
+@staticImplements<CrudController<PersonDto, PersonCreateDto, PersonUpdateDto>>()
 export default class PersonService {
   static async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<PersonDto>>> {
     return api.get<Paged<PersonDto>>(`/people${createCrudUri(page, size, sort)}`);

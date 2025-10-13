@@ -3,11 +3,11 @@ import { AxiosResponse } from 'axios';
 import { DragonDto } from '@/interfaces/dto/dragons/DragonDto';
 import { DragonCreateDto } from '@/interfaces/dto/dragons/DragonCreateDto';
 import { DragonUpdateDto } from '@/interfaces/dto/dragons/DragonUpdateDto';
-import CrudService, { staticImplements } from '@/interfaces/crud/CrudService';
+import CrudController, { staticImplements } from '@/interfaces/crud/CrudController';
 import Paged from '@/interfaces/models/Paged';
 import { createCrudUri } from './utils/uri';
 
-@staticImplements<CrudService<DragonDto, DragonCreateDto, DragonUpdateDto>>()
+@staticImplements<CrudController<DragonDto, DragonCreateDto, DragonUpdateDto>>()
 export default class DragonService {
   static async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<DragonDto>>> {
     return api.get<Paged<DragonDto>>(`/dragons${createCrudUri(page, size, sort)}`);

@@ -3,11 +3,11 @@ import { AxiosResponse } from 'axios';
 import { LocationDto } from '@/interfaces/dto/locations/LocationDto';
 import { LocationCreateDto } from '@/interfaces/dto/locations/LocationCreateDto';
 import { LocationUpdateDto } from '@/interfaces/dto/locations/LocationUpdateDto';
-import CrudService, { staticImplements } from '@/interfaces/crud/CrudService';
+import CrudController, { staticImplements } from '@/interfaces/crud/CrudController';
 import Paged from '@/interfaces/models/Paged';
 import { createCrudUri } from './utils/uri';
 
-@staticImplements<CrudService<LocationDto, LocationCreateDto, LocationUpdateDto>>()
+@staticImplements<CrudController<LocationDto, LocationCreateDto, LocationUpdateDto>>()
 export default class LocationService {
   static async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<LocationDto>>> {
     return api.get<Paged<LocationDto>>(`/locations${createCrudUri(page, size, sort)}`);

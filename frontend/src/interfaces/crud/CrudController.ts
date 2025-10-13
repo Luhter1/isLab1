@@ -5,7 +5,7 @@ export function staticImplements<T>() {
   return <U extends T>(constructor: U) => {constructor;};
 }
 
-export default interface CrudService<Dto, CreateDto, UpdateDto> {
+export default interface CrudController<Dto, CreateDto, UpdateDto> {
   getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<Dto>>>;
 
   get(id: number): Promise<AxiosResponse<Dto>>;
