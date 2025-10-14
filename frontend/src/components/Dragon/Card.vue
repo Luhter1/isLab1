@@ -16,7 +16,8 @@ const data = toRef(props, 'obj')
 
 <template>
   <div class="cards-container">
-    <el-card class="card-item">
+    <!-- Основная карточка Dragon -->
+    <el-card class="main-card">
       <template #header>
         <div class="card-header">
           <b>Dragon</b>
@@ -37,45 +38,117 @@ const data = toRef(props, 'obj')
       </template>
     </el-card>
 
-    <component
-      :is="cardCoordinate"
-      :obj="data.coordinates"
-      class="card-item"
-    />
+  <!-- Секция связанных объектов -->
+    <div class="related-objects">
+      <h3 class="section-title">Related Objects</h3>
+      
+      <!-- Обязательные вложенные объекты -->
+      <div class="nested-cards">
+        <div class="nested-card-wrapper">
+          <component
+            :is="cardCoordinate"
+            :obj="data.coordinates"
+          />
+        </div>
 
-    <component
-      :is="cardDragonCave"
-      :obj="data.cave"
-      v-if="data.cave"
-      class="card-item"
-    />
+        <!-- Опциональные вложенные объекты -->
+        <div v-if="data.cave" class="nested-card-wrapper">
+          <component
+            :is="cardDragonCave"
+            :obj="data.cave"
+          />
+        </div>
 
-    <component
-      :is="cardPerson"
-      :obj="data.killer"
-      v-if="data.killer"
-      class="card-item"
-    />
-
-    <component
-      :is="cardDragonHead"
-      :obj="data.head"
-      v-if="data.head"
-      class="card-item"
-    />
+        <div v-if="data.head" class="nested-card-wrapper">
+          <component
+            :is="cardDragonHead"
+            :obj="data.head"
+          />
+        </div>
+      </div>
+      <!-- Person отдельно, так как он может содержать свои вложенные объекты -->
+      <div v-if="data.killer" class="killer-section">
+        <h4 class="subsection-title">Killer Information</h4>
+        <div class="killer-wrapper">
+          <component
+            :is="cardPerson"
+            :obj="data.killer"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.cards-container {
+.dragon-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.main-card {
+  width: 100%;
+  max-width: 600px;
+}
+
+.related-objects {
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.section-title {
+  margin: 0 0 16px 0;
+  color: #303133;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.subsection-title {
+  margin: 24px 0 16px 0;
+  color: #606266;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.nested-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.nested-card-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.nested-card-wrapper :deep(.el-card) {
+  width: 100%;
+  max-width: 400px;
+}
+
+.killer-section {
+  border-top: 1px solid #dcdfe6;
+  padding-top: 20px;
+}
+
+.killer-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
 }
 
-.card-item {
-  flex: 1 1 300px; /* Карточки будут минимум 300px, но могут растягиваться */
-  min-width: 300px;
-  max-width: 480px; /* Сохраняем ваш максимальный размер */
+/* Переопределяем стили для вложенных Person карточек */
+.killer-wrapper :deep(.cards-container) {
+  width: 100%;
+  margin: 0;
+}
+
+.killer-wrapper :deep(.card-item) {
+  margin: 0;
 }
 </style>
