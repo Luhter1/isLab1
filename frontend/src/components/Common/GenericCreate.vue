@@ -10,41 +10,24 @@ const props = defineProps<{
   createT: (location: TCreateDto) => Promise<TDto>,
   formFieldsT: Component,
   formLabel?: string,
+  validationRules?: FormRules,
 }>()
 
 const data = ref<TDto>()
 const ruleFormRef = ref<FormInstance>()
 const Create = ref<TCreateDto>({} as TCreateDto);
 
-// const validateLocation = (rule: any, value: TCreateDto, callback: any) => {
-//   if (!value) {
-//     return callback(new Error('Input ID'))
-//   }
-//   if (value < 1) {
-//     return callback(new Error('ID must be greater than 0'))
-//   }
-//   callback()
-// }
-
-// const rules = reactive<FormRules<CreateId>>({
-//   location: [{ validator: validateLocation, trigger: 'blur' }]
-// })
-
-// Загрузка данных
-const loadData = async (location: TCreateDto) => {
-  try {
-    data.value = await props.createT(location)
-  } catch (error) {
-    data.value = undefined
-  }
-}
-
-// При отправке формы меняем только URI, watch получит данные сам
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
+  
   await formEl.validate(async (valid) => {
     if (valid) {
-      await loadData(Create.value)
+      try {
+        data.value = await props.createT(Create.value)
+        formEl.resetFields()
+      } catch (error) {
+        data.value = undefined
+      }
     }
   })
 }
@@ -56,6 +39,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     ref="ruleFormRef"
     style="max-width: 600px"
     :model="Create"
+    :rules="validationRules"
     label-width="auto"
   >
     <component

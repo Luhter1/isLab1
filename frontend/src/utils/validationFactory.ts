@@ -17,14 +17,30 @@ export class ValidationFactory {
   private static coordinateRules(): FormRules {
     return {
       x: [
-        { required: true, message: 'X is required', trigger: 'blur' },
-        { type: 'number', message: 'X must be a number', trigger: 'change' },
-        { min: -999, message: 'X must be greater than -999', trigger: 'change' }
+        { required: true, message: 'X coordinate is required', trigger: 'blur' },
+        { 
+          validator: (rule, value, callback) => {
+            if (value < -999) {
+              callback(new Error('X must be greater than -999'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        }
       ],
       y: [
         { required: true, message: 'Y is required', trigger: 'blur' },
-        { type: 'number', message: 'Y must be a number', trigger: 'change' },
-        { max: 844, message: 'Y must be less than 845', trigger: 'change' }
+        { 
+          validator: (rule, value, callback) => {
+            if (value >845) {
+              callback(new Error('Y must be less than 845'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        }
       ]
     }
   }

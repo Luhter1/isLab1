@@ -3,6 +3,7 @@ import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import type { FormRules } from 'element-plus'
 import type { Component } from 'vue'
+import { ValidationFactory } from '@/utils/validationFactory'
 import GenericCreate from '@/components/Common/GenericCreate.vue'
 
 import { createLocation } from '@/services/LocationService'
@@ -23,7 +24,6 @@ interface ComponentConfig {
   createT: (createDto: any) => Promise<any>,
   formFieldsT: Component,
   formLabel: string,
-  validationRules?: FormRules,
 }
 
 const route = useRoute()
@@ -123,7 +123,7 @@ watch(currentType, (type) => {
         :createT="currentConfig.createT"
         :formFieldsT="currentConfig.formFieldsT"
         :formLabel="currentConfig.formLabel"
-        :validationRules="currentConfig.validationRules"
+        :validationRules="ValidationFactory.createRules(currentConfig.formLabel)"
       />
     </el-main>
   </el-container>
