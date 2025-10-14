@@ -5,6 +5,7 @@ import cardCoordinate from '../Coordinates/Card.vue'
 import cardDragonCave from '../DragonCave/Card.vue'
 import cardPerson from '../Person/Card.vue'
 import cardDragonHead from '../DragonHead/Card.vue'
+import { displayValue } from '../utils/displayValue'
 
 interface Props {
   obj: DragonDto
@@ -18,19 +19,20 @@ const data = toRef(props, 'obj')
     <el-card class="card-item">
       <template #header>
         <div class="card-header">
-          <b>Person</b>
+          <b>Dragon</b>
         </div>
       </template>
       <p :key="data.id" class="text item">{{ 'ID: ' + data.id }}</p>
       <template #footer>
         <p :key="data.name" class="text item">{{ 'Name: ' + data.name }}</p>
         <p :key="data.coordinates.id" class="text item">{{ 'Coordinate ID: ' + data.coordinates.id }}</p>
-        <p :key="data.hairColor" class="text item">{{ 'Hair color: ' + data.hairColor }}</p>
-        <p :key="data.location.name" class="text item">{{ 'Location name: ' + data.location.name }}</p>
-        <p :key="data.birthday.toString()" class="text item">{{ 'Birthday: ' + data.birthday.toString() }}</p>
-        <p :key="data.height" class="text item">{{ 'Height: ' + data.height }}</p>
-        <p :key="data.weight" class="text item">{{ 'Weight: ' + data.weight }}</p>
-        <p :key="data.passportId" class="text item">{{ 'PassportId: ' + data.passportId }}</p>
+        <p :key="data.cave?.id" class="text item">{{ 'Cave ID: ' + displayValue(data.cave?.id) }}</p>
+        <p :key="data.killer?.name" class="text item">{{ 'Killer name: ' + displayValue(data.killer?.name) }}</p>
+        <p :key="data.age" class="text item">{{ 'Age: ' + displayValue(data.age) }}</p>
+        <p :key="data.color" class="text item">{{ 'Color: ' + displayValue(data.color) }}</p>
+        <p :key="data.type" class="text item">{{ 'Type: ' + displayValue(data.color) }}</p>
+        <p :key="data.character" class="text item">{{ 'Character: ' + data.character }}</p>
+        <p :key="data.head?.id" class="text item">{{ 'Head ID: ' + displayValue(data.head?.id) }}</p>
         <p :key="data.createdBy.username" class="text item">{{ 'Creator: ' + data.createdBy.username }}</p>
       </template>
     </el-card>
@@ -38,6 +40,27 @@ const data = toRef(props, 'obj')
     <component
       :is="cardCoordinate"
       :obj="data.coordinates"
+      class="card-item"
+    />
+
+    <component
+      :is="cardDragonCave"
+      :obj="data.cave"
+      v-if="data.cave"
+      class="card-item"
+    />
+
+    <component
+      :is="cardPerson"
+      :obj="data.killer"
+      v-if="data.killer"
+      class="card-item"
+    />
+
+    <component
+      :is="cardDragonHead"
+      :obj="data.head"
+      v-if="data.head"
       class="card-item"
     />
   </div>

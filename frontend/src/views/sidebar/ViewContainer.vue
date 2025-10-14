@@ -19,6 +19,9 @@ import { getDragonCave } from '@/services/DragonCaveService'
 import CardPerson from '@/components/Person/Card.vue'
 import { getPerson } from '@/services/PeopleService'
 
+import CardDragon from '@/components/Dragon/Card.vue'
+import { getDragon } from '@/services/DragonService'
+
 
 
 interface ComponentConfig {
@@ -34,6 +37,14 @@ const route = useRoute()
 const router = useRouter()
 
 const viewConfigs: Record<string, ComponentConfig> = {
+  Dragon: {
+    component: markRaw(GenericGetById),
+    getT: getDragon,
+    cardT: markRaw(CardDragon),
+    formLabel: "Dragon",
+
+  },
+
   Person: {
     component: markRaw(GenericGetById),
     getT: getPerson,
