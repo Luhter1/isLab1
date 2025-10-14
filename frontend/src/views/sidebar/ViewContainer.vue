@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
-import { shallowRef, markRaw } from 'vue';
+import { computed, watch, markRaw } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import GenericGetById from '@/components/Common/GenericGetById.vue'
 
@@ -25,7 +24,6 @@ import { getDragon } from '@/services/DragonService'
 
 
 interface ComponentConfig {
-  component: any
   getT: (id: number) => Promise<any>
   cardT: any
   formLabel?: string
@@ -38,7 +36,6 @@ const router = useRouter()
 
 const viewConfigs: Record<string, ComponentConfig> = {
   Dragon: {
-    component: markRaw(GenericGetById),
     getT: getDragon,
     cardT: markRaw(CardDragon),
     formLabel: "Dragon",
@@ -46,7 +43,6 @@ const viewConfigs: Record<string, ComponentConfig> = {
   },
 
   Person: {
-    component: markRaw(GenericGetById),
     getT: getPerson,
     cardT: markRaw(CardPerson),
     formLabel: "Person",
@@ -54,28 +50,24 @@ const viewConfigs: Record<string, ComponentConfig> = {
   },
 
   DragonHead: {
-    component: markRaw(GenericGetById),
     getT: getDragonHead,
     cardT: markRaw(CardDragonHead),
     formLabel: "DragonHead",
   },
 
   DragonCave: {
-    component: markRaw(GenericGetById),
     getT: getDragonCave,
     cardT: markRaw(CardDragonCave),
     formLabel: "DragonCave",
   },
 
   Location: {
-    component: markRaw(GenericGetById),
     getT: getLocation,
     cardT: markRaw(CardLocation),
     formLabel: "Location",
   },
 
   Coordinate: {
-    component: markRaw(GenericGetById),
     getT: getCoordinate,
     cardT: markRaw(CardCoordinate),
     formLabel: "Coordinate",

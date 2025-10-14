@@ -1,80 +1,80 @@
 <script lang="ts" setup>
-import { computed, watch } from 'vue';
+import { computed, watch, markRaw } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
-import GenericDeleteById from '@/components/Common/GenericDeleteById.vue'
+import GenericCreate from '@/components/Common/GenericCreate.vue'
 
-import { deleteLocation } from '@/services/LocationService'
+import { createLocation } from '@/services/LocationService'
 
-import { deleteCoordinate } from '@/services/CoordinatesService'
+import { createCoordinate } from '@/services/CoordinatesService'
 
-import { deleteDragonHead } from '@/services/DragonHeadService'
+import { createDragonHead } from '@/services/DragonHeadService'
 
-import { deleteDragonCave } from '@/services/DragonCaveService'
+import { createDragonCave } from '@/services/DragonCaveService'
 
-import { deletePerson } from '@/services/PeopleService'
+import { createPerson } from '@/services/PeopleService'
 
-import { deleteDragon } from '@/services/DragonService'
+import { createDragon } from '@/services/DragonService'
 
 
 
 interface ComponentConfig {
-  deleteT: (id: number) => Promise<any>,
+  createT: (createDto: any) => Promise<any>,
   formLabel?: string,
 }
 
 const route = useRoute()
 const router = useRouter()
 
-const deleteConfigs: Record<string, ComponentConfig> = {
+const createConfigs: Record<string, ComponentConfig> = {
   Dragon: {
-    deleteT: deleteDragon,
+    createT: createDragon,
     formLabel: "Dragon",
   },
 
   Person: {
-    deleteT: deletePerson,
+    createT: createPerson,
     formLabel: "Person",
 
   },
 
   DragonHead: {
-    deleteT: deleteDragonHead,
+    createT: createDragonHead,
     formLabel: "DragonHead",
   },
 
   DragonCave: {
-    deleteT: deleteDragonCave,
+    createT: createDragonCave,
     formLabel: "DragonCave",
   },
 
   Location: {
-    deleteT: deleteLocation,
+    createT: createLocation,
     formLabel: "Location",
   },
 
   Coordinate: {
-    deleteT: deleteCoordinate,
+    createT: createCoordinate,
     formLabel: "Coordinate",
   },
 }
 
 // Текущий тип из URL
 const currentType = computed(() => route.params.type as string)
-const currentConfig = computed(() => deleteConfigs[currentType.value])
+const currentConfig = computed(() => createConfigs[currentType.value])
 
 // Переход к другому типу
 const handleMenuSelect = (type: string) => {
   router.push({
-    path: `/delete/${type}`,
+    path: `/create/${type}`,
     query: {}
   })
 }
 
 // Если тип не найден, редирект на первый доступный
 watch(currentType, (type) => {
-  if (!deleteConfigs[type]) {
-    const firstType = Object.keys(deleteConfigs)[0]
-    router.replace(`/delete/${firstType}`)
+  if (!createConfigs[type]) {
+    const firstType = Object.keys(createConfigs)[0]
+    router.replace(`/create/${firstType}`)
   }
 }, { immediate: true })
 </script>
@@ -89,7 +89,7 @@ watch(currentType, (type) => {
         :default-active="currentType">
 
         <el-menu-item 
-          v-for="(config, key) in deleteConfigs" 
+          v-for="(config, key) in createConfigs" 
           :key="key"
           :index="key">
           <span>{{ key }}</span>
@@ -102,7 +102,7 @@ watch(currentType, (type) => {
 
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-        <el-breadcrumb-item>Delete</el-breadcrumb-item>
+        <el-breadcrumb-item>Create</el-breadcrumb-item>
         <el-breadcrumb-item>{{ currentType }}</el-breadcrumb-item>
         <el-breadcrumb-item v-if="route.query.id">
           ID: {{ route.query.id }}
@@ -111,9 +111,9 @@ watch(currentType, (type) => {
 
       <el-divider />
 
-      <GenericDeleteById
+      <GenericCreate
         :key="`${currentType}-${route.query.id || 'new'}`"
-        :deleteT="currentConfig.deleteT"
+        :createT="currentConfig.createT"
         :formLabel="currentConfig.formLabel"
       />
     </el-main>
