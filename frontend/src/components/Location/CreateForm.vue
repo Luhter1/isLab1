@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { CoordinateCreateDto } from '@/interfaces/dto/coordinates/CoordinateCreateDto'
+import { LocationCreateDto } from '@/interfaces/dto/locations/LocationCreateDto'
 
 const props = defineProps<{
-  obj: CoordinateCreateDto
+  obj: LocationCreateDto
 }>()
 
 const emit = defineEmits<{
-  'update:obj': [value: CoordinateCreateDto]
+  'update:obj': [value: LocationCreateDto]
 }>()
 
 // Computed свойства для двусторонней связи
@@ -29,5 +29,13 @@ const localObj = computed({
 
   <el-form-item label="Y" prop="y">
     <el-input v-model="localObj.y" type="number"/>
+  </el-form-item>
+
+  <el-form-item label="Z" prop="z">
+    <el-input v-model="localObj.z" type="number"/>
+  </el-form-item>
+
+  <el-form-item label="Name" prop="name">
+    <el-input v-model="localObj.name" type="number"/>
   </el-form-item>
 </template>

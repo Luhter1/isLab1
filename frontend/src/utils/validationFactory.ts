@@ -5,12 +5,36 @@ export class ValidationFactory {
     switch(type) {
       case 'Coordinate':
         return this.coordinateRules()
-      case 'Dragon':
-        return this.dragonRules()
-      case 'Person':
-        return this.personRules()
+      case 'Location':
+        return this.locationRules()
+      case 'DragonHead':
+        return {}
       default:
         return {}
+    }
+  }
+
+  private static locationRules(): FormRules {
+    return {
+      x: [
+        { required: true, message: 'X coordinate is required', trigger: 'blur' },
+      ],
+      z: [
+        { required: true, message: 'Z coordinate is required', trigger: 'blur' },
+      ],
+      name: [
+        { required: true, message: 'Z coordinate is required', trigger: 'blur' },
+        { 
+          validator: (rule, value, callback) => {
+            if (value.length > 240) {
+              callback(new Error('Name length must be less than 241'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        }
+      ],
     }
   }
 
@@ -45,29 +69,4 @@ export class ValidationFactory {
     }
   }
 
-  private static dragonRules(): FormRules {
-    return {
-      name: [
-        { required: true, message: 'Name is required', trigger: 'blur' },
-        { min: 2, max: 50, message: 'Name must be 2-50 characters', trigger: 'blur' }
-      ],
-      age: [
-        { required: true, message: 'Age is required', trigger: 'blur' },
-        { type: 'number', message: 'Age must be a number', trigger: 'change' },
-        { min: 0, max: 10000, message: 'Age must be between 0 and 10000', trigger: 'change' }
-      ]
-    }
-  }
-
-  private static personRules(): FormRules {
-    return {
-      name: [
-        { required: true, message: 'Name is required', trigger: 'blur' }
-      ],
-      email: [
-        { required: true, message: 'Email is required', trigger: 'blur' },
-        { type: 'email', message: 'Please enter valid email', trigger: 'blur' }
-      ]
-    }
-  }
 }

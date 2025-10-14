@@ -1,17 +1,18 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
-import type { FormRules } from 'element-plus'
 import type { Component } from 'vue'
 import { ValidationFactory } from '@/utils/validationFactory'
 import GenericCreate from '@/components/Common/GenericCreate.vue'
 
 import { createLocation } from '@/services/LocationService'
+import locationCreateForm from '@/components/Location/CreateForm.vue'
 
 import { createCoordinate } from '@/services/CoordinatesService'
 import coordinateCreateForm from '@/components/Coordinates/CreateForm.vue'
 
 import { createDragonHead } from '@/services/DragonHeadService'
+import locationDragonHead from '@/components/DragonHead/CreateForm.vue'
 
 import { createDragonCave } from '@/services/DragonCaveService'
 
@@ -45,7 +46,7 @@ const createConfigs: Record<string, ComponentConfig> = {
 
   DragonHead: {
     createT: createDragonHead,
-    formFieldsT: null,
+    formFieldsT: locationDragonHead,
     formLabel: "DragonHead",
   },
 
@@ -57,7 +58,7 @@ const createConfigs: Record<string, ComponentConfig> = {
 
   Location: {
     createT: createLocation,
-    formFieldsT: null,
+    formFieldsT: locationCreateForm,
     formLabel: "Location",
   },
 
