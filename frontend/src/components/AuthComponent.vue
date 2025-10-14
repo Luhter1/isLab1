@@ -60,7 +60,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     </el-form-item>
 
     <el-form-item label="Password" prop="password">
-      <el-input v-model="user.password" type="password" autocomplete="off" />
+      <el-input v-model="user.password" type="password" autocomplete="off" show-password/>
     </el-form-item>
 
     <el-form-item>
