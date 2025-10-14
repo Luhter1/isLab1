@@ -4,17 +4,14 @@
 import { reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { FormInstance, FormRules } from 'element-plus'
-import type { Component } from 'vue'
 
-interface ViewId {
+interface DeleteId {
   id: number;
 }
 
 const props = defineProps<{
-  getT: (id: number) => Promise<TDto>,
-  cardT: Component,
+  deleteT: (id: number) => Promise<TDto>,
   formLabel?: string,
-  initialId?: number | null
 }>()
 
 const route = useRoute()
@@ -22,7 +19,7 @@ const router = useRouter()
 
 const data = ref<TDto>()
 const ruleFormRef = ref<FormInstance>()
-const view = reactive<ViewId>({
+const Delete = reactive<DeleteId>({
   id: null
 });
 
@@ -36,14 +33,14 @@ const validateId = (rule: any, value: number, callback: any) => {
   callback()
 }
 
-const rules = reactive<FormRules<ViewId>>({
+const rules = reactive<FormRules<DeleteId>>({
   id: [{ validator: validateId, trigger: 'blur' }]
 })
 
 // Загрузка данных
 const loadData = async (id: number) => {
   try {
-    data.value = await props.getT(id)
+    data.value = await props.deleteT(id)
   } catch (error) {
     data.value = undefined
   }
@@ -58,7 +55,7 @@ const updateUrl = (id: number | null) => {
   } else {
     delete currentQuery.id
   }
-  
+
   router.push({ 
     path: route.path,
     query: currentQuery 
@@ -70,7 +67,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid) => {
     if (valid) {
-      updateUrl(view.id)
+      updateUrl(Delete.id)
     }
   })
 }
@@ -80,11 +77,11 @@ watch(() => route.query.id, async (newId) => {
   if (newId) {
     const id = Number(newId)
     if (!isNaN(id) && id > 0) {
-      view.id = id
+      Delete.id = id
       await loadData(id)
     }
   } else {
-    view.id = null
+    Delete.id = null
     data.value = undefined
   }
 }, { immediate: true })
@@ -94,22 +91,16 @@ watch(() => route.query.id, async (newId) => {
   <el-form
     ref="ruleFormRef"
     style="max-width: 600px"
-    :model="view"
+    :model="Delete"
     :rules="rules"
     label-width="auto"
   >
     <el-form-item label="ID" prop="id">
-      <el-input v-model.number="view.id" type="number" placeholder="Enter ID"/>
+      <el-input v-model.number="Delete.id" type="number" placeholder="Enter ID"/>
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormRef)">Submit</el-button>
+      <el-button type="primary" @click="submitForm(ruleFormRef)">Delete</el-button>
     </el-form-item>
   </el-form>
-
-  <component
-    :is="props.cardT"
-    :obj="data"
-    v-if="data"
-  />
 </template>

@@ -48,19 +48,19 @@ const handleToggle = () => {
           :collapse-transition="false"
           class="sidebar-menu"
         >
-          <el-menu-item index="/view/Location">
+          <el-menu-item index="/view/Dragon">
             <el-icon><View /></el-icon>
             <template #title>View</template>
           </el-menu-item>
-          <el-menu-item index="/create">
+          <el-menu-item index="/create/Dragon">
             <el-icon><DocumentAdd /></el-icon>
             <template #title>Create</template>
           </el-menu-item>
-          <el-menu-item index="/update">
+          <el-menu-item index="/update/Dragon">
             <el-icon><Edit /></el-icon>
             <template #title>Update</template>
           </el-menu-item>
-          <el-menu-item index="/delete">
+          <el-menu-item index="/delete/Dragon">
             <el-icon><Delete /></el-icon>
             <template #title>Delete</template>
           </el-menu-item>

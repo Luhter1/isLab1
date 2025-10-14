@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import SingIn from '@/views/SingIn.vue'
 import SingUp from '@/views/SingUp.vue'
 import ViewContainer from '@/views/sidebar/ViewContainer.vue'
+import DeleteContainer from '@/views/sidebar/DeleteContainer.vue'
 import { logout } from '@/services/AuthService'
 
 const router = createRouter({
@@ -36,6 +37,15 @@ const router = createRouter({
       path: '/view/:type',
       name: 'view',
       component: ViewContainer,
+      props: route => ({ 
+        type: route.params.type,
+        id: route.query.id ? Number(route.query.id) : null
+      })
+    },
+    {
+      path: '/delete/:type',
+      name: 'delete',
+      component: DeleteContainer,
       props: route => ({ 
         type: route.params.type,
         id: route.query.id ? Number(route.query.id) : null
