@@ -35,6 +35,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 </script>
 
 <template>
+  <p v-if="data">Created with ID: {{ data.id }}</p>
   <el-form
     ref="ruleFormRef"
     style="max-width: 600px"
