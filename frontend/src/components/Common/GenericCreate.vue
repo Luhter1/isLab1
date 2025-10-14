@@ -2,6 +2,7 @@
 
 <script lang="ts" setup generic="TCreateDto extends { id: any }, TDto extends { id: any }">
 import { ref } from 'vue'
+import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { Component } from 'vue'
 
@@ -25,6 +26,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       try {
         data.value = await props.createT(Create.value)
         formEl.resetFields()
+        ElNotification({
+          title: props.formLabel,
+          message: 'Created object with ID: ' + data.value.id,
+          type: 'success',
+          offset: 80,
+          duration: 0,
+        })
       } catch (error) {
         data.value = undefined
       }
@@ -35,7 +43,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 </script>
 
 <template>
-  <p v-if="data">Created with ID: {{ data.id }}</p>
   <el-form
     ref="ruleFormRef"
     style="max-width: 600px"
