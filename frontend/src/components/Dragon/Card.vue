@@ -5,7 +5,7 @@ import cardCoordinate from '../Coordinates/Card.vue'
 import cardDragonCave from '../DragonCave/Card.vue'
 import cardPerson from '../Person/Card.vue'
 import cardDragonHead from '../DragonHead/Card.vue'
-import { displayValue } from '../utils/displayValue'
+import { displayValue } from '@/utils/displayValue'
 
 interface Props {
   obj: DragonDto

@@ -6,7 +6,7 @@ import { CoordinateCreateDto } from '@/interfaces/dto/coordinates/CoordinateCrea
 import { CoordinateUpdateDto } from '@/interfaces/dto/coordinates/CoordinateUpdateDto';
 import CrudController, { staticImplements } from '@/interfaces/crud/CrudController';
 import Paged from '@/interfaces/models/Paged';
-import { createCrudUri } from './utils/uri';
+import { createCrudUri } from '@/utils/uri';
 
 @staticImplements<CrudController<CoordinateDto, CoordinateCreateDto, CoordinateUpdateDto>>()
 export default class CoordinatesService {

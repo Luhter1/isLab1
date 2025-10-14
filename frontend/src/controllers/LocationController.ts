@@ -5,7 +5,7 @@ import { LocationCreateDto } from '@/interfaces/dto/locations/LocationCreateDto'
 import { LocationUpdateDto } from '@/interfaces/dto/locations/LocationUpdateDto';
 import CrudController, { staticImplements } from '@/interfaces/crud/CrudController';
 import Paged from '@/interfaces/models/Paged';
-import { createCrudUri } from './utils/uri';
+import { createCrudUri } from '@/utils/uri';
 
 @staticImplements<CrudController<LocationDto, LocationCreateDto, LocationUpdateDto>>()
 export default class LocationService {

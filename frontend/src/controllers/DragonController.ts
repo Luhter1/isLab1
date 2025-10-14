@@ -5,7 +5,7 @@ import { DragonCreateDto } from '@/interfaces/dto/dragons/DragonCreateDto';
 import { DragonUpdateDto } from '@/interfaces/dto/dragons/DragonUpdateDto';
 import CrudController, { staticImplements } from '@/interfaces/crud/CrudController';
 import Paged from '@/interfaces/models/Paged';
-import { createCrudUri } from './utils/uri';
+import { createCrudUri } from '@/utils/uri';
 
 @staticImplements<CrudController<DragonDto, DragonCreateDto, DragonUpdateDto>>()
 export default class DragonService {

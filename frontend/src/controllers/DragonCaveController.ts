@@ -5,7 +5,7 @@ import { DragonCaveCreateDto } from '@/interfaces/dto/dragoncaves/DragonCaveCrea
 import { DragonCaveUpdateDto } from '@/interfaces/dto/dragoncaves/DragonCaveUpdateDto';
 import CrudController, { staticImplements } from '@/interfaces/crud/CrudController';
 import Paged from '@/interfaces/models/Paged';
-import { createCrudUri } from './utils/uri';
+import { createCrudUri } from '@/utils/uri';
 
 @staticImplements<CrudController<DragonCaveDto, DragonCaveCreateDto, DragonCaveUpdateDto>>()
 export default class DragonCaveService {

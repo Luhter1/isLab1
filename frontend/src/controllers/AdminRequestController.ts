@@ -2,7 +2,7 @@ import api from '@/controllers/api';
 import { AxiosResponse } from 'axios';
 import { AdminRequestDto } from '@/interfaces/dto/adminrequests/AdminRequestDto';
 import Paged from '@/interfaces/models/Paged';
-import { createCrudUri } from './utils/uri';
+import { createCrudUri } from '@/utils/uri';
 
 export default class AdminRequestService {
   static async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<AdminRequestDto>>> {

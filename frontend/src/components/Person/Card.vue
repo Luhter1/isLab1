@@ -2,7 +2,7 @@
 import { toRef } from 'vue'
 import { PersonDto } from '@/interfaces/dto/people/PersonDto'
 import cardLocation from '../Location/Card.vue'
-import { displayValue } from '../utils/displayValue'
+import { displayValue } from '@/utils/displayValue'
 
 interface Props {
   obj: PersonDto

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { toRef } from 'vue'
 import { LocationDto } from '@/interfaces/dto/locations/LocationDto'
-import { displayValue } from '../utils/displayValue'
+import { displayValue } from '@/utils/displayValue'
 
 interface Props {
   obj: LocationDto

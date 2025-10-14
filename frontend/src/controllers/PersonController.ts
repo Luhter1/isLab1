@@ -5,7 +5,7 @@ import { PersonCreateDto } from '@/interfaces/dto/people/PersonCreateDto';
 import { PersonUpdateDto } from '@/interfaces/dto/people/PersonUpdateDto';
 import CrudController, { staticImplements } from '@/interfaces/crud/CrudController';
 import Paged from '@/interfaces/models/Paged';
-import { createCrudUri } from './utils/uri';
+import { createCrudUri } from '@/utils/uri';
 
 @staticImplements<CrudController<PersonDto, PersonCreateDto, PersonUpdateDto>>()
 export default class PersonService {
