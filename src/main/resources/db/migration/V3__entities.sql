@@ -1,7 +1,7 @@
 BEGIN;
 
 -- Вспомогательный тип для цветов (enum Color)
-CREATE TYPE color AS ENUM ('GREEN', 'RED', 'BLACK', 'YELLOW', 'BROWN');
+CREATE TYPE color AS ENUM ('RED', 'BLUE', 'YELLOW', 'ORANGE');
 
 -- Вспомогательный тип для типов драконов (enum DragonType)
 CREATE TYPE dragon_type AS ENUM ('WATER', 'UNDERGROUND', 'AIR', 'FIRE');

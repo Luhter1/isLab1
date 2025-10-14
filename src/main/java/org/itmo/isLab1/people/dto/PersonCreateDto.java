@@ -6,6 +6,8 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.itmo.isLab1.people.enums.Color;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -22,6 +24,7 @@ public class PersonCreateDto {
     private Integer locationId;
 
     @Past
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime birthday;
 
     @NotNull
