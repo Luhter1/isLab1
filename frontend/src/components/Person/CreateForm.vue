@@ -45,4 +45,27 @@ const localObj = computed({
     </el-select>
   </el-form-item>
 
+  <el-form-item label="Location ID" prop="locationId">
+    <el-input v-model="localObj.locationId" type="number" placeholder="Location ID" clearable/>
+  </el-form-item>
+
+  <el-form-item label="Birthday" prop="birthday">
+    <el-date-picker
+      v-model="localObj.birthday"
+      type="datetime"
+      placeholder="Birthday"
+    />
+  </el-form-item>
+
+  <el-form-item label="Height" prop="height">
+    <el-input v-model="localObj.height" type="number" placeholder="Height" clearable/>
+  </el-form-item>
+
+  <el-form-item label="Weight" prop="weight">
+    <el-input v-model="localObj.weight" type="number" placeholder="Weight" clearable/>
+  </el-form-item>
+
+  <el-form-item label="Passport ID" prop="passportId">
+    <el-input v-model="localObj.passportId" placeholder="Passport ID" clearable/>
+  </el-form-item>
 </template>
