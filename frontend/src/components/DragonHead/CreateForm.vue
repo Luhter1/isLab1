@@ -24,6 +24,6 @@ const localObj = computed({
 
 <template>
   <el-form-item label="Size" prop="size">
-    <el-input v-model="localObj.size" type="number"/>
+    <el-input v-model="localObj.size" type="number" placeholder="Size" clearable/>
   </el-form-item>
 </template>

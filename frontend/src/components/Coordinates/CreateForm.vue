@@ -24,10 +24,10 @@ const localObj = computed({
 
 <template>
   <el-form-item label="X" prop="x">
-    <el-input v-model="localObj.x" type="number"/>
+    <el-input v-model="localObj.x" type="number" placeholder="X" clearable/>
   </el-form-item>
 
   <el-form-item label="Y" prop="y">
-    <el-input v-model="localObj.y" type="number"/>
+    <el-input v-model="localObj.y" type="number" placeholder="Y" clearable/>
   </el-form-item>
 </template>

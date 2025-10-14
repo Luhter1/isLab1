@@ -24,6 +24,6 @@ const localObj = computed({
 
 <template>
   <el-form-item label="Depth" prop="depth">
-    <el-input v-model="localObj.depth" type="number"/>
+    <el-input v-model="localObj.depth" type="number" placeholder="Depth" clearable/>
   </el-form-item>
 </template>

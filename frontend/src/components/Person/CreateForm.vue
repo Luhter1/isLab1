@@ -24,7 +24,7 @@ const localObj = computed({
 
 <template>
   <el-form-item label="Name" prop="name">
-    <el-input v-model="localObj.name" clearable/>
+    <el-input v-model="localObj.name" placeholder="Name" clearable/>
   </el-form-item>
 
   <el-form-item label="Eye color" prop="eyeColor">
