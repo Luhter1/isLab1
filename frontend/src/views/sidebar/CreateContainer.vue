@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { computed, watch, markRaw } from 'vue';
+import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
+import type { Component } from 'vue'
 import GenericCreate from '@/components/Common/GenericCreate.vue'
 
 import { createLocation } from '@/services/LocationService'
 
 import { createCoordinate } from '@/services/CoordinatesService'
+import coordinateCreateForm from '@/components/Coordinates/CreateForm.vue'
 
 import { createDragonHead } from '@/services/DragonHeadService'
 
@@ -16,9 +18,9 @@ import { createPerson } from '@/services/PeopleService'
 import { createDragon } from '@/services/DragonService'
 
 
-
 interface ComponentConfig {
   createT: (createDto: any) => Promise<any>,
+  formFieldsT: Component,
   formLabel?: string,
 }
 
@@ -28,32 +30,38 @@ const router = useRouter()
 const createConfigs: Record<string, ComponentConfig> = {
   Dragon: {
     createT: createDragon,
+    formFieldsT: null,
     formLabel: "Dragon",
   },
 
   Person: {
     createT: createPerson,
+    formFieldsT: null,
     formLabel: "Person",
 
   },
 
   DragonHead: {
     createT: createDragonHead,
+    formFieldsT: null,
     formLabel: "DragonHead",
   },
 
   DragonCave: {
     createT: createDragonCave,
+    formFieldsT: null,
     formLabel: "DragonCave",
   },
 
   Location: {
     createT: createLocation,
+    formFieldsT: null,
     formLabel: "Location",
   },
 
   Coordinate: {
     createT: createCoordinate,
+    formFieldsT: coordinateCreateForm,
     formLabel: "Coordinate",
   },
 }
@@ -104,9 +112,6 @@ watch(currentType, (type) => {
         <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
         <el-breadcrumb-item>Create</el-breadcrumb-item>
         <el-breadcrumb-item>{{ currentType }}</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="route.query.id">
-          ID: {{ route.query.id }}
-        </el-breadcrumb-item>
       </el-breadcrumb>
 
       <el-divider />
@@ -114,6 +119,7 @@ watch(currentType, (type) => {
       <GenericCreate
         :key="`${currentType}-${route.query.id || 'new'}`"
         :createT="currentConfig.createT"
+        :formFieldsT="currentConfig.formFieldsT"
         :formLabel="currentConfig.formLabel"
       />
     </el-main>
