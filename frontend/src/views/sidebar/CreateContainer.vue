@@ -15,6 +15,7 @@ import { createDragonHead } from '@/services/DragonHeadService'
 import locationDragonHead from '@/components/DragonHead/CreateForm.vue'
 
 import { createDragonCave } from '@/services/DragonCaveService'
+import locationDragonCave from '@/components/DragonCave/CreateForm.vue'
 
 import { createPerson } from '@/services/PeopleService'
 
@@ -52,7 +53,7 @@ const createConfigs: Record<string, ComponentConfig> = {
 
   DragonCave: {
     createT: createDragonCave,
-    formFieldsT: null,
+    formFieldsT: locationDragonCave,
     formLabel: "DragonCave",
   },
 

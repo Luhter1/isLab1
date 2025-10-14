@@ -23,6 +23,10 @@ const localObj = computed({
 </script>
 
 <template>
+  <el-form-item label="Name" prop="name">
+    <el-input v-model="localObj.name" type="number"/>
+  </el-form-item>
+
   <el-form-item label="X" prop="x">
     <el-input v-model="localObj.x" type="number"/>
   </el-form-item>
@@ -33,9 +37,5 @@ const localObj = computed({
 
   <el-form-item label="Z" prop="z">
     <el-input v-model="localObj.z" type="number"/>
-  </el-form-item>
-
-  <el-form-item label="Name" prop="name">
-    <el-input v-model="localObj.name" type="number"/>
   </el-form-item>
 </template>

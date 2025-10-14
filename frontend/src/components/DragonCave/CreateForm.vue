@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { DragonHeadCreateDto } from '@/interfaces/dto/dragonheads/DragonHeadCreateDto'
+import { DragonCaveCreateDto } from '@/interfaces/dto/dragoncaves/DragonCaveCreateDto'
 
 const props = defineProps<{
-  obj: DragonHeadCreateDto
+  obj: DragonCaveCreateDto
 }>()
 
 const emit = defineEmits<{
-  'update:obj': [value: DragonHeadCreateDto]
+  'update:obj': [value: DragonCaveCreateDto]
 }>()
 
 // Computed свойства для двусторонней связи
@@ -23,7 +23,7 @@ const localObj = computed({
 </script>
 
 <template>
-  <el-form-item label="Size" prop="size">
-    <el-input v-model="localObj.size" type="number"/>
+  <el-form-item label="Depth" prop="depth">
+    <el-input v-model="localObj.depth" type="number"/>
   </el-form-item>
 </template>

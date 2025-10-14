@@ -9,8 +9,18 @@ export class ValidationFactory {
         return this.locationRules()
       case 'DragonHead':
         return {}
+      case 'DragonCave':
+        return this.dragoncaveRules()
       default:
         return {}
+    }
+  }
+
+  private static dragoncaveRules(): FormRules {
+    return {
+      depth: [
+        { required: true, message: 'Depth is required', trigger: 'blur' },
+      ],
     }
   }
 
@@ -23,7 +33,7 @@ export class ValidationFactory {
         { required: true, message: 'Z coordinate is required', trigger: 'blur' },
       ],
       name: [
-        { required: true, message: 'Z coordinate is required', trigger: 'blur' },
+        { required: true, message: 'Name is required', trigger: 'blur' },
         { 
           validator: (rule, value, callback) => {
             if (value.length > 240) {
@@ -54,7 +64,7 @@ export class ValidationFactory {
         }
       ],
       y: [
-        { required: true, message: 'Y is required', trigger: 'blur' },
+        { required: true, message: 'Y coordinate is required', trigger: 'blur' },
         { 
           validator: (rule, value, callback) => {
             if (value >845) {
