@@ -19,7 +19,7 @@ import { deleteDragon } from '@/services/DragonService'
 
 interface ComponentConfig {
   deleteT: (id: number) => Promise<any>,
-  formLabel?: string,
+  formLabel: string,
 }
 
 const route = useRoute()

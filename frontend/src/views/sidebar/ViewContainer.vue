@@ -26,9 +26,7 @@ import { getDragon } from '@/services/DragonService'
 interface ComponentConfig {
   getT: (id: number) => Promise<any>
   cardT: any
-  formLabel?: string
-  initialId?: number | null
-
+  formLabel: string
 }
 
 const route = useRoute()

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
+import type { FormRules } from 'element-plus'
 import type { Component } from 'vue'
 import GenericCreate from '@/components/Common/GenericCreate.vue'
 
@@ -21,7 +22,8 @@ import { createDragon } from '@/services/DragonService'
 interface ComponentConfig {
   createT: (createDto: any) => Promise<any>,
   formFieldsT: Component,
-  formLabel?: string,
+  formLabel: string,
+  validationRules?: FormRules,
 }
 
 const route = useRoute()
@@ -121,6 +123,7 @@ watch(currentType, (type) => {
         :createT="currentConfig.createT"
         :formFieldsT="currentConfig.formFieldsT"
         :formLabel="currentConfig.formLabel"
+        :validationRules="currentConfig.validationRules"
       />
     </el-main>
   </el-container>
