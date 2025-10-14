@@ -26,7 +26,7 @@ public class Location extends CrudEntity {
     private Long x;
 
     @Column(name = "y")
-    private int y;
+    private Integer y;
 
     @NotNull
     @Column(name = "z", nullable = false)

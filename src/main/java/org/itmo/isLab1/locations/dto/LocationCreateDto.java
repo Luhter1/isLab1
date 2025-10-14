@@ -10,7 +10,7 @@ public class LocationCreateDto {
     @NotNull
     private Long x;
 
-    private int y;
+    private Integer y;
 
     @NotNull
     private Double z;
