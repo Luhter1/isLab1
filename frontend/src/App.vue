@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterView } from 'vue-router'
 import MenuAuth from './components/MenuAuth.vue'
+import WebSocketService from '@/controllers/websocket'
 import { 
   Fold, 
   Expand,
@@ -14,6 +15,14 @@ const isCollapse = ref(true)
 const handleToggle = () => {
   isCollapse.value = !isCollapse.value
 }
+
+onMounted(() => {
+  WebSocketService.connect()
+})
+
+onUnmounted(() => {
+  WebSocketService.disconnect()
+})
 </script>
 
 <template>
