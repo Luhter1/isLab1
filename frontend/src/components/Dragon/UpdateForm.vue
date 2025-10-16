@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { DragonCreateDto } from '@/interfaces/dto/dragons/DragonCreateDto'
-import CreateForm from './CreateForm.vue'
 
 const props = defineProps<{
   obj: DragonCreateDto
@@ -57,10 +56,6 @@ const fields = [
     value: 8,
   },
 ]
-
-const change = () => {
-  console.log(value2.value.find((e) => e === 1))
-}
 </script>
 
 <template>
