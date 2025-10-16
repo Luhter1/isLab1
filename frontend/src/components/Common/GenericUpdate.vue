@@ -1,6 +1,4 @@
-// File: GenericGetByIdForm.vue
-
-<script lang="ts" setup generic="TUpdateDto extends { id: any }, TDto extends { id: any }">
+<script lang="ts" setup generic="TUpdateDto, TDto extends { id: any }">
 import { ref } from 'vue'
 import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
