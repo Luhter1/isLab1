@@ -6,7 +6,7 @@ import { ValidationFactory } from '@/utils/validationFactory'
 import GenericUpdate from '@/components/Common/GenericUpdate.vue'
 
 import { updateLocation } from '@/services/LocationService'
-// import locationUpdateForm from '@/components/Location/UpdateForm.vue'
+import locationUpdateForm from '@/components/Location/UpdateForm.vue'
 
 import { updateCoordinate } from '@/services/CoordinatesService'
 import coordinateUpdateForm from '@/components/Coordinates/UpdateForm.vue'
@@ -62,7 +62,7 @@ const updateConfigs: Record<string, ComponentConfig> = {
 
   Location: {
     updateT: updateLocation,
-    formFieldsT: null,
+    formFieldsT: locationUpdateForm,
     formLabel: "Location",
   },
 
