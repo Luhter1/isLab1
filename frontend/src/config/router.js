@@ -5,6 +5,7 @@ import SingUp from '@/views/SingUp.vue'
 import ViewContainer from '@/views/sidebar/ViewContainer.vue'
 import DeleteContainer from '@/views/sidebar/DeleteContainer.vue'
 import CreateContainer from '@/views/sidebar/CreateContainer.vue'
+import UpdateContainer from '@/views/sidebar/UpdateContainer.vue'
 import { logout } from '@/services/AuthService'
 
 const router = createRouter({
@@ -56,6 +57,15 @@ const router = createRouter({
       path: '/create/:type',
       name: 'create',
       component: CreateContainer,
+      props: route => ({ 
+        type: route.params.type,
+        id: route.query.id ? Number(route.query.id) : null
+      })
+    },
+    {
+      path: '/update/:type',
+      name: 'update',
+      component: UpdateContainer,
       props: route => ({ 
         type: route.params.type,
         id: route.query.id ? Number(route.query.id) : null
