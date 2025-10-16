@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="TUpdateDto, TDto extends { id: any }">
-import { ref, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { Component } from 'vue'
@@ -15,15 +15,37 @@ const props = defineProps<{
 const data = ref<TDto>()
 const ruleFormRef = ref<FormInstance>()
 const Update = ref<TUpdateDto>({} as TUpdateDto);
-const id = ref(null);
+const UpdateId = ref(null);
+
+const localRules = computed<FormRules>(() => {
+  const rules: FormRules = { ...props.validationRules }
+  
+  rules.UpdateId = [
+    { 
+      validator: (rule, value, callback) => {
+        value = UpdateId.value
+        if(!value){
+          callback(new Error('ID is required'))
+        }else if (!Number.isInteger(value) || value <= 0) {
+          callback(new Error('ID must be a positive integer'))
+        } else {
+          callback()
+        }
+      }, 
+      trigger: 'change' 
+    }
+  ]
+  
+  return rules
+})
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
-  
+
   await formEl.validate(async (valid) => {
     if (valid) {
       try {
-        data.value = await props.updateT(id.value, Update.value)
+        data.value = await props.updateT(UpdateId.value, Update.value)
         formEl.resetFields()
         ElNotification({
           title: props.formLabel,
@@ -38,12 +60,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-
-// onMounted(() => {
-//   if(props.validationRules){
-//     console.log(props.validationRules.rules)
-//   }
-// })
 </script>
 
 <template>
@@ -51,17 +67,16 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     ref="ruleFormRef"
     style="max-width: 600px"
     :model="Update"
-    :rules="validationRules"
+    :rules="localRules"
     label-width="auto"
   >
-    <el-form-item label="ID" prop="id">
-      <el-input v-model.number="id" type="number" placeholder="Enter ID"/>
+    <el-form-item label="ID" prop="UpdateId">
+      <el-input v-model.number="UpdateId" type="number" placeholder="Enter ID"/>
     </el-form-item>
 
     <component
       :is="props.formFieldsT"
       v-model:obj="Update"
-      v-model:id="id"
     />
 
     <el-form-item>

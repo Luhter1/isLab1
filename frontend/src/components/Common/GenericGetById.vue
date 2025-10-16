@@ -26,14 +26,14 @@ const view = reactive<ViewId>({
   id: null
 });
 
-const validateId = (rule: any, value: number, callback: any) => {
+const validateId = (rule, value, callback) => {
   if (!value) {
-    return callback(new Error('Input ID'))
+    callback(new Error('ID is required'))
+  } else if (!Number.isInteger(value) || value <= 0) {
+    callback(new Error('ID must be a positive integer'))
+  } else {
+    callback()
   }
-  if (value < 1) {
-    return callback(new Error('ID must be greater than 0'))
-  }
-  callback()
 }
 
 const rules = reactive<FormRules<ViewId>>({
