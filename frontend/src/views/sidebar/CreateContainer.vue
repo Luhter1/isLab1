@@ -22,6 +22,8 @@ import locationPerson from '@/components/Person/CreateForm.vue'
 
 
 import { createDragon } from '@/services/DragonService'
+import locationDragon from '@/components/Dragon/CreateForm.vue'
+
 
 
 interface ComponentConfig {
@@ -36,7 +38,7 @@ const router = useRouter()
 const createConfigs: Record<string, ComponentConfig> = {
   Dragon: {
     createT: createDragon,
-    formFieldsT: null,
+    formFieldsT: locationDragon,
     formLabel: "Dragon",
   },
 

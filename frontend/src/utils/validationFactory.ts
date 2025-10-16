@@ -14,8 +14,46 @@ export class ValidationFactory {
         return this.dragoncaveRules()
       case 'Person':
         return this.personRules()
+      case 'Dragon':
+        return this.dragonRules()
       default:
         return {}
+    }
+  }
+
+  private static dragonRules(): FormRules {
+    return {
+      name: [
+        { required: true, message: 'Name is required', trigger: 'blur' },
+        { 
+          validator: (rule, value, callback) => {
+            if (value.length > 0) {
+              callback(new Error('Name must be not blank'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        }
+      ],
+      coordinatesId: [
+        { required: true, message: 'Coordinates ID is required', trigger: 'blur' },
+      ],
+      age: [
+        { 
+          validator: (rule, value, callback) => {
+            if (value < 1) {
+              callback(new Error('Age must be grater than 0'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        },
+      ],
+      character: [
+        { required: true, message: 'Character is required', trigger: 'blur' },
+      ]
     }
   }
 
@@ -51,10 +89,28 @@ export class ValidationFactory {
       ],
       height: [
         { required: true, message: 'Height is required', trigger: 'blur' },
-        { min: 1, message: 'Height must be grater than 0', trigger: 'blur' },
+        { 
+          validator: (rule, value, callback) => {
+            if (value < 1) {
+              callback(new Error('Weight must be grater than 0'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        },
       ],
       weight: [
-        { min: 1, message: 'Weight must be grater than 0', trigger: 'blur' },
+        { 
+          validator: (rule, value, callback) => {
+            if (value < 1) {
+              callback(new Error('Weight must be grater than 0'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        },
       ],
       passportId: [
         { required: true, message: 'Passport ID is required', trigger: 'blur' },
