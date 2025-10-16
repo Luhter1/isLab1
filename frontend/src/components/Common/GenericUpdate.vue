@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="TUpdateDto, TDto extends { id: any }">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { Component } from 'vue'
@@ -15,7 +15,7 @@ const props = defineProps<{
 const data = ref<TDto>()
 const ruleFormRef = ref<FormInstance>()
 const Update = ref<TUpdateDto>({} as TUpdateDto);
-const id = ref(0);
+const id = ref(null);
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -39,6 +39,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   })
 }
 
+// onMounted(() => {
+//   if(props.validationRules){
+//     console.log(props.validationRules.rules)
+//   }
+// })
 </script>
 
 <template>
@@ -49,6 +54,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     :rules="validationRules"
     label-width="auto"
   >
+    <el-form-item label="ID" prop="id">
+      <el-input v-model.number="id" type="number" placeholder="Enter ID"/>
+    </el-form-item>
+
     <component
       :is="props.formFieldsT"
       v-model:obj="Update"

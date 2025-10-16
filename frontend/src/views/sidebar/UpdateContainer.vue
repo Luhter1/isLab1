@@ -9,7 +9,7 @@ import { updateLocation } from '@/services/LocationService'
 // import locationUpdateForm from '@/components/Location/UpdateForm.vue'
 
 import { updateCoordinate } from '@/services/CoordinatesService'
-// import coordinateUpdateForm from '@/components/Coordinates/UpdateForm.vue'
+import coordinateUpdateForm from '@/components/Coordinates/UpdateForm.vue'
 
 import { updateDragonHead } from '@/services/DragonHeadService'
 // import locationDragonHead from '@/components/DragonHead/UpdateForm.vue'
@@ -69,7 +69,7 @@ const updateConfigs: Record<string, ComponentConfig> = {
 
   Coordinate: {
     updateT: updateCoordinate,
-    formFieldsT: null,
+    formFieldsT: coordinateUpdateForm,
     formLabel: "Coordinate",
   },
 }
