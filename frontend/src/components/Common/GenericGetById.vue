@@ -5,6 +5,7 @@ import { reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { Component } from 'vue'
+import validatorID from '@/utils/validateId'
 
 interface ViewId {
   id: number;
@@ -26,18 +27,8 @@ const view = reactive<ViewId>({
   id: null
 });
 
-const validateId = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('ID is required'))
-  } else if (!Number.isInteger(value) || value <= 0) {
-    callback(new Error('ID must be a positive integer'))
-  } else {
-    callback()
-  }
-}
-
 const rules = reactive<FormRules<ViewId>>({
-  id: [{ validator: validateId, trigger: 'blur' }]
+  id: [{ validator: validatorID, trigger: 'blur' }]
 })
 
 // Загрузка данных

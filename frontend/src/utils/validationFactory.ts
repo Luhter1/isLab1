@@ -1,5 +1,6 @@
 import type { FormRules } from 'element-plus'
 import { DateTime } from 'luxon';
+import validatorID from '@/utils/validateId'
 
 export class ValidationFactory {
   static createRules(type: string): FormRules {
@@ -38,6 +39,16 @@ export class ValidationFactory {
       ],
       coordinatesId: [
         { required: true, message: 'Coordinates ID is required', trigger: 'blur' },
+        { validator: validatorID, trigger: 'change' }
+      ],
+      caveId: [
+        { validator: validatorID, trigger: 'change' }
+      ],
+      killerId: [
+        { validator: validatorID, trigger: 'change' }
+      ],
+      headId: [
+        { validator: validatorID, trigger: 'change' }
       ],
       age: [
         { 
@@ -74,6 +85,9 @@ export class ValidationFactory {
       ],
       hairColor: [
         { required: true, message: 'HairColor is required', trigger: 'blur' },
+      ],
+      locationId: [
+        { validator: validatorID, trigger: 'change' }
       ],
       birthday: [
         { 
