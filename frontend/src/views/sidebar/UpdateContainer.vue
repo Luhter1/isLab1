@@ -22,8 +22,7 @@ import { updatePerson } from '@/services/PeopleService'
 
 
 import { updateDragon } from '@/services/DragonService'
-// import locationDragon from '@/components/Dragon/UpdateForm.vue'
-
+import locationDragon from '@/components/Dragon/UpdateForm.vue'
 
 
 interface ComponentConfig {
@@ -38,7 +37,7 @@ const router = useRouter()
 const updateConfigs: Record<string, ComponentConfig> = {
   Dragon: {
     updateT: updateDragon,
-    formFieldsT: null,
+    formFieldsT: locationDragon,
     formLabel: "Dragon",
   },
 
