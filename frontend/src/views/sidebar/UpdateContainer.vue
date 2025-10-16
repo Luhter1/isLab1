@@ -15,7 +15,7 @@ import { updateDragonHead } from '@/services/DragonHeadService'
 // import locationDragonHead from '@/components/DragonHead/UpdateForm.vue'
 
 import { updateDragonCave } from '@/services/DragonCaveService'
-// import locationDragonCave from '@/components/DragonCave/UpdateForm.vue'
+import locationDragonCave from '@/components/DragonCave/UpdateForm.vue'
 
 import { updatePerson } from '@/services/PeopleService'
 // import locationPerson from '@/components/Person/UpdateForm.vue'
@@ -56,7 +56,7 @@ const updateConfigs: Record<string, ComponentConfig> = {
 
   DragonCave: {
     updateT: updateDragonCave,
-    formFieldsT: null,
+    formFieldsT: locationDragonCave,
     formLabel: "DragonCave",
   },
 
