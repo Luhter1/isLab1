@@ -15,6 +15,7 @@ const props = defineProps<{
 const data = ref<TDto>()
 const ruleFormRef = ref<FormInstance>()
 const Update = ref<TUpdateDto>({} as TUpdateDto);
+const id = ref(0);
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -22,7 +23,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid) => {
     if (valid) {
       try {
-        // data.value = await props.updateT(Update.value)
+        data.value = await props.updateT(id.value, Update.value)
         formEl.resetFields()
         ElNotification({
           title: props.formLabel,
@@ -51,6 +52,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     <component
       :is="props.formFieldsT"
       v-model:obj="Update"
+      v-model:id="id"
     />
 
     <el-form-item>
