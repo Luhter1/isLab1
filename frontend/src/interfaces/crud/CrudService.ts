@@ -18,6 +18,10 @@ abstract class CrudService<TDto, TCreateDto, TUpdateDto> {
         return error?.response?.data?.message || 'ERROR';
     }
 
+    getName = () => {
+        return this.name
+    }
+
     getAll = async (page: number, size: number, sort: string[]): Promise<Paged<TDto>> => {
         try {
             const response = await this.controller.getAll(page, size, sort);

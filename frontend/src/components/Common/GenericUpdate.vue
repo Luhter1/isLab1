@@ -1,5 +1,6 @@
 <script lang="ts" setup generic="TUpdateDto, TDto extends { id: any }">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { Component } from 'vue'
@@ -11,6 +12,9 @@ const props = defineProps<{
   formLabel?: string,
   validationRules?: FormRules,
 }>()
+
+const route = useRoute()
+const router = useRouter()
 
 const data = ref<TDto>()
 const ruleFormRef = ref<FormInstance>()
@@ -39,6 +43,22 @@ const localRules = computed<FormRules>(() => {
   return rules
 })
 
+// Изменение URI
+const updateUrl = (id: number | null) => {
+  const currentQuery = { ...route.query }
+  
+  if (id) {
+    currentQuery.id = String(id)
+  } else {
+    delete currentQuery.id
+  }
+
+  router.push({ 
+    path: route.path,
+    query: currentQuery 
+  })
+}
+
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
 
@@ -46,6 +66,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     if (valid) {
       try {
         data.value = await props.updateT(UpdateId.value, Update.value)
+        updateUrl(UpdateId.value)
         formEl.resetFields()
         ElNotification({
           title: props.formLabel,
@@ -60,6 +81,19 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     }
   })
 }
+
+// Следим за изменениями query параметра id в URL
+watch(() => route.query.id, async (newId) => {
+  if (newId) {
+    const id = Number(newId)
+    if (!isNaN(id) && id > 0) {
+      UpdateId.value = id
+    }
+  } else {
+    UpdateId.value = null
+    data.value = undefined
+  }
+}, { immediate: true })
 </script>
 
 <template>

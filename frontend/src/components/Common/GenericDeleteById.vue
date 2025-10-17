@@ -67,6 +67,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid) => {
     if (valid) {
+      await loadData(Delete.id)
       updateUrl(Delete.id)
     }
   })
@@ -78,7 +79,6 @@ watch(() => route.query.id, async (newId) => {
     const id = Number(newId)
     if (!isNaN(id) && id > 0) {
       Delete.id = id
-      await loadData(id)
     }
   } else {
     Delete.id = null
