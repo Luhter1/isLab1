@@ -24,7 +24,7 @@ public class DragonUpdateDto {
     @Min(0)
     private JsonNullable<Integer> age;
 
-    private JsonNullable<Color> сolor;
+    private JsonNullable<Color> color;
   
     private JsonNullable<DragonType> type;
 

@@ -25,7 +25,7 @@ public class DragonCreateDto {
     @Min(0)
     private Integer age;
 
-    private Color сolor;
+    private Color color;
   
     private DragonType type;
 

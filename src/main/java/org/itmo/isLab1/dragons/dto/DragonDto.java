@@ -21,7 +21,7 @@ public class DragonDto extends CrudDto {
     private DragonCave cave;
     private Person killer;
     private Integer age;
-    private Color сolor;
+    private Color color;
     private DragonType type;
     private DragonCharacter character;
     private DragonHead head;
