@@ -69,4 +69,8 @@ const localObj = computed({
       <el-option label="FICKLE" value="FICKLE" />
     </el-select>
   </el-form-item>
+
+  <el-form-item label="Head ID" prop="headId">
+    <el-input v-model="localObj.headId" type="number" placeholder="Head ID" clearable/>
+  </el-form-item>
 </template>
