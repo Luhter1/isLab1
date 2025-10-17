@@ -5,60 +5,32 @@ import DragonController from '@/controllers/DragonController'
 import CrudService from '@/interfaces/crud/CrudService';
 
 class DragonService extends CrudService<DragonDto, DragonCreateDto, DragonUpdateDto> {
-    constructor() {
-        super("Dragon", DragonController);
-    }
+  constructor() {
+    super("Dragon", DragonController);
 
-    getTable() {
+    this.pageSize = 10;
+    this.currentPage = 1;
+  }
 
-    }
+  getTable() {
+  }
+
+  // handleDragonCreated(dragon) {
+  //   this.dragons.push(dragon)
+  //   this.totalDragons++
+  // }
+
+  // handleDragonUpdated(dragon) {
+  //   const index = this.dragons.findIndex(d => d.id === dragon.id)
+  //   if (index !== -1) {
+  //     this.dragons[index] = dragon
+  //   }
+  // }
+
+  // handleDragonDeleted(id) {
+  //   this.dragons = this.dragons.filter(d => d.id !== id)
+  //   this.totalDragons--
+  // }
 }
 
 export default new DragonService()
-
-// class DragonService extends CrudService2<DragonDto, DragonCreateDto, DragonUpdateDto> {
-//     constructor() {
-//         super("Dragon", DragonController);
-//     }
-
-//     getTable() {
-
-//     }
-// }
-
-// class DragonTable {
-//   dragons: DragonDto[]
-//   totalDragons: number;
-//   sortBy: boolean;
-//   loading: boolean;
-//   isLast: boolean;
-//   isFirst: boolean;
-//   isEmpty: boolean;
-//   sortOrder: string;
-//   currentPage: number;
-//   pageSize: number;
-
-//   constructor() {
-//     this.pageSize = 10;
-//     this.currentPage = 1;
-//   }
-
-//   async fetchDragons() {
-//     this.loading = true
-
-//     const response = await getAllDragon(
-//       this.currentPage - 1,
-//       this.pageSize,
-//       []
-//     )
-//     this.dragons = response.content
-//     this.totalDragons = response.totalElements
-//     this.isLast = response.last
-//     this.isFirst = response.first
-//     this.isEmpty = response.empty
-
-//     this.loading = false
-//   }
-// }
-
-// export default new DragonService()

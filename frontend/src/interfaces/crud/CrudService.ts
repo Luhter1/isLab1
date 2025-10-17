@@ -2,9 +2,19 @@ import Paged from '@/interfaces/models/Paged';
 import CrudController from '@/interfaces/crud/CrudController'
 import { ElMessage } from 'element-plus'
 
-abstract class CrudService<TDto, TCreateDto, TUpdateDto> {
+abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
     protected readonly name: string;
     protected readonly controller: CrudController<TDto, TCreateDto, TUpdateDto>;
+    objects: TDto[]
+    totalObjects: number;
+    sortBy: boolean;
+    loading: boolean;
+    isLast: boolean;
+    isFirst: boolean;
+    isEmpty: boolean;
+    sortOrder: string;
+    currentPage: number;
+    pageSize: number;
 
     constructor(
         name: string,
@@ -112,6 +122,51 @@ abstract class CrudService<TDto, TCreateDto, TUpdateDto> {
             });
             throw error;
         }
+    }
+
+    async fetchObjects() {
+        this.loading = true
+
+        const response = await this.getAll(
+        this.currentPage - 1,
+        this.pageSize,
+        []
+        )
+        this.objects = response.content
+        this.totalObjects = response.totalElements
+        this.isLast = response.last
+        this.isFirst = response.first
+        this.isEmpty = response.empty
+
+        this.loading = false
+    }
+
+    async updatePage(page) {
+        this.currentPage = page
+        await this.fetchObjects()
+    }
+
+    async updatePageSize(size) {
+        this.pageSize = size
+        this.currentPage = 1
+        await this.fetchObjects()
+    }
+
+    handleDragonCreated(object) {
+        this.objects.push(object)
+        this.totalObjects++
+    }
+
+    handleDragonUpdated(object) {
+        const index = this.objects.findIndex(d => d.id === object.id)
+        if (index !== -1) {
+        this.objects[index] = object
+        }
+    }
+
+    handleDragonDeleted(id) {
+        this.objects = this.objects.filter(d => d.id !== id)
+        this.totalObjects--
     }
 
     abstract getTable(): any;
