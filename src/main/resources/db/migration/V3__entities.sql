@@ -79,7 +79,7 @@ CREATE TABLE dragons (
   cave_id INTEGER REFERENCES dragon_caves(id) ON DELETE CASCADE, -- Идентификатор пещеры дракона
   killer_id INTEGER REFERENCES people(id) ON DELETE CASCADE,     -- Идентификатор убийцы дракона
   age INTEGER CHECK (age IS NULL OR age > 0),                     -- Возраст дракона (больше 0), может быть NULL
-  color color,                                                    -- Цвет дракона
+  dragon_color color,                                                    -- Цвет дракона
   type dragon_type,                                               -- Тип дракона
   character dragon_character NOT NULL,                            -- Характер дракона
   head_id INTEGER REFERENCES dragon_heads(id) ON DELETE CASCADE, -- Идентификатор головы дракона

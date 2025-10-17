@@ -55,7 +55,7 @@ public class Dragon extends CrudEntity {
 
     @Enumerated(EnumType.STRING)
     @ColumnTransformer(write="?::color")
-    @Column(name = "color")
+    @Column(name = "dragon_color")
     private Color color;
   
     @Enumerated(EnumType.STRING)
