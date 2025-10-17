@@ -6,6 +6,14 @@ const userStore = useUserStore()
 </script>
 
 <template>
+  <h1>Dragon Management System</h1>
+
+  <el-menu mode="horizontal" :router="true" :ellipsis="false">
+    <el-menu-item index="/">Dashboard</el-menu-item>
+    <el-menu-item index="/analytics">Analytics</el-menu-item>
+    <el-menu-item index="/killer">Killer</el-menu-item>
+  </el-menu>
+
   <el-space wrap v-if="!userStore.isLoggedIn">
     <RouterLink to="/sing-in">
       <el-button type="primary" round>

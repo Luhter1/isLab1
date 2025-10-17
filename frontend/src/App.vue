@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
-import MenuAuth from './components/MenuAuth.vue'
+import HomeHeader from './components/HomeHeader.vue'
 import WebSocketService from '@/controllers/websocket'
 import { 
   Fold, 
@@ -50,15 +50,7 @@ onUnmounted(() => {
   <el-container class="app-container">
     <el-header>
       <div class="header-content">
-        <h1>Dragon Management System</h1>
-
-        <el-menu mode="horizontal" :router="true" :ellipsis="false">
-          <el-menu-item index="/">Dashboard</el-menu-item>
-          <el-menu-item index="/analytics">Analytics</el-menu-item>
-          <el-menu-item index="/killer">Killer</el-menu-item>
-        </el-menu>
-
-        <MenuAuth />
+        <HomeHeader />
       </div>
     </el-header>
 
