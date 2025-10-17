@@ -3,13 +3,13 @@ import { computed, onMounted, ref, watch } from 'vue'
 import DragonService from '@/services/DragonService'
 import DragonTable from '@/components/Dragon/Table.vue'
 
-// import CoordinatesService from '@/services/CoordinatesService'
-// import CoordinatesTable from '@/components/Coordinates/Table.vue'
+import CoordinatesService from '@/services/CoordinatesService'
+import CoordinatesTable from '@/components/Coordinates/Table.vue'
 
 // Типы данных для отображения
 const dataTypes = [
   { value: 'dragons', label: 'Dragons', service: DragonService, component: DragonTable },
-  // { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable },
+  { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable },
   // Добавьте другие типы данных здесь
 ]
 
@@ -28,41 +28,28 @@ const currentTableComponent = computed(() => {
 })
 
 // Вычисляемые свойства на основе текущего сервиса
-const tableData = computed(() => currentService.value.objects)
-const loading = computed(() => currentService.value.loading)
-const totalItems = computed(() => currentService.value.totalObjects)
+const tableData = computed(() => currentService.value.state.objects)
+const loading = computed(() => currentService.value.state.loading)
+const totalItems = computed(() => currentService.value.state.totalObjects)
 const name = computed(() => currentService.value.getName())
 
 const currentPage = computed({
-  get: () => currentService.value.currentPage,
+  get: () => currentService.value.state.currentPage,
   set: (val) => currentService.value.updatePage(val)
 })
 
 const pageSize = computed({
-  get: () => currentService.value.pageSize,
+  get: () => currentService.value.state.pageSize,
   set: (val) => currentService.value.updatePageSize(val)
 })
 
-const handleSizeChange = (size) => {
-  currentService.value.updatePageSize(size)
-}
-
-const handlePageChange = (page) => {
-  currentService.value.updatePage(page)
-}
-
-// Обработчик изменения типа данных
-const handleDataTypeChange = async (value) => {
-  await currentService.value.fetchObjects()
-}
-
-// Следим за изменением типа данных
-watch(selectedDataType, async (newValue) => {
-  await handleDataTypeChange(newValue)
+onMounted(() => {
+  currentService.value.fetchObjects()
 })
 
-onMounted(async () => {
-  await currentService.value.fetchObjects()
+// Следим за изменением типа данных
+watch(selectedDataType, () => {
+  currentService.value.fetchObjects()
 })
 </script>
 
@@ -134,8 +121,6 @@ onMounted(async () => {
         :page-sizes="[10, 20, 50, 100]"
         :total="totalItems"
         layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handlePageChange"
         class="pagination"
       />
     </el-card>

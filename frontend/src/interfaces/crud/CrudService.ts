@@ -1,3 +1,4 @@
+import { reactive } from 'vue';
 import Paged from '@/interfaces/models/Paged';
 import CrudController from '@/interfaces/crud/CrudController'
 import { ElMessage } from 'element-plus'
@@ -5,16 +6,18 @@ import { ElMessage } from 'element-plus'
 abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
     protected readonly name: string;
     protected readonly controller: CrudController<TDto, TCreateDto, TUpdateDto>;
-    objects: TDto[]
-    totalObjects: number;
-    sortBy: boolean;
-    loading: boolean;
-    isLast: boolean;
-    isFirst: boolean;
-    isEmpty: boolean;
-    sortOrder: string;
-    currentPage: number;
-    pageSize: number;
+
+    state: {
+        objects: TDto[];
+        totalObjects: number;
+        loading: boolean;
+        isLast: boolean;
+        isFirst: boolean;
+        isEmpty: boolean;
+        sortOrder: string;
+        currentPage: number;
+        pageSize: number;
+    };
 
     constructor(
         name: string,
@@ -22,6 +25,18 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
     ) {
         this.name = name;
         this.controller = controller;
+
+        this.state = reactive({
+            objects: [],
+            totalObjects: 0,
+            loading: false,
+            isLast: false,
+            isFirst: true,
+            isEmpty: true,
+            sortOrder: 'asc',
+            currentPage: 1,
+            pageSize: 10,
+        });
     }
 
     protected getErrorMessage = (error: any): string => {
@@ -125,48 +140,55 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
     }
 
     async fetchObjects() {
-        this.loading = true
-
-        const response = await this.getAll(
-        this.currentPage - 1,
-        this.pageSize,
-        []
-        )
-        this.objects = response.content
-        this.totalObjects = response.totalElements
-        this.isLast = response.last
-        this.isFirst = response.first
-        this.isEmpty = response.empty
-
-        this.loading = false
+        try {
+            this.state.loading = true
+            
+            const response = await this.getAll(
+                this.state.currentPage - 1,
+                this.state.pageSize,
+                []
+            )
+            this.state.objects = response.content
+            this.state.totalObjects = response.totalElements
+            this.state.isLast = response.last
+            this.state.isFirst = response.first
+            this.state.isEmpty = response.empty
+            console.log("download")
+        } catch (error) {
+            console.error('Error fetching objects:', error)
+            this.state.objects = []
+            this.state.totalObjects = 0
+        } finally {
+            this.state.loading = false  // Гарантируем, что loading станет false
+        }
     }
 
     async updatePage(page) {
-        this.currentPage = page
+        this.state.currentPage = page
         await this.fetchObjects()
     }
 
     async updatePageSize(size) {
-        this.pageSize = size
-        this.currentPage = 1
+        this.state.pageSize = size
+        this.state.currentPage = 1
         await this.fetchObjects()
     }
 
     handleDragonCreated(object) {
-        this.objects.push(object)
-        this.totalObjects++
+        this.state.objects.push(object)
+        this.state.totalObjects++
     }
 
     handleDragonUpdated(object) {
-        const index = this.objects.findIndex(d => d.id === object.id)
+        const index = this.state.objects.findIndex(d => d.id === object.id)
         if (index !== -1) {
-        this.objects[index] = object
+        this.state.objects[index] = object
         }
     }
 
     handleDragonDeleted(id) {
-        this.objects = this.objects.filter(d => d.id !== id)
-        this.totalObjects--
+        this.state.objects = this.state.objects.filter(d => d.id !== id)
+        this.state.totalObjects--
     }
 
     abstract getTable(): any;
