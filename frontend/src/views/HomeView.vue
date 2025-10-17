@@ -43,6 +43,56 @@ const pageSize = computed({
   set: (val) => currentService.value.updatePageSize(val)
 })
 
+// Форматирование даты
+const formatDate = (date: string | null | undefined) => {
+  if (!date) return '-'
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  })
+}
+
+// Форматирование даты и времени
+const formatDateTime = (date: string | null | undefined) => {
+  if (!date) return '-'
+  return new Date(date).toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+// Относительное время
+const getRelativeTime = (date: string | null | undefined) => {
+  if (!date) return 'Never'
+  
+  const now = new Date()
+  const past = new Date(date)
+  const diffMs = now.getTime() - past.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+  
+  if (diffMins < 1) return 'Just now'
+  if (diffMins < 60) return `${diffMins} min ago`
+  if (diffHours < 24) return `${diffHours} hours ago`
+  if (diffDays < 7) return `${diffDays} days ago`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`
+  return `${Math.floor(diffDays / 365)} years ago`
+}
+
+// Проверка на недавно измененные записи
+const isRecentlyModified = (date: string | null | undefined) => {
+  if (!date) return false
+  const hourAgo = new Date(Date.now() - 3600000)
+  return new Date(date) > hourAgo
+}
+
+
 onMounted(() => {
   currentService.value.fetchObjects()
 })
@@ -89,11 +139,128 @@ watch(selectedDataType, () => {
         style="width: 100%"
         :key="selectedDataType"
       >
+
+        <el-table-column 
+          prop="id" 
+          label="ID" 
+          width="80" 
+          fixed="left"
+        />
         <!-- Динамический компонент таблицы -->
         <component :is="currentTableComponent" />
+
+        <!-- Created By -->
+        <el-table-column 
+          label="Created By" 
+          align="center"
+        >
+          <template #header>
+            <span>
+              <el-icon><User /></el-icon>
+              Created By
+            </span>
+          </template>
+          <template #default="{ row }">
+            <div v-if="row.createdBy" class="user-cell">
+              <span>{{ row.createdBy.username }}</span>
+            </div>
+            <span v-else class="empty-value">System</span>
+          </template>
+        </el-table-column>
+        
+        <!-- Created At -->
+        <el-table-column 
+          prop="createdAt" 
+          label="Created" 
+          align="center"
+        >
+          <template #header>
+            <span>
+              <el-icon><Calendar /></el-icon>
+              Created
+            </span>
+          </template>
+          <template #default="{ row }">
+            <el-tooltip 
+              v-if="row.createdAt"
+              :content="formatDateTime(row.createdAt)"
+            >
+              <div class="date-cell">
+                <span>{{ formatDate(row.createdAt) }}</span>
+              </div>
+            </el-tooltip>
+            <span v-else class="empty-value">-</span>
+          </template>
+        </el-table-column>
+        
+        <!-- Updated By -->
+        <el-table-column 
+          label="Updated By" 
+          align="center"
+        >
+          <template #header>
+            <span>
+              <el-icon><Edit /></el-icon>
+              Updated By
+            </span>
+          </template>
+          <template #default="{ row }">
+            <div v-if="row.updatedBy" class="user-cell">
+              <span>{{ row.updatedBy.username }}</span>
+            </div>
+            <span v-else class="empty-value">-</span>
+          </template>
+        </el-table-column>
+        
+        <!-- Updated At -->
+        <el-table-column 
+          prop="updatedAt" 
+          label="Updated" 
+          align="center"
+        >
+          <template #header>
+            <span>
+              <el-icon><Calendar /></el-icon>
+              Updated
+            </span>
+          </template>
+          <template #default="{ row }">
+            <el-tooltip 
+              v-if="row.updatedAt"
+              :content="formatDateTime(row.updatedAt)"
+            >
+              <div class="date-cell">
+                <span>{{ formatDate(row.updatedAt) }}</span>
+              </div>
+            </el-tooltip>
+            <span v-else class="empty-value">Never</span>
+          </template>
+        </el-table-column>
+        
+        <!-- Last Modified (relative time) -->
+        <el-table-column 
+          label="Last Modified" 
+          width="130"
+        >
+          <template #header>
+            <span>
+              <el-icon><Timer /></el-icon>
+              Last Modified
+            </span>
+          </template>
+          <template #default="{ row }">
+            <el-tooltip
+              :content="formatDateTime(row.updatedAt || row.createdAt)"
+            >
+              <span class="relative-time">
+                {{ getRelativeTime(row.updatedAt || row.createdAt) }}
+              </span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
         
         <!-- Actions column -->
-        <el-table-column label="Actions" width="200" fixed="right">
+        <el-table-column label="Actions" align="center" width="200px" fixed="right">
           <template #default="{ row }">
             <el-button size="small">
               <router-link :to="`/view/${name}?id=${row.id}`">
