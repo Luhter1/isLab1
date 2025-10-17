@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Auth from '@/components/AuthComponent.vue'
+import Auth from '@/components/Common/AuthComponent.vue'
 import { login } from '@/services/AuthService'
 </script>
 
