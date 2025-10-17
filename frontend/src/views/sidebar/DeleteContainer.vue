@@ -3,17 +3,17 @@ import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import GenericDeleteById from '@/components/Common/GenericDeleteById.vue'
 
-import { deleteLocation } from '@/services/LocationService'
+import LocationService from '@/services/LocationService'
 
-import { deleteCoordinate } from '@/services/CoordinatesService'
+import CoordinateService from '@/services/CoordinatesService'
 
-import { deleteDragonHead } from '@/services/DragonHeadService'
+import DragonHeadService from '@/services/DragonHeadService'
 
-import { deleteDragonCave } from '@/services/DragonCaveService'
+import DragonCaveService from '@/services/DragonCaveService'
 
-import { deletePerson } from '@/services/PeopleService'
+import PersonService from '@/services/PeopleService'
 
-import { deleteDragon } from '@/services/DragonService'
+import DragonService from '@/services/DragonService'
 
 
 
@@ -27,34 +27,34 @@ const router = useRouter()
 
 const deleteConfigs: Record<string, ComponentConfig> = {
   Dragon: {
-    deleteT: deleteDragon,
+    deleteT: DragonService.delete,
     formLabel: "Dragon",
   },
 
   Person: {
-    deleteT: deletePerson,
+    deleteT: PersonService.delete,
     formLabel: "Person",
 
   },
 
-  DragonHead: {
-    deleteT: deleteDragonHead,
-    formLabel: "DragonHead",
-  },
-
   DragonCave: {
-    deleteT: deleteDragonCave,
+    deleteT: DragonCaveService.delete,
     formLabel: "DragonCave",
   },
 
-  Location: {
-    deleteT: deleteLocation,
-    formLabel: "Location",
+  DragonHead: {
+    deleteT: DragonHeadService.delete,
+    formLabel: "DragonHead",
   },
 
   Coordinate: {
-    deleteT: deleteCoordinate,
+    deleteT: CoordinateService.delete,
     formLabel: "Coordinate",
+  },
+
+  Location: {
+    deleteT: LocationService.delete,
+    formLabel: "Location",
   },
 }
 

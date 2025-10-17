@@ -1,18 +1,17 @@
 import { DragonHeadCreateDto } from '@/interfaces/dto/dragonheads/DragonHeadCreateDto'
 import { DragonHeadDto } from '@/interfaces/dto/dragonheads/DragonHeadDto'
-import { CrudService } from '@/interfaces/crud/CrudService';
 import { DragonHeadUpdateDto } from '@/interfaces/dto/dragonheads/DragonHeadUpdateDto'
 import DragonHeadController from '@/controllers/DragonHeadController'
+import CrudService from '@/interfaces/crud/CrudService';
 
-const DragonHead = CrudService<DragonHeadDto, DragonHeadCreateDto, DragonHeadUpdateDto>(
-  'DragonHead',
-  DragonHeadController
-);
+class DragonHeadService extends CrudService<DragonHeadDto, DragonHeadCreateDto, DragonHeadUpdateDto> {
+    constructor() {
+        super("DragonHead", DragonHeadController);
+    }
 
-export const {
-  getAll: getAllDragonHead,
-  getById: getDragonHead,
-  create: createDragonHead,
-  update: updateDragonHead,
-  Delete: deleteDragonHead,
-} = DragonHead
+    getTable() {
+
+    }
+}
+
+export default new DragonHeadService()

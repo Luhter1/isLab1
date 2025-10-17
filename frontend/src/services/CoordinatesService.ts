@@ -1,18 +1,17 @@
 import { CoordinateCreateDto } from '@/interfaces/dto/coordinates/CoordinateCreateDto'
 import { CoordinateDto } from '@/interfaces/dto/coordinates/CoordinateDto'
-import { CrudService } from '@/interfaces/crud/CrudService';
 import { CoordinateUpdateDto } from '@/interfaces/dto/coordinates/CoordinateUpdateDto'
 import CoordinateController from '@/controllers/CoordinatesController'
+import CrudService from '@/interfaces/crud/CrudService';
 
-const Coordinate = CrudService<CoordinateDto, CoordinateCreateDto, CoordinateUpdateDto>(
-  'Coordinate',
-  CoordinateController
-);
+class CoordinateService extends CrudService<CoordinateDto, CoordinateCreateDto, CoordinateUpdateDto> {
+    constructor() {
+        super("Coordinate", CoordinateController);
+    }
 
-export const {
-  getAll: getAllCoordinate,
-  getById: getCoordinate,
-  create: createCoordinate,
-  update: updateCoordinate,
-  Delete: deleteCoordinate,
-} = Coordinate
+    getTable() {
+
+    }
+}
+
+export default new CoordinateService()

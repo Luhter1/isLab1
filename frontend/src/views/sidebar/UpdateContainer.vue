@@ -5,23 +5,23 @@ import type { Component } from 'vue'
 import { ValidationFactory } from '@/utils/validationFactory'
 import GenericUpdate from '@/components/Common/GenericUpdate.vue'
 
-import { updateLocation } from '@/services/LocationService'
-import locationUpdateForm from '@/components/Location/UpdateForm.vue'
+import LocationService from '@/services/LocationService'
+import LocationUpdateForm from '@/components/Location/UpdateForm.vue'
 
-import { updateCoordinate } from '@/services/CoordinatesService'
-import coordinateUpdateForm from '@/components/Coordinates/UpdateForm.vue'
+import CoordinateService from '@/services/CoordinatesService'
+import CoordinateUpdateForm from '@/components/Coordinates/UpdateForm.vue'
 
-import { updateDragonHead } from '@/services/DragonHeadService'
-import locationDragonHead from '@/components/DragonHead/UpdateForm.vue'
+import DragonHeadService from '@/services/DragonHeadService'
+import DragonHeadUpdateForm from '@/components/DragonHead/UpdateForm.vue'
 
-import { updateDragonCave } from '@/services/DragonCaveService'
-import locationDragonCave from '@/components/DragonCave/UpdateForm.vue'
+import DragonCaveService from '@/services/DragonCaveService'
+import DragonCaveUpdateForm from '@/components/DragonCave/UpdateForm.vue'
 
-import { updatePerson } from '@/services/PeopleService'
-import locationPerson from '@/components/Person/UpdateForm.vue'
+import PersonService from '@/services/PeopleService'
+import PersonUpdateForm from '@/components/Person/UpdateForm.vue'
 
-import { updateDragon } from '@/services/DragonService'
-import locationDragon from '@/components/Dragon/UpdateForm.vue'
+import DragonService from '@/services/DragonService'
+import DragonUpdateForm from '@/components/Dragon/UpdateForm.vue'
 
 
 interface ComponentConfig {
@@ -35,40 +35,40 @@ const router = useRouter()
 
 const updateConfigs: Record<string, ComponentConfig> = {
   Dragon: {
-    updateT: updateDragon,
-    formFieldsT: locationDragon,
+    updateT: DragonService.update,
+    formFieldsT: DragonUpdateForm,
     formLabel: "Dragon",
   },
 
   Person: {
-    updateT: updatePerson,
-    formFieldsT: locationPerson,
+    updateT: PersonService.update,
+    formFieldsT: PersonUpdateForm,
     formLabel: "Person",
 
   },
 
-  DragonHead: {
-    updateT: updateDragonHead,
-    formFieldsT: locationDragonHead,
-    formLabel: "DragonHead",
-  },
-
   DragonCave: {
-    updateT: updateDragonCave,
-    formFieldsT: locationDragonCave,
+    updateT: DragonCaveService.update,
+    formFieldsT: DragonCaveUpdateForm,
     formLabel: "DragonCave",
   },
 
-  Location: {
-    updateT: updateLocation,
-    formFieldsT: locationUpdateForm,
-    formLabel: "Location",
+  DragonHead: {
+    updateT: DragonHeadService.update,
+    formFieldsT: DragonHeadUpdateForm,
+    formLabel: "DragonHead",
   },
 
   Coordinate: {
-    updateT: updateCoordinate,
-    formFieldsT: coordinateUpdateForm,
+    updateT: CoordinateService.update,
+    formFieldsT: CoordinateUpdateForm,
     formLabel: "Coordinate",
+  },
+
+  Location: {
+    updateT: LocationService.update,
+    formFieldsT: LocationUpdateForm,
+    formLabel: "Location",
   },
 }
 

@@ -4,24 +4,22 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericGetById from '@/components/Common/GenericGetById.vue'
 
 import CardLocation from '@/components/Location/Card.vue'
-import { getLocation } from '@/services/LocationService'
+import LocationService from '@/services/LocationService'
 
 import CardCoordinate from '@/components/Coordinates/Card.vue'
-import { getCoordinate } from '@/services/CoordinatesService'
+import CoordinateService from '@/services/CoordinatesService'
 
 import CardDragonHead from '@/components/DragonHead/Card.vue'
-import { getDragonHead } from '@/services/DragonHeadService'
+import DragonHeadService from '@/services/DragonHeadService'
 
 import CardDragonCave from '@/components/DragonCave/Card.vue'
-import { getDragonCave } from '@/services/DragonCaveService'
+import DragonCaveService from '@/services/DragonCaveService'
 
 import CardPerson from '@/components/Person/Card.vue'
-import { getPerson } from '@/services/PeopleService'
+import PersonService from '@/services/PeopleService'
 
 import CardDragon from '@/components/Dragon/Card.vue'
-import { getDragon } from '@/services/DragonService'
-
-
+import DragonService from '@/services/DragonService'
 
 interface ComponentConfig {
   getT: (id: number) => Promise<any>
@@ -34,41 +32,41 @@ const router = useRouter()
 
 const viewConfigs: Record<string, ComponentConfig> = {
   Dragon: {
-    getT: getDragon,
+    getT: DragonService.getById,
     cardT: markRaw(CardDragon),
     formLabel: "Dragon",
 
   },
 
   Person: {
-    getT: getPerson,
+    getT: PersonService.getById,
     cardT: markRaw(CardPerson),
     formLabel: "Person",
 
   },
 
-  DragonHead: {
-    getT: getDragonHead,
-    cardT: markRaw(CardDragonHead),
-    formLabel: "DragonHead",
-  },
-
   DragonCave: {
-    getT: getDragonCave,
+    getT: DragonCaveService.getById,
     cardT: markRaw(CardDragonCave),
     formLabel: "DragonCave",
   },
 
-  Location: {
-    getT: getLocation,
-    cardT: markRaw(CardLocation),
-    formLabel: "Location",
+  DragonHead: {
+    getT: DragonHeadService.getById,
+    cardT: markRaw(CardDragonHead),
+    formLabel: "DragonHead",
   },
 
   Coordinate: {
-    getT: getCoordinate,
+    getT: CoordinateService.getById,
     cardT: markRaw(CardCoordinate),
     formLabel: "Coordinate",
+  },
+
+  Location: {
+    getT: LocationService.getById,
+    cardT: markRaw(CardLocation),
+    formLabel: "Location",
   },
 }
 

@@ -1,18 +1,17 @@
 import { PersonCreateDto } from '@/interfaces/dto/people/PersonCreateDto'
 import { PersonDto } from '@/interfaces/dto/people/PersonDto'
-import { CrudService } from '@/interfaces/crud/CrudService';
 import { PersonUpdateDto } from '@/interfaces/dto/people/PersonUpdateDto'
 import PersonController from '@/controllers/PersonController'
+import CrudService from '@/interfaces/crud/CrudService';
 
-const Person = CrudService<PersonDto, PersonCreateDto, PersonUpdateDto>(
-  'location',
-  PersonController
-);
+class PersonService extends CrudService<PersonDto, PersonCreateDto, PersonUpdateDto> {
+    constructor() {
+        super("Person", PersonController);
+    }
 
-export const {
-  getAll: getAllPerson,
-  getById: getPerson,
-  create: createPerson,
-  update: updatePerson,
-  Delete: deletePerson,
-} = Person
+    getTable() {
+
+    }
+}
+
+export default new PersonService()

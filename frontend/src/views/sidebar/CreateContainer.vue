@@ -5,24 +5,23 @@ import type { Component } from 'vue'
 import { ValidationFactory } from '@/utils/validationFactory'
 import GenericCreate from '@/components/Common/GenericCreate.vue'
 
-import { createLocation } from '@/services/LocationService'
-import locationCreateForm from '@/components/Location/CreateForm.vue'
+import LocationService from '@/services/LocationService'
+import LocationCreateForm from '@/components/Location/CreateForm.vue'
 
-import { createCoordinate } from '@/services/CoordinatesService'
-import coordinateCreateForm from '@/components/Coordinates/CreateForm.vue'
+import CoordinateService from '@/services/CoordinatesService'
+import CoordinateCreateForm from '@/components/Coordinates/CreateForm.vue'
 
-import { createDragonHead } from '@/services/DragonHeadService'
-import locationDragonHead from '@/components/DragonHead/CreateForm.vue'
+import DragonHeadService from '@/services/DragonHeadService'
+import DragonHeadCreateForm from '@/components/DragonHead/CreateForm.vue'
 
-import { createDragonCave } from '@/services/DragonCaveService'
-import locationDragonCave from '@/components/DragonCave/CreateForm.vue'
+import DragonCaveService from '@/services/DragonCaveService'
+import DragonCaveCreateForm from '@/components/DragonCave/CreateForm.vue'
 
-import { createPerson } from '@/services/PeopleService'
-import locationPerson from '@/components/Person/CreateForm.vue'
+import PersonService from '@/services/PeopleService'
+import PersonCreateForm from '@/components/Person/CreateForm.vue'
 
-
-import { createDragon } from '@/services/DragonService'
-import locationDragon from '@/components/Dragon/CreateForm.vue'
+import DragonService from '@/services/DragonService'
+import DragonCreateForm from '@/components/Dragon/CreateForm.vue'
 
 
 
@@ -37,41 +36,42 @@ const router = useRouter()
 
 const createConfigs: Record<string, ComponentConfig> = {
   Dragon: {
-    createT: createDragon,
-    formFieldsT: locationDragon,
+    createT: DragonService.create,
+    formFieldsT: DragonCreateForm,
     formLabel: "Dragon",
   },
 
   Person: {
-    createT: createPerson,
-    formFieldsT: locationPerson,
+    createT: PersonService.create,
+    formFieldsT: PersonCreateForm,
     formLabel: "Person",
 
   },
 
-  DragonHead: {
-    createT: createDragonHead,
-    formFieldsT: locationDragonHead,
-    formLabel: "DragonHead",
-  },
-
   DragonCave: {
-    createT: createDragonCave,
-    formFieldsT: locationDragonCave,
+    createT: DragonCaveService.create,
+    formFieldsT: DragonCaveCreateForm,
     formLabel: "DragonCave",
   },
 
-  Location: {
-    createT: createLocation,
-    formFieldsT: locationCreateForm,
-    formLabel: "Location",
+  DragonHead: {
+    createT: DragonHeadService.create,
+    formFieldsT: DragonHeadCreateForm,
+    formLabel: "DragonHead",
   },
 
   Coordinate: {
-    createT: createCoordinate,
-    formFieldsT: coordinateCreateForm,
+    createT: CoordinateService.create,
+    formFieldsT: CoordinateCreateForm,
     formLabel: "Coordinate",
   },
+
+  Location: {
+    createT: LocationService.create,
+    formFieldsT: LocationCreateForm,
+    formLabel: "Location",
+  },
+
 }
 
 // Текущий тип из URL

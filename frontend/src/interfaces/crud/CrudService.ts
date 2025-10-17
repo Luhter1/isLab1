@@ -2,124 +2,115 @@ import Paged from '@/interfaces/models/Paged';
 import CrudController from '@/interfaces/crud/CrudController'
 import { ElMessage } from 'element-plus'
 
-const getErrorMessage = error => error?.response?.data?.message || 'ERROR';
+abstract class CrudService<TDto, TCreateDto, TUpdateDto> {
+    protected readonly name: string;
+    protected readonly controller: CrudController<TDto, TCreateDto, TUpdateDto>;
 
-export const  CrudService = <TDto, TCreateDto, TUpdateDto>(
-    name: string,
-    Controller: CrudController<TDto, TCreateDto, TUpdateDto>
-) => {
-    const  getAll = (page: number, size: number, sort: string[]) => {
-        return Controller.getAll(page, size, sort).then(
-            response => {
-                const { data } = response;
-                return Promise.resolve(data as Paged<TDto>);
-            },
-            error => {
-                ElMessage({
-                    message: getErrorMessage(error),
-                    showClose: true,
-                    grouping: true,
-                    type: 'error',
-                });
-                return Promise.reject(error);
-            }
-        );
+    constructor(
+        name: string,
+        controller: CrudController<TDto, TCreateDto, TUpdateDto>
+    ) {
+        this.name = name;
+        this.controller = controller;
     }
 
-    const  getById = (id: number) => {
-        return Controller.get(id).then(
-            response => {
-                const { data } = response;
-                return Promise.resolve(data as TDto);
-            },
-            error => {
-                ElMessage({
-                    message: getErrorMessage(error),
-                    showClose: true,
-                    grouping: true,
-                    type: 'error',
-                });
-                return Promise.reject(error);
-            }
-        );
+    protected getErrorMessage = (error: any): string => {
+        return error?.response?.data?.message || 'ERROR';
     }
 
-    const  create = (location: TCreateDto) => {
-        return Controller.create(location).then(
-            response => {
-                const { data } = response;
-                ElMessage({
-                    message: name + ' created successfully!',
-                    showClose: true,
-                    grouping: true,
-                    type: 'success',
-                });
-                return Promise.resolve(data as TDto);
-            },
-            error => {
-                ElMessage({
-                    message: getErrorMessage(error),
-                    showClose: true,
-                    grouping: true,
-                    type: 'error',
-                });
-                return Promise.reject(error);
-            }
-        );
+    getAll = async (page: number, size: number, sort: string[]): Promise<Paged<TDto>> => {
+        try {
+            const response = await this.controller.getAll(page, size, sort);
+            return response.data as Paged<TDto>;
+        } catch (error) {
+            ElMessage({
+                message: this.getErrorMessage(error),
+                showClose: true,
+                grouping: true,
+                type: 'error',
+            });
+            throw error;
+        }
     }
 
-    const  update = (id: number, location: TUpdateDto) => {
-        return Controller.update(id, location).then(
-            response => {
-                const { data } = response;
-                ElMessage({
-                    message: name + ' updated successfully!',
-                    showClose: true,
-                    grouping: true,
-                    type: 'success',
-                });
-                return Promise.resolve(data as TDto);
-            },
-            error => {
-                ElMessage({
-                    message: getErrorMessage(error),
-                    showClose: true,
-                    grouping: true,
-                    type: 'error',
-                });
-                return Promise.reject(error);
-            }
-        );
+    getById = async (id: number): Promise<TDto> => {
+        try {
+            const response = await this.controller.get(id);
+            return response.data as TDto;
+        } catch (error) {
+            ElMessage({
+                message: this.getErrorMessage(error),
+                showClose: true,
+                grouping: true,
+                type: 'error',
+            });
+            throw error;
+        }
     }
 
-    const  Delete = (id: number) => {
-        return Controller.delete(id).then(
-            response => {
-                ElMessage({
-                    message: name + ' deleted successfully!',
-                    showClose: true,
-                    grouping: true,
-                    type: 'success',
-                });
-                return Promise.resolve();
-            },
-            error => {
-                ElMessage({
-                    message: getErrorMessage(error),
-                    showClose: true,
-                    grouping: true,
-                    type: 'error',
-                });
-                return Promise.reject(error);
-            }
-        );
+    create = async (data: TCreateDto): Promise<TDto> => {
+        try {
+            const response = await this.controller.create(data);
+            ElMessage({
+                message: `${this.name} created successfully!`,
+                showClose: true,
+                grouping: true,
+                type: 'success',
+            });
+            return response.data as TDto;
+        } catch (error) {
+            ElMessage({
+                message: this.getErrorMessage(error),
+                showClose: true,
+                grouping: true,
+                type: 'error',
+            });
+            throw error;
+        }
     }
 
-    return {
-        getAll,
-        getById,
-        create,
-        update,
-        Delete
+    update = async (id: number, data: TUpdateDto): Promise<TDto> => {
+        try {
+            const response = await this.controller.update(id, data);
+            ElMessage({
+                message: `${this.name} updated successfully!`,
+                showClose: true,
+                grouping: true,
+                type: 'success',
+            });
+            return response.data as TDto;
+        } catch (error) {
+            ElMessage({
+                message: this.getErrorMessage(error),
+                showClose: true,
+                grouping: true,
+                type: 'error',
+            });
+            throw error;
+        }
     }
+
+    delete = async (id: number): Promise<void> => {
+        try {
+            await this.controller.delete(id);
+            ElMessage({
+                message: `${this.name} deleted successfully!`,
+                showClose: true,
+                grouping: true,
+                type: 'success',
+            });
+        } catch (error) {
+            ElMessage({
+                message: this.getErrorMessage(error),
+                showClose: true,
+                grouping: true,
+                type: 'error',
+            });
+            throw error;
+        }
+    }
+
+    abstract getTable(): any;
 }
+
+export default CrudService;
