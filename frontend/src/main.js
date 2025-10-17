@@ -9,16 +9,18 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
 import router from './config/router'
 import { useUserStore } from '@/stores/userStore'
+import DragonService from '@/services/DragonService'
 
 const app = createApp(App)
 
 app.use(createPinia())
+await DragonService.fetchDragons()
+const userStore = useUserStore()
+userStore.initializeFromStorage()
+
 app.use(router)
 app.use(ElementPlus)
 
-
-const userStore = useUserStore()
-userStore.initializeFromStorage()
 
 // Register all icons
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
