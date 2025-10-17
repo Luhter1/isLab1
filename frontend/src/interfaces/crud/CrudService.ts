@@ -153,7 +153,6 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             this.state.isLast = response.last
             this.state.isFirst = response.first
             this.state.isEmpty = response.empty
-            console.log("download")
         } catch (error) {
             console.error('Error fetching objects:', error)
             this.state.objects = []

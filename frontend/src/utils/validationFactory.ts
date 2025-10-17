@@ -66,7 +66,16 @@ export class ValidationFactory {
         }
       ],
       headId: [
-        { validator: validatorID, trigger: 'change' }
+        { 
+          validator: (rule, value, callback) => {
+            if (value) {
+              validatorID(rule, value, callback)
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        }
       ],
       age: [
         { 

@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
-import { ElMessage } from 'element-plus'
 import { 
   User,
   Location,
@@ -84,24 +82,18 @@ const getAgeText = (age: number | null) => {
 </script>
 
 <template>
-  <el-table-column 
-    prop="id" 
-    label="ID" 
-    width="80" 
-    fixed="left"
-  />
-  
+
   <el-table-column 
     prop="name" 
     label="Name" 
-    min-width="150"
+    min-width="100"
     fixed="left"
   />
   
   <el-table-column 
     prop="age" 
     label="Age" 
-    width="120" 
+    width="110" 
     align="center"
   >
     <template #default="{ row }">
@@ -235,34 +227,6 @@ const getAgeText = (age: number | null) => {
       <el-tag v-else type="success" effect="plain">
         Alive
       </el-tag>
-    </template>
-  </el-table-column>
-  
-  <el-table-column 
-    label="Creator" 
-    width="150"
-  >
-    <template #default="{ row }">
-      <div class="user-cell">
-        <el-icon><User /></el-icon>
-        <span>{{ row.createdBy?.username || 'System' }}</span>
-      </div>
-    </template>
-  </el-table-column>
-
-  <el-table-column 
-    prop="createdAt" 
-    label="Created" 
-    width="120"
-  >
-    <template #default="{ row }">
-      <el-tooltip 
-        v-if="row.createdAt"
-        :content="new Date(row.createdAt).toLocaleString()"
-      >
-        <span>{{ formatDate(row.createdAt) }}</span>
-      </el-tooltip>
-      <span v-else class="empty-value">-</span>
     </template>
   </el-table-column>
 </template>
