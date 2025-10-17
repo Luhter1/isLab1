@@ -1,18 +1,32 @@
 import { AxiosResponse } from 'axios';
 import Paged from '@/interfaces/models/Paged';
+import api from '@/controllers/api';
+import { createCrudUri } from '@/utils/uri';
 
-export function staticImplements<T>() {
-  return <U extends T>(constructor: U) => {constructor;};
-}
+export default class CrudController<TDto, TCreateDto, TUpdateDto> {
+  protected readonly path: string;
 
-export default interface CrudController<Dto, CreateDto, UpdateDto> {
-  getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<Dto>>>;
+  constructor(path: string) {
+    this.path = path;
+  }
 
-  get(id: number): Promise<AxiosResponse<Dto>>;
+  async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<TDto>>> {
+    return api.get<Paged<TDto>>(`/${this.path}${createCrudUri(page, size, sort)}`);
+  }
 
-  create(dto: CreateDto): Promise<AxiosResponse<Dto>>;
+  async get(id: number): Promise<AxiosResponse<TDto>> {
+    return api.get<TDto>(`/${this.path}/${id}`);
+  }
 
-  update(id: number, dto: UpdateDto): Promise<AxiosResponse<Dto>>;
+  async create(Coordinates: TCreateDto): Promise<AxiosResponse<TDto>> {
+    return api.post<TDto>(`/${this.path}`, Coordinates);
+  }
 
-  delete(id: number): Promise<AxiosResponse>;
+  async update(id: number, Coordinates: TUpdateDto): Promise<AxiosResponse<TDto>> {
+    return api.patch<TDto>(`/${this.path}/${id}`, Coordinates);
+  }
+
+  async delete(id: number): Promise<AxiosResponse> {
+    return api.delete(`/${this.path}/${id}`);
+  }
 }
