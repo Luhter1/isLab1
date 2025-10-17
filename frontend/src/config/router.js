@@ -7,6 +7,7 @@ import DeleteContainer from '@/views/sidebar/DeleteContainer.vue'
 import CreateContainer from '@/views/sidebar/CreateContainer.vue'
 import UpdateContainer from '@/views/sidebar/UpdateContainer.vue'
 import { logout } from '@/services/AuthService'
+import { useUserStore } from '@/stores/userStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,7 @@ const router = createRouter({
         next('/')
       },
       component: () => null,
+      meta: { requiresAuth: true }
     },
     {
       path: '/view/:type',
@@ -51,7 +53,8 @@ const router = createRouter({
       props: route => ({ 
         type: route.params.type,
         id: route.query.id ? Number(route.query.id) : null
-      })
+      }),
+      meta: { requiresAuth: true }
     },
     {
       path: '/create/:type',
@@ -60,7 +63,8 @@ const router = createRouter({
       props: route => ({ 
         type: route.params.type,
         id: route.query.id ? Number(route.query.id) : null
-      })
+      }),
+      meta: { requiresAuth: true }
     },
     {
       path: '/update/:type',
@@ -69,9 +73,26 @@ const router = createRouter({
       props: route => ({ 
         type: route.params.type,
         id: route.query.id ? Number(route.query.id) : null
-      })
+      }),
+      meta: { requiresAuth: true }
     },
   ],
 })
 
+router.beforeEach((to, from, next) => {
+  // Проверяем, требует ли маршрут аутентификации
+  const userStore = useUserStore()
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!userStore.isLoggedIn) {
+      next({
+        path: '/sing-in',
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 export default router
