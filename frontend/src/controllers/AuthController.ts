@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { AuthenticationDto } from '../interfaces/dto/auth/AuthenticationDto';
 import { SingInUpDto } from '../interfaces/dto/auth/SingInUpDto';
 
-export default class AuthService {
+export default class AuthController {
   /**
    * Login user
    * @param {Credentials} credentials Username & Password

@@ -8,7 +8,7 @@ import Paged from '@/interfaces/models/Paged';
 import { createCrudUri } from '@/utils/uri';
 
 @staticImplements<CrudController<DragonHeadDto, DragonHeadCreateDto, DragonHeadUpdateDto>>()
-export default class DragonHeadService {
+export default class DragonHeadController {
   static async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<DragonHeadDto>>> {
     return api.get<Paged<DragonHeadDto>>(`/dragon-heads${createCrudUri(page, size, sort)}`);
   }

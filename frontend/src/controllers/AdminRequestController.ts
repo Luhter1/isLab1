@@ -4,7 +4,7 @@ import { AdminRequestDto } from '@/interfaces/dto/adminrequests/AdminRequestDto'
 import Paged from '@/interfaces/models/Paged';
 import { createCrudUri } from '@/utils/uri';
 
-export default class AdminRequestService {
+export default class AdminRequestController {
   static async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<AdminRequestDto>>> {
     return api.get<Paged<AdminRequestDto>>(`/admin-requests${createCrudUri(page, size, sort)}`);
   }

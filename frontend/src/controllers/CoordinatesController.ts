@@ -9,7 +9,7 @@ import Paged from '@/interfaces/models/Paged';
 import { createCrudUri } from '@/utils/uri';
 
 @staticImplements<CrudController<CoordinateDto, CoordinateCreateDto, CoordinateUpdateDto>>()
-export default class CoordinatesService {
+export default class CoordinatesController {
   static async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<CoordinateDto>>> {
     return api.get<Paged<CoordinateDto>>(`/coordinates${createCrudUri(page, size, sort)}`);
   }

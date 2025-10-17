@@ -8,7 +8,7 @@ import Paged from '@/interfaces/models/Paged';
 import { createCrudUri } from '@/utils/uri';
 
 @staticImplements<CrudController<DragonCaveDto, DragonCaveCreateDto, DragonCaveUpdateDto>>()
-export default class DragonCaveService {
+export default class DragonCaveController {
   static async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<DragonCaveDto>>> {
     return api.get<Paged<DragonCaveDto>>(`/dragon-caves${createCrudUri(page, size, sort)}`);
   }

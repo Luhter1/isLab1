@@ -5,7 +5,7 @@ import { DragonResultDto } from '@/interfaces/dto/specialoperations/DragonResult
 import { AverageAgeDto } from '@/interfaces/dto/specialoperations/AverageAgeDto';
 import Paged from '@/interfaces/models/Paged';
 
-export default class SpecialOperationService {
+export default class SpecialOperationController {
   static async killDragon(id: number): Promise<AxiosResponse<DragonResultDto>> {
     return api.post<DragonResultDto>(`/special-operations/kill-dragon/${id}`);
   }

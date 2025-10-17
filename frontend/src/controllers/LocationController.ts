@@ -8,7 +8,7 @@ import Paged from '@/interfaces/models/Paged';
 import { createCrudUri } from '@/utils/uri';
 
 @staticImplements<CrudController<LocationDto, LocationCreateDto, LocationUpdateDto>>()
-export default class LocationService {
+export default class LocationController {
   static async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<LocationDto>>> {
     return api.get<Paged<LocationDto>>(`/locations${createCrudUri(page, size, sort)}`);
   }
