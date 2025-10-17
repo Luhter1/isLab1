@@ -28,7 +28,7 @@ export class ValidationFactory {
         { required: true, message: 'Name is required', trigger: 'blur' },
         { 
           validator: (rule, value, callback) => {
-            if (value.length > 0) {
+            if (value.length < 1) {
               callback(new Error('Name must be not blank'))
             } else {
               callback()
@@ -42,10 +42,28 @@ export class ValidationFactory {
         { validator: validatorID, trigger: 'change' }
       ],
       caveId: [
-        { validator: validatorID, trigger: 'change' }
+        { 
+          validator: (rule, value, callback) => {
+            if (value) {
+              validatorID(rule, value, callback)
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        }
       ],
       killerId: [
-        { validator: validatorID, trigger: 'change' }
+        { 
+          validator: (rule, value, callback) => {
+            if (value) {
+              validatorID(rule, value, callback)
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        }
       ],
       headId: [
         { validator: validatorID, trigger: 'change' }
