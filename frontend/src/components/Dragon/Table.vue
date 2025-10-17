@@ -232,53 +232,6 @@ const getAgeText = (age: number | null) => {
 </template>
 
 <style scoped lang="scss">
-.table-toolbar {
-  margin-bottom: 20px;
-  
-  .toolbar-actions {
-    text-align: right;
-  }
-}
-
-.filter-content {
-  .filter-actions {
-    text-align: right;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #ebeef5;
-    
-    .el-button {
-      margin-left: 10px;
-    }
-  }
-  
-  .el-radio-group {
-    display: flex;
-    gap: 10px;
-  }
-}
-
-.column-settings {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.name-cell {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  
-  .info-icon {
-    color: #909399;
-    cursor: pointer;
-    
-    &:hover {
-      color: #409eff;
-    }
-  }
-}
-
 .type-cell {
   display: flex;
   align-items: center;
@@ -297,23 +250,11 @@ const getAgeText = (age: number | null) => {
   width: 100%;
 }
 
-.user-cell {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #606266;
-}
-
 .killer-cell {
   .el-tag {
     display: inline-flex;
     align-items: center;
     gap: 4px;
   }
-}
-
-.empty-value {
-  color: #c0c4cc;
-  font-style: italic;
 }
 </style>

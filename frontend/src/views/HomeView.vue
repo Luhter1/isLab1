@@ -6,10 +6,14 @@ import DragonTable from '@/components/Dragon/Table.vue'
 import CoordinatesService from '@/services/CoordinatesService'
 import CoordinatesTable from '@/components/Coordinates/Table.vue'
 
+import DragonCaveService from '@/services/DragonCaveService'
+import DragonCaveTable from '@/components/DragonCave/Table.vue'
+
 // Типы данных для отображения
 const dataTypes = [
   { value: 'dragons', label: 'Dragons', service: DragonService, component: DragonTable },
   { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable },
+  { value: 'dragon-cave', label: 'Dragon Cave', service: DragonCaveService, component: DragonCaveTable },
   // Добавьте другие типы данных здесь
 ]
 
