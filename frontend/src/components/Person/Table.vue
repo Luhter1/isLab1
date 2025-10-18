@@ -71,6 +71,7 @@ const formatPassportID = (passportID: string) => {
     prop="name" 
     label="Name" 
     min-width="100"
+    sortable="custom"
   >
     <template #default="{ row }">
       <strong>{{ row.name }}</strong>
@@ -82,7 +83,6 @@ const formatPassportID = (passportID: string) => {
     prop="birthday" 
     label="Birthday" 
     min-width="140"
-    sortable="custom"
   >
     <template #header>
       <span>
@@ -107,6 +107,7 @@ const formatPassportID = (passportID: string) => {
     prop="eyeColor" 
     label="Eye Color" 
     min-width="120"
+    sortable="custom"
   >
     <template #header>
       <span>
@@ -131,6 +132,7 @@ const formatPassportID = (passportID: string) => {
     prop="hairColor" 
     label="Hair Color" 
     min-width="120"
+    sortable="custom"
   >
     <template #default="{ row }">
       <el-tag 
@@ -174,8 +176,10 @@ const formatPassportID = (passportID: string) => {
   
   <!-- Location -->
   <el-table-column 
+    prop="location.name" 
     label="Location" 
     min-width="100"
+    sortable="custom"
   >
     <template #header>
       <span>
@@ -197,6 +201,7 @@ const formatPassportID = (passportID: string) => {
     prop="passportID" 
     label="Passport ID" 
     min-width="130"
+    sortable="custom"
   >
     <template #header>
       <span>

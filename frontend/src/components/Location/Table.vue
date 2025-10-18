@@ -3,6 +3,7 @@
     prop="name" 
     label="Name" 
     min-width="100"
+    sortable="custom"
   >
     <template #default="{ row }">
       <strong>{{ row.name }}</strong>

@@ -73,6 +73,7 @@ const getAgeText = (age: number | null) => {
     prop="name" 
     label="Name" 
     min-width="100"
+    sortable="custom"
   >
     <template #default="{ row }">
       <strong>{{ row.name }}</strong>
@@ -102,6 +103,7 @@ const getAgeText = (age: number | null) => {
     prop="color" 
     label="Color" 
     min-width="120"
+    sortable="custom"
   >
     <template #default="{ row }">
       <el-tag 
@@ -119,6 +121,7 @@ const getAgeText = (age: number | null) => {
     prop="type" 
     label="Type" 
     min-width="165"
+    sortable="custom"
   >
     <template #default="{ row }">
       <div v-if="row.type" class="type-cell">
@@ -134,6 +137,7 @@ const getAgeText = (age: number | null) => {
     label="Character" 
     min-width="150"
     align="center"
+    sortable="custom"
   >
     <template #default="{ row }">
       <el-tag class="char-cell"
@@ -188,9 +192,11 @@ const getAgeText = (age: number | null) => {
   </el-table-column>
   
   <el-table-column 
-    label="Status" 
+    prop="killer.name" 
+    label="Killer" 
     min-width="150"
     align="center"
+    sortable="custom"
   >
     <template #default="{ row }">
       <div v-if="row.killer?.name" class="killer-cell">
