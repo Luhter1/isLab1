@@ -2,7 +2,7 @@
   <el-table-column 
     prop="depth" 
     label="Depth" 
-    width="120"
+    min-width="120"
     align="center"
   >
     <template #default="{ row }">

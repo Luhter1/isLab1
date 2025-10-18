@@ -13,10 +13,7 @@ const getColorType = (color: string | null) => {
     RED: 'danger',
     BLUE: 'primary',
     YELLOW: 'warning',
-    ORANGE: 'warning',
-    GREEN: 'success',
-    BLACK: 'info',
-    WHITE: 'info'
+    ORANGE: 'warning'
   }
   return colorMap[color] || 'info'
 }
@@ -55,16 +52,6 @@ const formatAge = (age: number | null) => {
   return age.toString()
 }
 
-// Форматирование даты
-const formatDate = (date: string | null) => {
-  if (!date) return '-'
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
-}
-
 // Цвета для возраста
 const getAgeColor = (age: number | null) => {
   if (age === null || age === undefined) return '#909399' // неизвестный
@@ -87,13 +74,16 @@ const getAgeText = (age: number | null) => {
     prop="name" 
     label="Name" 
     min-width="100"
-    fixed="left"
-  />
+  >
+    <template #default="{ row }">
+      <strong>{{ row.name }}</strong>
+    </template>
+  </el-table-column>
   
   <el-table-column 
     prop="age" 
     label="Age" 
-    width="110" 
+    min-width="110" 
     align="center"
   >
     <template #default="{ row }">
@@ -105,17 +95,14 @@ const getAgeText = (age: number | null) => {
           {{ formatAge(row.age) }}
         </el-tag>
       </el-tooltip>
-      <el-tag v-else type="info" effect="plain">
-        <el-icon><QuestionFilled /></el-icon>
-        Unknown
-      </el-tag>
+      <span v-else class="empty-value">Unknown</span>
     </template>
   </el-table-column>
   
   <el-table-column 
     prop="color" 
     label="Color" 
-    width="120"
+    min-width="120"
   >
     <template #default="{ row }">
       <el-tag 
@@ -125,34 +112,28 @@ const getAgeText = (age: number | null) => {
       >
         {{ row.color }}
       </el-tag>
-      <el-tag v-else type="info" effect="plain">
-        <el-icon><QuestionFilled /></el-icon>
-        Unknown
-      </el-tag>
+      <span v-else class="empty-value">Unknown</span>
     </template>
   </el-table-column>
   
   <el-table-column 
     prop="type" 
     label="Type" 
-    width="200"
+    min-width="165"
   >
     <template #default="{ row }">
       <div v-if="row.type" class="type-cell">
         <span class="type-icon">{{ getTypeIcon(row.type) }}</span>
         <el-tag type="info" effect="plain">{{ row.type }}</el-tag>
       </div>
-      <el-tag v-else type="info" class="type-unk-cell" effect="plain">
-        <el-icon><QuestionFilled /></el-icon>
-        Unknown
-      </el-tag>
+      <span v-else class="empty-value">Unknown</span>
     </template>
   </el-table-column>
   
   <el-table-column 
     prop="character" 
     label="Character" 
-    width="150"
+    min-width="150"
     align="center"
   >
     <template #default="{ row }">
@@ -168,7 +149,7 @@ const getAgeText = (age: number | null) => {
   <el-table-column 
     prop="head" 
     label="Head" 
-    width="150"
+    min-width="150"
     align="center"
   >
     <template #default="{ row }">
@@ -180,16 +161,13 @@ const getAgeText = (age: number | null) => {
           {{ row.head.size ? row.head?.size : 'none' }}
         </el-tag>
       </el-tooltip>
-      <el-tag v-else type="info" effect="plain">
-        <el-icon><QuestionFilled /></el-icon>
-        Unknown
-      </el-tag>
+      <span v-else class="empty-value">Unknown</span>
     </template>
   </el-table-column>
   
   <el-table-column 
     label="Cave" 
-    width="120"
+    min-width="120"
     align="center"
   >
     <template #header>
@@ -212,7 +190,7 @@ const getAgeText = (age: number | null) => {
   
   <el-table-column 
     label="Status" 
-    width="150"
+    min-width="150"
     align="center"
   >
     <template #default="{ row }">
@@ -256,5 +234,10 @@ const getAgeText = (age: number | null) => {
     align-items: center;
     gap: 4px;
   }
+}
+
+.empty-value {
+  color: #c0c4cc;
+  font-style: italic;
 }
 </style>

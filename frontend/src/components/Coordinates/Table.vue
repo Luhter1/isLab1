@@ -3,7 +3,7 @@
   <el-table-column 
     prop="x" 
     label="X" 
-    width="120"
+    min-width="120"
     align="center"
   >
     <template #default="{ row }">
@@ -17,7 +17,7 @@
   <el-table-column 
     prop="y" 
     label="Y" 
-    width="120"
+    min-width="120"
     align="center"
   >
     <template #default="{ row }">

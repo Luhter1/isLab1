@@ -14,6 +14,12 @@ import DragonCaveTable from '@/components/DragonCave/Table.vue'
 import DragonHeadService from '@/services/DragonHeadService'
 import DragonHeadTable from '@/components/DragonHead/Table.vue'
 
+import LocationService from '@/services/LocationService'
+import LocationTable from '@/components/Location/Table.vue'
+
+import PersonService from '@/services/PeopleService'
+import PersonTable from '@/components/Person/Table.vue'
+
 const userStore = useUserStore()
 
 // Типы данных для отображения
@@ -22,6 +28,8 @@ const dataTypes = [
   { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable },
   { value: 'dragon-cave', label: 'Dragon Cave', service: DragonCaveService, component: DragonCaveTable },
   { value: 'dragon-head', label: 'Dragon Head', service: DragonHeadService, component: DragonHeadTable },
+  { value: 'location', label: 'Location', service: LocationService, component: LocationTable },
+  { value: 'person', label: 'Person', service: PersonService, component: PersonTable },
   // Добавьте другие типы данных здесь
 ]
 
