@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.itmo.isLab1.common.framework.dto.CrudDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @AllArgsConstructor
 public abstract class CrudController<
@@ -27,15 +25,12 @@ public abstract class CrudController<
   TUpdateDto,
   TService extends CrudService<T, ?, ?, ?, TDto, TCreateDto, TUpdateDto>
   > {
-  private static final Logger logger = LoggerFactory.getLogger(CrudController.class);
   private TService service;
 
   @GetMapping
   public ResponseEntity<Page<TDto>> index(
       @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-      @RequestParam(value = "filter", required = false) String[] filters) {
-    logger.info(filters.toString());
-    logger.info(filters[0]);
+      @RequestParam(value = "filter", defaultValue = "") String[] filters) {
     Map<String, String> filterMap = parseFilters(filters);
 
     var objs = service.getAll(pageable, filterMap);
