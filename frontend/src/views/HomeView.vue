@@ -105,13 +105,13 @@ const getRelativeTime = (date: string | null | undefined) => {
   return `${Math.floor(diffDays / 365)} years ago`
 }
 
-// Проверка на недавно измененные записи
-const isRecentlyModified = (date: string | null | undefined) => {
-  if (!date) return false
-  const hourAgo = new Date(Date.now() - 3600000)
-  return new Date(date) > hourAgo
-}
+// Обработчик изменения сортировки
+const handleSortChange = ({ prop, order }: { prop: string; order: string | null }) => {
+  const prepOrder = order === 'descending' ? 'desc' : order === 'ascending' ? 'asc' : 'null'
 
+  currentService.value.addSort(prop, prepOrder)
+  currentService.value.fetchObjects()
+}
 
 onMounted(() => {
   currentService.value.fetchObjects()
@@ -158,6 +158,8 @@ watch(selectedDataType, () => {
         v-loading="loading"
         style="width: 100%"
         :key="selectedDataType"
+        @sort-change="handleSortChange"
+        :default-sort="{ prop: 'id', order: 'asc' }"
       >
 
         <el-table-column 
@@ -165,6 +167,7 @@ watch(selectedDataType, () => {
           label="ID" 
           width="80" 
           fixed="left"
+          sortable="custom"
         />
         <!-- Динамический компонент таблицы -->
         <component :is="currentTableComponent" />

@@ -1,13 +1,13 @@
 BEGIN;
 
 -- Вспомогательный тип для цветов (enum Color)
-CREATE TYPE color AS ENUM ('RED', 'BLUE', 'YELLOW', 'ORANGE');
+CREATE TYPE color AS ENUM ('BLUE', 'ORANGE', 'RED', 'YELLOW');
 
 -- Вспомогательный тип для типов драконов (enum DragonType)
-CREATE TYPE dragon_type AS ENUM ('WATER', 'UNDERGROUND', 'AIR', 'FIRE');
+CREATE TYPE dragon_type AS ENUM ('AIR', 'FIRE', 'UNDERGROUND', 'WATER');
 
 -- Вспомогательный тип для характеров драконов (enum DragonCharacter)
-CREATE TYPE dragon_character AS ENUM ('EVIL', 'CHAOTIC_EVIL', 'FICKLE');
+CREATE TYPE dragon_character AS ENUM ('CHAOTIC_EVIL', 'EVIL', 'FICKLE');
 
 -- Таблица координат
 CREATE TABLE coordinates (

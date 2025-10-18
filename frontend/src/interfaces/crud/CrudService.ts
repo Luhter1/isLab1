@@ -18,7 +18,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         isEmpty: boolean;
         currentPage: number;
         pageSize: number;
-        sorts: [];
+        sorts: Map<string, string>;
     };
 
     constructor(
@@ -37,7 +37,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             isEmpty: true,
             currentPage: 1,
             pageSize: 10,
-            sorts: []
+            sorts: new Map<string, string>()
         });
     }
 
@@ -141,14 +141,26 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         }
     }
 
+    addSort(field: string, direction = 'asc') {
+        this.state.sorts.set(field, direction);
+        return this;
+    }
+
     async fetchObjects() {
         try {
             this.state.loading = true
-            
+            const prepSort = []
+
+            this.state.sorts.forEach((value, key) => {
+                if(value === 'asc' || value === 'desc'){
+                    prepSort.push(`${key},${value}`)
+                }
+            });
+            console.log(prepSort)
             const response = await this.getAll(
                 this.state.currentPage - 1,
                 this.state.pageSize,
-                this.state.sorts
+                prepSort
             )
             this.state.objects = response.content
             this.state.totalObjects = response.totalElements
