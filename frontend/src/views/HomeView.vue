@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
+import { useUserStore } from '@/stores/userStore'
+
 import DragonService from '@/services/DragonService'
 import DragonTable from '@/components/Dragon/Table.vue'
 
@@ -9,11 +11,17 @@ import CoordinatesTable from '@/components/Coordinates/Table.vue'
 import DragonCaveService from '@/services/DragonCaveService'
 import DragonCaveTable from '@/components/DragonCave/Table.vue'
 
+import DragonHeadService from '@/services/DragonHeadService'
+import DragonHeadTable from '@/components/DragonHead/Table.vue'
+
+const userStore = useUserStore()
+
 // Типы данных для отображения
 const dataTypes = [
   { value: 'dragons', label: 'Dragons', service: DragonService, component: DragonTable },
   { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable },
   { value: 'dragon-cave', label: 'Dragon Cave', service: DragonCaveService, component: DragonCaveTable },
+  { value: 'dragon-head', label: 'Dragon Head', service: DragonHeadService, component: DragonHeadTable },
   // Добавьте другие типы данных здесь
 ]
 
@@ -271,12 +279,12 @@ watch(selectedDataType, () => {
                 <el-icon><View /></el-icon>
               </router-link>
             </el-button>
-            <el-button size="small" type="primary">
+            <el-button size="small" type="primary" v-if="userStore.isLoggedIn">
               <router-link :to="`/update/${name}?id=${row.id}`">
                 <el-icon><Edit /></el-icon>
               </router-link>
             </el-button>
-            <el-button size="small" type="danger">
+            <el-button size="small" type="danger" v-if="userStore.isLoggedIn">
               <router-link :to="`/delete/${name}?id=${row.id}`">
                 <el-icon><Delete /></el-icon>
               </router-link>
