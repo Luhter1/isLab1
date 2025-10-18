@@ -54,6 +54,7 @@ public class Dragon extends CrudEntity {
     private Integer age;
 
     @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     @ColumnTransformer(write="?::color")
     @Column(name = "dragon_color")
     private Color color;
@@ -66,8 +67,9 @@ public class Dragon extends CrudEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     @ColumnTransformer(write="?::dragon_character")
-    @JoinColumn(name = "character", nullable = false)
+    @Column(name = "character", nullable = false)
     private DragonCharacter character;
 
     @ManyToOne(fetch = FetchType.EAGER)

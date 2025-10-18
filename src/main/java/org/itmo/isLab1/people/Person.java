@@ -4,6 +4,8 @@ import lombok.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.itmo.isLab1.common.framework.CrudEntity;
@@ -32,12 +34,14 @@ public class Person extends CrudEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     @ColumnTransformer(write="?::color")
     @Column(name = "eye_color")
     private Color eyeColor;
     
     @NotNull
     @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     @ColumnTransformer(write="?::color")
     @Column(name = "hair_color", nullable = false)
     private Color hairColor;

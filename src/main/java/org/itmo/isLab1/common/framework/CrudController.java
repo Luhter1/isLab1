@@ -11,6 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.itmo.isLab1.common.framework.dto.CrudDto;
 
 @AllArgsConstructor
@@ -25,8 +30,14 @@ public abstract class CrudController<
   private TService service;
 
   @GetMapping
-  public ResponseEntity<Page<TDto>> index(@PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-    var objs = service.getAll(pageable);
+  public ResponseEntity<Page<TDto>> index(
+      @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+      @RequestParam(value = "filter", required = false) List<String> filters) {
+    
+    Map<String, String> filterMap = parseFilters(filters);
+
+    var objs = service.getAll(pageable, filterMap);
+    
     return ResponseEntity.ok()
       .header("X-Total-Count", String.valueOf(objs.getTotalElements()))
       .body(objs);
@@ -60,5 +71,18 @@ public abstract class CrudController<
       return ResponseEntity.noContent().build();
     }
     return ResponseEntity.notFound().build();
+  }
+
+  private Map<String, String> parseFilters(List<String> filters) {
+    Map<String, String> filterMap = new HashMap<>();
+    if (filters != null) {
+      for (String filter : filters) {
+        String[] parts = filter.split(",", 2);
+        if (parts.length == 2) {
+          filterMap.put(parts[0], parts[1]);
+        }
+      }
+    }
+    return filterMap;
   }
 }

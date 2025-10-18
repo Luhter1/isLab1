@@ -3,6 +3,7 @@ package org.itmo.isLab1.common.framework;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.itmo.isLab1.users.User;
 import org.itmo.isLab1.users.UserService;
 
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 @AllArgsConstructor
 public abstract class CrudService<
@@ -35,9 +37,20 @@ public abstract class CrudService<
     private EventService<T> eventService;
 
     public Page<TDto> getAll(Pageable pageable) {
+        return getAll(pageable, null);
+    }
+    
+    public Page<TDto> getAll(Pageable pageable, Map<String, String> filters) {
         policy.showAll(currentUser());
-
-        var objs = repository.findAll(pageable);
+        
+        Page<T> objs;
+        if (filters != null && !filters.isEmpty()) {
+            Specification<T> spec = CrudSpecification.buildSpecification(filters);
+            objs = repository.findAll(spec, pageable);
+        } else {
+            objs = repository.findAll(pageable);
+        }
+        
         return objs.map(mapper::map);
     }
 
