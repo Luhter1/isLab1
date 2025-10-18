@@ -2,7 +2,6 @@
 import { 
   User,
   Location,
-  QuestionFilled
 } from '@element-plus/icons-vue'
 
 // Цветовая схема для тегов

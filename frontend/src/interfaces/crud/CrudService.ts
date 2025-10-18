@@ -16,9 +16,9 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         isLast: boolean;
         isFirst: boolean;
         isEmpty: boolean;
-        sortOrder: string;
         currentPage: number;
         pageSize: number;
+        sorts: [];
     };
 
     constructor(
@@ -35,9 +35,9 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             isLast: false,
             isFirst: true,
             isEmpty: true,
-            sortOrder: 'asc',
             currentPage: 1,
             pageSize: 10,
+            sorts: []
         });
     }
 
@@ -148,7 +148,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             const response = await this.getAll(
                 this.state.currentPage - 1,
                 this.state.pageSize,
-                []
+                this.state.sorts
             )
             this.state.objects = response.content
             this.state.totalObjects = response.totalElements
@@ -182,7 +182,6 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             case EventType.UPDATE:
                 return this.handleObjectUpdated(event.entity)
             case EventType.DELETE:
-            case EventType.KILL:
         }
     }
 
