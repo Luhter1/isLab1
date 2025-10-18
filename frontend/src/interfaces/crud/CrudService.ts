@@ -19,6 +19,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         currentPage: number;
         pageSize: number;
         sorts: Map<string, string>;
+        filters: Map<string, string>;
     };
 
     constructor(
@@ -37,7 +38,8 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             isEmpty: true,
             currentPage: 1,
             pageSize: 10,
-            sorts: new Map<string, string>()
+            sorts: new Map<string, string>(),
+            filters: new Map<string, string>()
         });
     }
 
@@ -144,6 +146,19 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
     addSort(field: string, direction = 'asc') {
         this.state.sorts.set(field, direction);
         return this;
+    }
+
+    resetSort() {
+        this.state.sorts.clear()
+    }
+
+    addFilter(field: string, value: string) {
+        this.state.filters.set(field, value);
+        return this;
+    }
+
+    resetFilter() {
+        this.state.sorts.clear()
     }
 
     async fetchObjects() {

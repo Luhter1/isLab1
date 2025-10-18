@@ -120,6 +120,7 @@ onMounted(() => {
 // Следим за изменением типа данных
 watch(selectedDataType, () => {
   currentService.value.fetchObjects()
+  currentService.value.resetSort()
 })
 </script>
 
