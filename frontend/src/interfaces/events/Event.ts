@@ -5,6 +5,6 @@ export interface Event<T> {
     eventType: EventType;
     resourceType: ResourceType;
     resourceId: number;
-    requestUuid: string;
+    requestUUID: string;
     entity: T;
 }

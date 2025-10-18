@@ -1,6 +1,8 @@
 import { reactive } from 'vue';
 import Paged from '@/interfaces/models/Paged';
 import CrudController from '@/interfaces/crud/CrudController'
+import type { Event } from '@/interfaces/events/Event'
+import { EventType } from '@/interfaces/models/EventType';
 import { ElMessage } from 'element-plus'
 
 abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
@@ -173,19 +175,30 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         await this.fetchObjects()
     }
 
-    handleDragonCreated(object) {
+    handleObjectEvent(event: Event<TDto>) {
+        switch(event.eventType){
+            case EventType.CREATE:
+                return this.handleObjectCreated(event.entity)
+            case EventType.UPDATE:
+                return this.handleObjectUpdated(event.entity)
+            case EventType.DELETE:
+            case EventType.KILL:
+        }
+    }
+
+    handleObjectCreated(object: TDto) {
         this.state.objects.push(object)
         this.state.totalObjects++
     }
 
-    handleDragonUpdated(object) {
+    handleObjectUpdated(object: TDto) {
         const index = this.state.objects.findIndex(d => d.id === object.id)
         if (index !== -1) {
-        this.state.objects[index] = object
+            this.state.objects[index] = object
         }
     }
 
-    handleDragonDeleted(id) {
+    handleObjectDeleted(id) {
         this.state.objects = this.state.objects.filter(d => d.id !== id)
         this.state.totalObjects--
     }
