@@ -13,10 +13,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.itmo.isLab1.common.framework.dto.CrudDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @AllArgsConstructor
 public abstract class CrudController<
@@ -26,14 +27,15 @@ public abstract class CrudController<
   TUpdateDto,
   TService extends CrudService<T, ?, ?, ?, TDto, TCreateDto, TUpdateDto>
   > {
-
+  private static final Logger logger = LoggerFactory.getLogger(CrudController.class);
   private TService service;
 
   @GetMapping
   public ResponseEntity<Page<TDto>> index(
       @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-      @RequestParam(value = "filter", required = false) List<String> filters) {
-    
+      @RequestParam(value = "filter", required = false) String[] filters) {
+    logger.info(filters.toString());
+    logger.info(filters[0]);
     Map<String, String> filterMap = parseFilters(filters);
 
     var objs = service.getAll(pageable, filterMap);
@@ -73,11 +75,11 @@ public abstract class CrudController<
     return ResponseEntity.notFound().build();
   }
 
-  private Map<String, String> parseFilters(List<String> filters) {
+  private Map<String, String> parseFilters(String[] filters) {
     Map<String, String> filterMap = new HashMap<>();
     if (filters != null) {
       for (String filter : filters) {
-        String[] parts = filter.split(",", 2);
+        String[] parts = filter.split(":", 2);
         if (parts.length == 2) {
           filterMap.put(parts[0], parts[1]);
         }
