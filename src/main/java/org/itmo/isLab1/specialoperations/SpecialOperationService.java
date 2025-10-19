@@ -10,8 +10,6 @@ import org.itmo.isLab1.specialoperations.dto.*;
 @Service
 @RequiredArgsConstructor
 public class SpecialOperationService {
-  private static final String NO_DRAGONS_FOUND = "No one dragons found";
-
   private final DragonRepository repository;
   private final DragonMapper mapper;
 
@@ -19,20 +17,13 @@ public class SpecialOperationService {
     var result = repository.getAverageAge();
     return result
       .map(averageAge -> new AverageAgeDto(null, averageAge))
-      .orElseGet(() -> new AverageAgeDto(NO_DRAGONS_FOUND, null));
-  }
-
-  public DragonResultDto getOldestDragon() {
-    var result = repository.findTopAgeByAgeIsNotNullOrderByAgeDesc();
-    return result
-      .map(dragon -> new DragonResultDto(null, mapper.map(dragon)))
-      .orElseGet(() -> new DragonResultDto(NO_DRAGONS_FOUND, null));
+      .orElseGet(() -> new AverageAgeDto("No one dragons with filled age found", null));
   }
 
   public DragonResultDto getDragonInDeepestCave() {
     var result = repository.findDragonInDeepestCave();
     return result
       .map(dragon -> new DragonResultDto(null, mapper.map(dragon)))
-      .orElseGet(() -> new DragonResultDto(NO_DRAGONS_FOUND, null));
+      .orElseGet(() -> new DragonResultDto("No one dragons with cave found", null));
   }
 }

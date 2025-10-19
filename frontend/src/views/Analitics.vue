@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-import { onMounted } from "vue"
+import { onMounted, watch, ref } from "vue"
 import DragonService from '@/services/DragonService'
+import type { DragonResultDto } from '@/interfaces/dto/specialoperations/DragonResultDto';
+import type { AverageAgeDto } from '@/interfaces/dto/specialoperations/AverageAgeDto';
 
-const name = 'DragonInfoPage'
+const AverageAgeData = ref({} as AverageAgeDto)
+const DeepestCaveDragon = ref({} as DragonResultDto)
 
 const deepestCaveDragon = {
     name: "test",
@@ -10,6 +13,16 @@ const deepestCaveDragon = {
     caveDepth: "test",
     color: "test",
 }
+
+watch(() => DragonService.getTotalObjects(), async (newValue) => {
+    AverageAgeData.value = await DragonService.getAverageAge()
+    DeepestCaveDragon.value = await DragonService.getDeepestCaveDragon()
+})
+
+onMounted(async () => {
+    AverageAgeData.value = await DragonService.getAverageAge()
+    DeepestCaveDragon.value = await DragonService.getDeepestCaveDragon()
+})
 </script>
 
 <template>
@@ -22,7 +35,8 @@ const deepestCaveDragon = {
         <h2>📊 Статистика</h2>
         <div class="stat-item">
           <span class="label">Средний возраст драконов:</span>
-          <span class="value">10 лет</span>
+          <span class="value" v-if="AverageAgeData.averageAge">{{ AverageAgeData.averageAge }}</span>
+          <span class="value" v-else>{{ AverageAgeData.errorMessage }}</span>
         </div>
         <div class="stat-item">
           <span class="label">Всего драконов:</span>
@@ -33,26 +47,34 @@ const deepestCaveDragon = {
       <!-- Блок с драконом из самой глубокой пещеры -->
       <div class="info-card">
         <h2>🏔️ Дракон из самой глубокой пещеры</h2>
-        <div v-if="deepestCaveDragon" class="dragon-details">
+        <div v-if="DeepestCaveDragon.dragon" class="dragon-details">
           <div class="detail-item">
             <span class="label">Имя:</span>
-            <span class="value">{{ deepestCaveDragon.name }}</span>
+            <span class="value">{{ DeepestCaveDragon.dragon.name }}</span>
           </div>
-          <div class="detail-item">
+          <div class="detail-item" v-if="DeepestCaveDragon.dragon.age">
             <span class="label">Возраст:</span>
-            <span class="value">{{ deepestCaveDragon.age }} лет</span>
+            <span class="value">{{ DeepestCaveDragon.dragon.age }} лет</span>
           </div>
           <div class="detail-item">
             <span class="label">Глубина пещеры:</span>
-            <span class="value">{{ deepestCaveDragon.caveDepth }} м</span>
+            <span class="value">{{ DeepestCaveDragon.dragon.cave.depth }} м</span>
           </div>
-          <div class="detail-item">
+          <div class="detail-item" v-if="DeepestCaveDragon.dragon.color">
             <span class="label">Цвет:</span>
-            <span class="value">{{ deepestCaveDragon.color }}</span>
+            <span class="value">{{ DeepestCaveDragon.dragon.color }}</span>
+          </div>
+          <div class="detail-item" v-if="DeepestCaveDragon.dragon.type">
+            <span class="label">Тип:</span>
+            <span class="value">{{ DeepestCaveDragon.dragon.type }}</span>
+          </div>
+          <div class="detail-item" v-if="DeepestCaveDragon.dragon.character">
+            <span class="label">Характер:</span>
+            <span class="value">{{ DeepestCaveDragon.dragon.character }}</span>
           </div>
         </div>
         <div v-else class="no-data">
-          Данные не найдены
+          {{ DeepestCaveDragon.errorMessage }}
         </div>
       </div>
     </div>
