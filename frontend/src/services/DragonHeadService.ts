@@ -9,8 +9,7 @@ class DragonHeadService extends CrudService<DragonHeadDto, DragonHeadCreateDto, 
         super("DragonHead", DragonHeadController);
     }
 
-    getTable() {
-
+    handleObjectKill(object: DragonHeadDto) {
     }
 }
 

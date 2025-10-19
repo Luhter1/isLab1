@@ -213,18 +213,16 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
     handleObjectEvent(event: Event<TDto>) {
         switch(event.eventType){
             case EventType.CREATE:
-                return this.handleObjectCreated(event.entity)
+                return this.fetchObjects()
             case EventType.UPDATE:
                 return this.handleObjectUpdated(event.entity)
             case EventType.DELETE:
+                return this.fetchObjects()
+            case EventType.KILL:
+                return this.handleObjectKill(event.entity)
         }
     }
-
-    handleObjectCreated(object: TDto) {
-        this.state.objects.push(object)
-        this.state.totalObjects++
-    }
-
+    
     handleObjectUpdated(object: TDto) {
         const index = this.state.objects.findIndex(d => d.id === object.id)
         if (index !== -1) {
@@ -232,12 +230,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         }
     }
 
-    handleObjectDeleted(id) {
-        this.state.objects = this.state.objects.filter(d => d.id !== id)
-        this.state.totalObjects--
-    }
-
-    abstract getTable(): any;
+    abstract handleObjectKill(object: TDto): any;
 }
 
 export default CrudService;

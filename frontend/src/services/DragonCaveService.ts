@@ -9,8 +9,7 @@ class DragonCaveService extends CrudService<DragonCaveDto, DragonCaveCreateDto, 
         super("DragonCave", DragonCaveController);
     }
 
-    getTable() {
-
+    handleObjectKill(object: DragonCaveDto) {
     }
 }
 

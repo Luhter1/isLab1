@@ -9,8 +9,7 @@ class CoordinateService extends CrudService<CoordinateDto, CoordinateCreateDto, 
         super("Coordinate", CoordinateController);
     }
 
-    getTable() {
-
+    handleObjectKill(object: CoordinateDto) {
     }
 }
 

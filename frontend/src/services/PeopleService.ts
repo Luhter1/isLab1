@@ -9,8 +9,7 @@ class PersonService extends CrudService<PersonDto, PersonCreateDto, PersonUpdate
         super("Person", PersonController);
     }
 
-    getTable() {
-
+    handleObjectKill(object: PersonDto) {
     }
 }
 

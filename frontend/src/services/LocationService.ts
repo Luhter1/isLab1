@@ -9,8 +9,7 @@ class LocationService extends CrudService<LocationDto, LocationCreateDto, Locati
         super("Location", LocationController);
     }
 
-    getTable() {
-
+    handleObjectKill(object: LocationDto) {
     }
 }
 

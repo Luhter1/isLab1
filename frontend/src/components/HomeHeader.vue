@@ -29,7 +29,7 @@ const userStore = useUserStore()
   </el-space>
 
   <el-space wrap v-else>
-    <RouterLink to="/">
+    <RouterLink to="/create/Dragon">
       <el-button type="danger">
         +ADD Dragon
       </el-button>

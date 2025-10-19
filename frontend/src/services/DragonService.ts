@@ -7,30 +7,12 @@ import CrudService from '@/interfaces/crud/CrudService';
 class DragonService extends CrudService<DragonDto, DragonCreateDto, DragonUpdateDto> {
   constructor() {
     super("Dragon", DragonController);
-
-    this.pageSize = 10;
-    this.currentPage = 1;
   }
 
-  getTable() {
-  }
+    handleObjectKill(object: DragonDto) {
+      this.handleObjectUpdated(object)
+    }
 
-  // handleDragonCreated(dragon) {
-  //   this.dragons.push(dragon)
-  //   this.totalDragons++
-  // }
-
-  // handleDragonUpdated(dragon) {
-  //   const index = this.dragons.findIndex(d => d.id === dragon.id)
-  //   if (index !== -1) {
-  //     this.dragons[index] = dragon
-  //   }
-  // }
-
-  // handleDragonDeleted(id) {
-  //   this.dragons = this.dragons.filter(d => d.id !== id)
-  //   this.totalDragons--
-  // }
 }
 
 export default new DragonService()
