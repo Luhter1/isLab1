@@ -167,6 +167,34 @@ const getAgeText = (age: number | null) => {
       <span v-else class="empty-value">Unknown</span>
     </template>
   </el-table-column>
+
+  <!-- Coordinates (combined) -->
+  <el-table-column 
+    label="Coordinates" 
+    min-width="120"
+  >
+    <template #header>
+      <span>Coordinates</span>
+    </template>
+    <template #default="{ row }">
+      <el-tooltip :content="`Coordinates id: ${row.coordinates.id}`">
+        <div class="coordinates-info">
+          <div class="coordinates-row">
+            <span class="label">X:</span>
+            <el-tag type="info" effect="plain">
+              {{ row.coordinates.x }}
+            </el-tag>
+          </div>
+          <div class="coordinates-row">
+            <span class="label">Y:</span>
+            <el-tag type="info" effect="plain">
+              {{ row.coordinates.y }}
+            </el-tag>
+          </div>
+        </div>
+      </el-tooltip>
+    </template>
+  </el-table-column>
   
   <el-table-column 
     label="Cave" 
@@ -244,5 +272,23 @@ const getAgeText = (age: number | null) => {
 .empty-value {
   color: #c0c4cc;
   font-style: italic;
+}
+
+.coordinates-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  
+  .coordinates-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    .label {
+      font-weight: 500;
+      color: #606266;
+      width: 20px;
+    }
+  }
 }
 </style>

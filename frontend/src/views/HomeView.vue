@@ -39,7 +39,6 @@ const dataTypes = [
     ]
   },
   { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable, filterableFields: [] },
-  { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable, filterableFields: [] },
   { value: 'dragon-cave', label: 'Dragon Cave', service: DragonCaveService, component: DragonCaveTable, filterableFields: [] },
   { value: 'dragon-head', label: 'Dragon Head', service: DragonHeadService, component: DragonHeadTable, filterableFields: [] },
   { 
