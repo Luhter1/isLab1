@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { onMounted } from "vue"
 import DragonService from '@/services/DragonService'
 
 const name = 'DragonInfoPage'
