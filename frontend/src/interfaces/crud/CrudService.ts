@@ -51,6 +51,10 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         return this.name
     }
 
+    getTotalObjects = () => {
+        return this.state.totalObjects
+    }
+
     getAll = async (page: number, size: number, sort: string[], filter: string[]): Promise<Paged<TDto>> => {
         try {
             const response = await this.controller.getAll(page, size, sort, filter);

@@ -14,6 +14,7 @@ import DragonService from '@/services/DragonService'
 const app = createApp(App)
 
 app.use(createPinia())
+await DragonService.fetchObjects()
 const userStore = useUserStore()
 userStore.initializeFromStorage()
 
