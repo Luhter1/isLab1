@@ -3,6 +3,9 @@ package org.itmo.isLab1.people.dto;
 import lombok.Data;
 import jakarta.validation.constraints.*;
 import org.openapitools.jackson.nullable.JsonNullable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import org.hibernate.validator.constraints.Length;
 import org.itmo.isLab1.people.enums.Color;
 
@@ -22,6 +25,7 @@ public class PersonUpdateDto {
     private JsonNullable<Integer> locationId;
 
     @Past
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private JsonNullable<LocalDateTime> birthday;
 
     @NotNull

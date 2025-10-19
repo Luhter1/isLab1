@@ -7,6 +7,7 @@ import DeleteContainer from '@/views/sidebar/DeleteContainer.vue'
 import CreateContainer from '@/views/sidebar/CreateContainer.vue'
 import UpdateContainer from '@/views/sidebar/UpdateContainer.vue'
 import Analitics from '@/views/Analitics.vue'
+import KillerTeam from '@/views/KillerTeam.vue'
 import { logout } from '@/services/AuthService'
 import { useUserStore } from '@/stores/userStore'
 
@@ -81,6 +82,11 @@ const router = createRouter({
       path: '/analytics',
       name: 'analytics',
       component: Analitics,
+    },
+    {
+      path: '/killer-team',
+      name: 'killer-team',
+      component: KillerTeam,
     },
   ],
 })
