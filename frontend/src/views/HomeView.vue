@@ -125,12 +125,12 @@ const applyFilters = () => {
     }
   })
   
-  // Сбрасываем на первую страницу при применении фильтров
-  currentPage.value = 1
-  
   // Обновляем фильтры в сервисе и перезагружаем данные
   currentService.value.setFilters(filters.value)
-  currentService.value.fetchObjects()
+
+  // Сбрасываем на первую страницу при применении фильтров
+  // в updatePage сразу и данные запрашиваются с сервера
+  currentPage.value = 1
 }
 
 // Сброс фильтров
@@ -218,7 +218,9 @@ onMounted(() => {
 
 // Следим за изменением типа данных
 watch(selectedDataType, () => {
-  resetFilters()
+  filters.value = {}
+  filterInputs.value = {}
+  currentService.value.clearFilters()
   currentService.value.fetchObjects()
   currentService.value.resetSort()
 })
