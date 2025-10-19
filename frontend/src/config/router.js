@@ -6,6 +6,7 @@ import ViewContainer from '@/views/sidebar/ViewContainer.vue'
 import DeleteContainer from '@/views/sidebar/DeleteContainer.vue'
 import CreateContainer from '@/views/sidebar/CreateContainer.vue'
 import UpdateContainer from '@/views/sidebar/UpdateContainer.vue'
+import Analitics from '@/views/Analitics.vue'
 import { logout } from '@/services/AuthService'
 import { useUserStore } from '@/stores/userStore'
 
@@ -75,6 +76,11 @@ const router = createRouter({
         id: route.query.id ? Number(route.query.id) : null
       }),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/analytics',
+      name: 'analytics',
+      component: Analitics,
     },
   ],
 })

@@ -26,7 +26,6 @@ public class CrudSpecification {
             for (Map.Entry<String, String> entry : filters.entrySet()) {
                 String fieldName = entry.getKey();
                 String value = entry.getValue();
-
                 // Пропускаем пустые значения фильтров
                 if (value == null || value.trim().isEmpty()) {
                     continue;
@@ -37,7 +36,11 @@ public class CrudSpecification {
                     Class<?> fieldType = fieldPath.getJavaType();
 
                     if (String.class.isAssignableFrom(fieldType)) {
-                        predicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fieldPath.as(String.class)), value));
+                        if(fieldName.equals("name")){
+                            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(fieldPath.as(String.class)), "%" + value + "%"));
+                        }else{
+                            predicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fieldPath.as(String.class)), value));
+                        }
                     } else if (Enum.class.isAssignableFrom(fieldType)) {
                         try {
                             @SuppressWarnings("unchecked")
