@@ -45,18 +45,13 @@ public class CrudSpecification {
                             predicates.add(criteriaBuilder.equal(fieldPath, enumValue));
                         } catch (IllegalArgumentException e) {
                             logger.warn("Invalid enum value '{}' for field '{}'", value, fieldName);
-                        }
-                    } else if (Number.class.isAssignableFrom(fieldType)) {
-                        try {
-                            // Простое сравнение на равенство для чисел
-                            predicates.add(criteriaBuilder.equal(fieldPath, value));
-                        } catch (Exception e) {
-                             logger.warn("Invalid number value '{}' for field '{}'", value, fieldName);
+                            predicates.add(criteriaBuilder.disjunction());
                         }
                     }
 
                 } catch (IllegalArgumentException e) {
                     logger.warn("Could not resolve path for filter: '{}'. Field might not exist.", fieldName);
+                    predicates.add(criteriaBuilder.disjunction());
                 }
             }
 

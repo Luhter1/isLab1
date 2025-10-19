@@ -19,7 +19,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         currentPage: number;
         pageSize: number;
         sorts: Map<string, string>;
-        filters: Map<string, string>;
+        filters: Record<string, string>;
     };
 
     constructor(
@@ -39,7 +39,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             currentPage: 1,
             pageSize: 10,
             sorts: new Map<string, string>(),
-            filters: new Map<string, string>()
+            filters: {}
         });
     }
 
@@ -51,9 +51,9 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         return this.name
     }
 
-    getAll = async (page: number, size: number, sort: string[]): Promise<Paged<TDto>> => {
+    getAll = async (page: number, size: number, sort: string[], filter: string[]): Promise<Paged<TDto>> => {
         try {
-            const response = await this.controller.getAll(page, size, sort);
+            const response = await this.controller.getAll(page, size, sort, filter);
             return response.data as Paged<TDto>;
         } catch (error) {
             ElMessage({
@@ -152,30 +152,38 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         this.state.sorts.clear()
     }
 
-    addFilter(field: string, value: string) {
-        this.state.filters.set(field, value);
-        return this;
+    setFilters(filters: Record<string, string>) {
+        this.state.filters = filters
     }
 
-    resetFilter() {
-        this.state.sorts.clear()
+    clearFilters() {
+        this.state.filters = {}
     }
 
     async fetchObjects() {
         try {
             this.state.loading = true
-            const prepSort = []
 
+            // Добавляем сортировку
+            const prepSort = []
             this.state.sorts.forEach((value, key) => {
                 if(value === 'asc' || value === 'desc'){
                     prepSort.push(`${key},${value}`)
                 }
             });
-            console.log(prepSort)
+
+            // Добавляем фильтры
+            const filterParams: string[] = []
+            Object.entries(this.state.filters).forEach(([field, value]) => {
+                if (value) {
+                filterParams.push(`${field}:${value}`)
+                }
+            })
             const response = await this.getAll(
                 this.state.currentPage - 1,
                 this.state.pageSize,
-                prepSort
+                prepSort,
+                filterParams
             )
             this.state.objects = response.content
             this.state.totalObjects = response.totalElements

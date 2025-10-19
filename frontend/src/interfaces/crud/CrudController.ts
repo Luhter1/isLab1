@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import Paged from '@/interfaces/models/Paged';
 import api from '@/controllers/api';
-import { createCrudUri } from '@/utils/uri';
+import { createCrudUri, createFilterUri } from '@/utils/uri';
 
 export default class CrudController<TDto, TCreateDto, TUpdateDto> {
   protected readonly path: string;
@@ -10,8 +10,8 @@ export default class CrudController<TDto, TCreateDto, TUpdateDto> {
     this.path = path;
   }
 
-  async getAll(page: number, size: number, sort: string[]): Promise<AxiosResponse<Paged<TDto>>> {
-    return api.get<Paged<TDto>>(`/${this.path}${createCrudUri(page, size, sort)}`);
+  async getAll(page: number, size: number, sort: string[], filter: string[]): Promise<AxiosResponse<Paged<TDto>>> {
+    return api.get<Paged<TDto>>(`/${this.path}${createCrudUri(page, size, sort)}${createFilterUri(filter)}`);
   }
 
   async get(id: number): Promise<AxiosResponse<TDto>> {

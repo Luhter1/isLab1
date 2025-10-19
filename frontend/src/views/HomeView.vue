@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
+import { Search } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/userStore'
 
 import DragonService from '@/services/DragonService'
@@ -24,27 +25,71 @@ const userStore = useUserStore()
 
 // Типы данных для отображения
 const dataTypes = [
-  { value: 'dragons', label: 'Dragons', service: DragonService, component: DragonTable },
-  { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable },
-  { value: 'dragon-cave', label: 'Dragon Cave', service: DragonCaveService, component: DragonCaveTable },
-  { value: 'dragon-head', label: 'Dragon Head', service: DragonHeadService, component: DragonHeadTable },
-  { value: 'location', label: 'Location', service: LocationService, component: LocationTable },
-  { value: 'person', label: 'Person', service: PersonService, component: PersonTable },
-  // Добавьте другие типы данных здесь
+  { 
+    value: 'dragons', 
+    label: 'Dragons', 
+    service: DragonService, 
+    component: DragonTable,
+    filterableFields: [
+      { field: 'name', label: 'Name', type: 'string' },
+      { field: 'killer.name', label: 'Killer', type: 'string' },
+      { field: 'color', label: 'Color', type: 'enum', options: ['RED', 'BLUE', 'YELLOW', 'ORANGE'] },
+      { field: 'type', label: 'Type', type: 'enum', options: ['WATER', 'UNDERGROUND', 'AIR', 'FIRE'] },
+      { field: 'character', label: 'Character', type: 'enum', options: ['EVIL', 'CHAOTIC_EVIL', 'FICKLE'] }
+    ]
+  },
+  { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable, filterableFields: [] },
+  { value: 'coordinates', label: 'Coordinates', service: CoordinatesService, component: CoordinatesTable, filterableFields: [] },
+  { value: 'dragon-cave', label: 'Dragon Cave', service: DragonCaveService, component: DragonCaveTable, filterableFields: [] },
+  { value: 'dragon-head', label: 'Dragon Head', service: DragonHeadService, component: DragonHeadTable, filterableFields: [] },
+  { 
+    value: 'location', 
+    label: 'Location', 
+    service: LocationService, 
+    component: LocationTable, 
+    filterableFields: [
+      { field: 'name', label: 'Name', type: 'string' },
+    ] 
+  },
+  { 
+    value: 'person', 
+    label: 'Person', 
+    service: PersonService, 
+    component: PersonTable, 
+    filterableFields: [
+      { field: 'name', label: 'Name', type: 'string' },
+      { field: 'location.name', label: 'Location', type: 'string' },
+      { field: 'passportId', label: 'Passport', type: 'string' },
+      { field: 'eyeColor', label: 'Eye Color', type: 'enum', options: ['RED', 'BLUE', 'YELLOW', 'ORANGE'] },
+      { field: 'hairColor', label: 'Hair Color', type: 'enum', options: ['RED', 'BLUE', 'YELLOW', 'ORANGE'] },
+    ]
+  },
 ]
 
 // Текущий выбранный тип данных
 const selectedDataType = ref('dragons')
 
-// Получаем текущий сервис и компонент
+// Состояние фильтров
+const filters = ref<Record<string, string>>({})
+const showFilters = ref(false)
+const filterInputs = ref<Record<string, string>>({})
+
+// Получаем текущий тип данных, сервис и компонент
+const currentDataType = computed(() => {
+  return dataTypes.find(t => t.value === selectedDataType.value)
+})
 const currentService = computed(() => {
   const type = dataTypes.find(t => t.value === selectedDataType.value)
   return type ? type.service : DragonService
 })
-
 const currentTableComponent = computed(() => {
   const type = dataTypes.find(t => t.value === selectedDataType.value)
   return type ? type.component : DragonTable
+})
+
+// Доступные поля для фильтрации
+const filterableFields = computed(() => {
+  return currentDataType.value?.filterableFields || []
 })
 
 // Вычисляемые свойства на основе текущего сервиса
@@ -62,6 +107,60 @@ const pageSize = computed({
   get: () => currentService.value.state.pageSize,
   set: (val) => currentService.value.updatePageSize(val)
 })
+
+// Счетчик активных фильтров
+const activeFiltersCount = computed(() => {
+  return Object.keys(filters.value).length
+})
+
+// Применение фильтров
+const applyFilters = () => {
+  filters.value = { ...filterInputs.value }
+
+  filterInputs.value = {}
+  // Удаляем пустые фильтры
+  Object.keys(filters.value).forEach(key => {
+    if (!filters.value[key] || filters.value[key].trim() === '') {
+      delete filters.value[key]
+    }
+  })
+  
+  // Сбрасываем на первую страницу при применении фильтров
+  currentPage.value = 1
+  
+  // Обновляем фильтры в сервисе и перезагружаем данные
+  currentService.value.setFilters(filters.value)
+  currentService.value.fetchObjects()
+}
+
+// Сброс фильтров
+const resetFilters = () => {
+  filters.value = {}
+  filterInputs.value = {}
+  currentService.value.clearFilters()
+  currentService.value.fetchObjects()
+}
+
+// Быстрая фильтрация (поиск)
+const quickSearch = ref('')
+const quickSearchField = ref('name')
+
+const handleQuickSearch = () => {
+  if (quickSearch.value.trim()) {
+    filters.value = {
+      [quickSearchField.value]: quickSearch.value
+    }
+    filterInputs.value = { ...filters.value }
+    currentService.value.setFilters(filters.value)
+    currentService.value.fetchObjects()
+  }
+}
+
+// Очистка быстрого поиска
+const clearQuickSearch = () => {
+  quickSearch.value = ''
+  resetFilters()
+}
 
 // Форматирование даты
 const formatDate = (date: string | null | undefined) => {
@@ -119,6 +218,7 @@ onMounted(() => {
 
 // Следим за изменением типа данных
 watch(selectedDataType, () => {
+  resetFilters()
   currentService.value.fetchObjects()
   currentService.value.resetSort()
 })
@@ -130,28 +230,152 @@ watch(selectedDataType, () => {
       <!-- Header с выбором типа данных -->
       <template #header>
         <div class="card-header">
-          <el-select 
-            v-model="selectedDataType" 
-            placeholder="Select data type"
-            size="large"
-            style="width: 200px"
-          >
-            <el-option
-              v-for="type in dataTypes"
-              :key="type.value"
-              :label="type.label"
-              :value="type.value"
-            />
-          </el-select>
-          
-          <el-button type="primary">
-            <router-link :to="`/create/${name}`">
-              <el-icon><Plus /></el-icon>
-              Add New
-            </router-link>
-          </el-button>
+          <div class="header-left">
+            <el-select 
+              v-model="selectedDataType" 
+              placeholder="Select data type"
+              size="large"
+              style="width: 200px"
+            >
+              <el-option
+                v-for="type in dataTypes"
+                :key="type.value"
+                :label="type.label"
+                :value="type.value"
+              />
+            </el-select>
+
+            <!-- Быстрый поиск -->
+            <el-input
+              v-model="quickSearch"
+              placeholder="Quick search..."
+              clearable
+              @clear="clearQuickSearch"
+              @keyup.enter="handleQuickSearch"
+              style="width: 250px"
+            >
+              <template #prepend>
+                <el-select v-model="quickSearchField" style="width: 100px">
+                  <el-option
+                    v-for="field in filterableFields"
+                    :key="field.field"
+                    :label="field.label"
+                    :value="field.field"
+                  />
+                </el-select>
+              </template>
+              <template #append>
+                <el-button :icon="Search" @click="handleQuickSearch" />
+              </template>
+            </el-input>
+          </div>
+
+          <div class="header-right">
+            <!-- Кнопка фильтров -->
+            <el-badge :value="activeFiltersCount" :hidden="activeFiltersCount === 0">
+              <el-button 
+                @click="showFilters = !showFilters"
+                :type="activeFiltersCount > 0 ? 'primary' : 'default'"
+              >
+                <el-icon><Filter /></el-icon>
+                Filters
+              </el-button>
+            </el-badge>
+
+            <el-button @click="currentService.fetchObjects()">
+              <el-icon><RefreshRight /></el-icon>
+              Refresh
+            </el-button>
+            
+            <el-button type="primary">
+              <router-link :to="`/create/${name}`">
+                <el-icon><Plus /></el-icon>
+                Add New
+              </router-link>
+            </el-button>
+          </div>
         </div>
       </template>
+
+      <!-- Панель фильтров -->
+      <el-collapse-transition>
+        <div v-show="showFilters" class="filter-panel">
+          <el-divider content-position="left">
+            <el-icon><Filter /></el-icon>
+            Advanced Filters
+          </el-divider>
+          
+          <el-form label-width="120px">
+            <el-row :gutter="20">
+              <el-col 
+                v-for="field in filterableFields" 
+                :key="field.field"
+                :span="12"
+              >
+                <el-form-item :label="field.label">
+                  <!-- Для enum полей показываем select -->
+                  <el-select
+                    v-if="field.type === 'enum'"
+                    v-model="filterInputs[field.field]"
+                    clearable
+                    :placeholder="`Select ${field.label}`"
+                    style="width: 100%"
+                  >
+                    <el-option
+                      v-for="option in field.options"
+                      :key="option"
+                      :label="option"
+                      :value="option"
+                    />
+                  </el-select>
+                  
+                  <!-- Для строковых полей показываем input -->
+                  <el-input
+                    v-else
+                    v-model="filterInputs[field.field]"
+                    clearable
+                    :placeholder="`Enter ${field.label}`"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            
+            <el-form-item>
+              <el-button type="primary" @click="applyFilters">
+                Apply Filters
+              </el-button>
+              <el-button @click="resetFilters">
+                Reset All
+              </el-button>
+              <el-text v-if="activeFiltersCount > 0" type="info" style="margin-left: 20px">
+                {{ activeFiltersCount }} filter(s) active
+              </el-text>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-collapse-transition>
+
+      <!-- Активные фильтры в виде тегов -->
+      <div v-if="activeFiltersCount > 0" class="active-filters">
+        <el-text type="info" style="margin-right: 10px">Active filters:</el-text>
+        <el-tag
+          v-for="(value, key) in filters"
+          :key="key"
+          closable
+          @close="delete filters[key]; applyFilters()"
+          style="margin-right: 8px"
+        >
+          {{ key }}: {{ value }}
+        </el-tag>
+        <el-button 
+          link 
+          type="danger" 
+          size="small"
+          @click="resetFilters"
+        >
+          Clear all
+        </el-button>
+      </div>
 
       <!-- Table -->
       <el-table
@@ -325,10 +549,35 @@ watch(selectedDataType, () => {
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    
+    .header-left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .header-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
   }
 
-  .filters {
+  .filter-panel {
+    padding: 20px;
+    background-color: #f5f7fa;
+    border-radius: 4px;
     margin-bottom: 20px;
+  }
+
+  .active-filters {
+    padding: 12px;
+    background-color: #ecf5ff;
+    border-left: 4px solid #409eff;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
   }
 
   .pagination {
