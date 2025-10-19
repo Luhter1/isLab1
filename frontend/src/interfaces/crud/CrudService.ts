@@ -61,6 +61,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             return response.data as Paged<TDto>;
         } catch (error) {
             ElMessage({
+                offset: 60,
                 message: this.getErrorMessage(error),
                 showClose: true,
                 grouping: true,
@@ -76,6 +77,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             return response.data as TDto;
         } catch (error) {
             ElMessage({
+                offset: 60,
                 message: this.getErrorMessage(error),
                 showClose: true,
                 grouping: true,
@@ -89,6 +91,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         try {
             const response = await this.controller.create(data);
             ElMessage({
+                offset: 60,
                 message: `${this.name} created successfully!`,
                 showClose: true,
                 grouping: true,
@@ -97,6 +100,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             return response.data as TDto;
         } catch (error) {
             ElMessage({
+                offset: 60,
                 message: this.getErrorMessage(error),
                 showClose: true,
                 grouping: true,
@@ -110,6 +114,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         try {
             const response = await this.controller.update(id, data);
             ElMessage({
+                offset: 60,
                 message: `${this.name} updated successfully!`,
                 showClose: true,
                 grouping: true,
@@ -118,6 +123,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             return response.data as TDto;
         } catch (error) {
             ElMessage({
+                offset: 60,
                 message: this.getErrorMessage(error),
                 showClose: true,
                 grouping: true,
@@ -131,6 +137,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
         try {
             await this.controller.delete(id);
             ElMessage({
+                offset: 60,
                 message: `${this.name} deleted successfully!`,
                 showClose: true,
                 grouping: true,
@@ -138,6 +145,7 @@ abstract class CrudService<TDto extends { id: any }, TCreateDto, TUpdateDto> {
             });
         } catch (error) {
             ElMessage({
+                offset: 60,
                 message: this.getErrorMessage(error),
                 showClose: true,
                 grouping: true,
