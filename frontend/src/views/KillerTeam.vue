@@ -383,7 +383,7 @@ onMounted(() => {
 <style scoped>
 .dragon-slayers-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  /* background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); */
   padding: 20px;
 }
 
@@ -394,7 +394,7 @@ onMounted(() => {
 
 h1 {
   text-align: center;
-  color: white;
+  color: grey;
   font-size: 2.5rem;
   margin-bottom: 30px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
