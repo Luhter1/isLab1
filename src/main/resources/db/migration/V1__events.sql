@@ -1,5 +1,3 @@
-BEGIN;
-
 -- Вспомогательный тип для типов событий
 CREATE TYPE event_type AS ENUM ('CREATE', 'UPDATE', 'DELETE', 'KILL');
 
@@ -24,5 +22,3 @@ CREATE INDEX idx_events_created_at ON events(created_at);
 
 -- Ограничение внешних ключей для таблиц
 ALTER TABLE events ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES users(id);
-
-COMMIT;

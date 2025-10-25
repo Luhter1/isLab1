@@ -1,5 +1,3 @@
-BEGIN;
-
 -- Вспомогательный тип для статуса заявки на администратора
 CREATE TYPE request_status AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
@@ -17,5 +15,3 @@ CREATE TABLE admin_requests (
 
 CREATE INDEX idx_admin_requests_user_id ON admin_requests(user_id);
 CREATE INDEX idx_admin_requests_status ON admin_requests(status);
-
-COMMIT;

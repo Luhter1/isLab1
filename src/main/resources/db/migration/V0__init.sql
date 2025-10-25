@@ -1,5 +1,3 @@
-BEGIN;
-
 -- Вспомогательный тип для ролей пользователей (enum Role)
 CREATE TYPE user_role AS ENUM ('ROLE_USER', 'ROLE_ADMIN');
 
@@ -11,5 +9,3 @@ CREATE TABLE users (
   role user_role NOT NULL,                                      -- Роль пользователя: 'USER', 'ADMIN'
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()    -- Дата создания пользователя
 );
-
-COMMIT;

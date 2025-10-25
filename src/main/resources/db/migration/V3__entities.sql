@@ -1,5 +1,3 @@
-BEGIN;
-
 -- Вспомогательный тип для цветов (enum Color)
 CREATE TYPE color AS ENUM ('BLUE', 'ORANGE', 'RED', 'YELLOW');
 
@@ -102,5 +100,3 @@ ALTER TABLE dragons ADD CONSTRAINT fk_cave FOREIGN KEY (cave_id) REFERENCES drag
 ALTER TABLE dragons ADD CONSTRAINT fk_killer FOREIGN KEY (killer_id) REFERENCES people(id);
 ALTER TABLE dragons ADD CONSTRAINT fk_head FOREIGN KEY (head_id) REFERENCES dragon_heads(id);
 ALTER TABLE people ADD CONSTRAINT fk_location FOREIGN KEY (location_id) REFERENCES locations(id);
-
-COMMIT;
