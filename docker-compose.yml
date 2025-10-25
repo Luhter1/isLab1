@@ -4,8 +4,8 @@ services:
     image: postgres:14.2
     restart: unless-stopped
     environment:
-      POSTGRES_DB: "is1"
-      POSTGRES_USER: "user"
+      POSTGRES_DB: "studs"
+      POSTGRES_USER: "s408737"
       POSTGRES_PASSWORD: "password"
     ports:
       - "5432:5432"

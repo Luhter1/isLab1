@@ -6,11 +6,12 @@ import LocationService from '@/services/LocationService'
 import PersonService from '@/services/PeopleService'
 import type { Event } from '@/interfaces/events/Event'
 import { ResourceType } from '@/interfaces/models/ResourceType';
+import { WS_BASE_URL } from '@/config/constants';
 class WebSocketService {
   socket: WebSocket | null
 
   connect() {
-    this.socket = new WebSocket('ws://localhost:8080/ws')
+    this.socket = new WebSocket(WS_BASE_URL)
 
     this.socket.onopen = () => {
       console.log('WebSocket connected')
