@@ -4,12 +4,13 @@ import lombok.Data;
 import jakarta.validation.constraints.*;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.itmo.isLab1.dragons.enums.DragonType;
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 import org.itmo.isLab1.dragons.enums.DragonCharacter;
 import org.itmo.isLab1.people.enums.Color;
 
 
 @Data
-public class DragonUpdateDto {
+public class DragonUpdateDto implements ClientDto{
     @NotNull
     @NotBlank
     private JsonNullable<String> name;

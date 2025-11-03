@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.itmo.isLab1.common.framework.dto.CrudDto;
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 import org.itmo.isLab1.common.framework.mapper.CrudMapper;
 import org.itmo.isLab1.common.framework.policy.CrudPolicy;
 import org.itmo.isLab1.common.errors.ResourceNotFoundException;
@@ -27,8 +28,8 @@ public abstract class CrudService<
     TMapper extends CrudMapper<T, TDto, TCreateDto, TUpdateDto>,
     TPolicy extends CrudPolicy<T>,
     TDto extends CrudDto,
-    TCreateDto,
-    TUpdateDto> {
+    TCreateDto extends ClientDto,
+    TUpdateDto extends ClientDto> {
 
     private TRepository repository;
     private TMapper mapper;

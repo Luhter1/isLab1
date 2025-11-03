@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import org.hibernate.validator.constraints.Length;
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 import org.itmo.isLab1.people.enums.Color;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 @Data
-public class PersonCreateDto {
+public class PersonCreateDto implements ClientDto{
     @NotNull
     @NotBlank
     private String name;

@@ -1,8 +1,8 @@
 package org.itmo.isLab1.events;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.itmo.isLab1.common.entity.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EventRepository extends JpaRepository<Event, Integer> {
+public interface EventRepository extends BaseRepository<Event, Integer> {
 }

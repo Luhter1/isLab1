@@ -1,12 +1,13 @@
 package org.itmo.isLab1.locations.dto;
 
 import org.hibernate.validator.constraints.Length;
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class LocationCreateDto {
+public class LocationCreateDto implements ClientDto{
     @NotNull
     private Long x;
 

@@ -7,12 +7,13 @@ import org.openapitools.jackson.nullable.JsonNullable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import org.hibernate.validator.constraints.Length;
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 import org.itmo.isLab1.people.enums.Color;
 
 import java.time.LocalDateTime;
 
 @Data
-public class PersonUpdateDto {
+public class PersonUpdateDto implements ClientDto{
     @NotNull
     @NotBlank
     private JsonNullable<String> name;

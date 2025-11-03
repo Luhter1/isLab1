@@ -16,13 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.itmo.isLab1.common.framework.dto.CrudDto;
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 
 @AllArgsConstructor
 public abstract class CrudController<
   T extends CrudEntity,
   TDto extends CrudDto,
-  TCreateDto,
-  TUpdateDto,
+  TCreateDto extends ClientDto,
+  TUpdateDto extends ClientDto,
   TService extends CrudService<T, ?, ?, ?, TDto, TCreateDto, TUpdateDto>
   > {
   private TService service;

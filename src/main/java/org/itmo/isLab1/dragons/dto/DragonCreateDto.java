@@ -5,12 +5,13 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import org.itmo.isLab1.dragons.enums.DragonType;
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 import org.itmo.isLab1.dragons.enums.DragonCharacter;
 import org.itmo.isLab1.people.enums.Color;
 
 
 @Data
-public class DragonCreateDto {
+public class DragonCreateDto implements ClientDto{
     @NotNull
     @NotBlank
     private String name;

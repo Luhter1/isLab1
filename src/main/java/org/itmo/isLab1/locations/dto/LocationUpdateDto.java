@@ -4,10 +4,11 @@ import lombok.Data;
 import jakarta.validation.constraints.*;
 
 import org.hibernate.validator.constraints.Length;
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 @Data
-public class LocationUpdateDto {
+public class LocationUpdateDto implements ClientDto{
     @NotNull
     private JsonNullable<Long> x;
 
