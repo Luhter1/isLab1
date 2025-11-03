@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.itmo.isLab1.auth.dto.AuthenticationDto;
 import org.itmo.isLab1.auth.dto.SignInUpDto;
-import org.itmo.isLab1.common.context.ApplicationLockBean;;
+import org.itmo.isLab1.common.context.ApplicationLockBean;
+import org.itmo.isLab1.common.entity.BaseController;;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthenticationController implements BaseController{
     private final ApplicationLockBean applicationLockBean;
     private final AuthenticationService authenticationService;
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 import org.itmo.isLab1.events.EventType;
 import org.itmo.isLab1.events.resources.ResourceType;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 @Data
 @Builder
 @AllArgsConstructor
-public class EventDto<T> {
+public class EventDto<T> implements ClientDto{
 
     public EventType eventType;
     public ResourceType resourceType;

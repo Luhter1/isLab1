@@ -2,6 +2,7 @@ package org.itmo.isLab1.auth.dto;
 
 import lombok.*;
 
+import org.itmo.isLab1.common.framework.dto.ClientDto;
 import org.itmo.isLab1.users.User;
 
 
@@ -9,7 +10,7 @@ import org.itmo.isLab1.users.User;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationDto {
+public class AuthenticationDto implements ClientDto{
     private String token;
     private User user;
 }

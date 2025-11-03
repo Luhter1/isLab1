@@ -1,11 +1,13 @@
 package org.itmo.isLab1.auth.dto;
 
+import org.itmo.isLab1.common.framework.dto.ClientDto;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class SignInUpDto {
+public class SignInUpDto implements ClientDto{
     @Size(min = 3, max = 255, message = "Имя пользователя должно содержать от 3 до 255 символов")
     @NotBlank(message = "Имя пользователя не может быть пустыми")
     private String username;

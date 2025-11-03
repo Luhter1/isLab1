@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.itmo.isLab1.common.framework.dto.CrudDto;
+import org.itmo.isLab1.common.entity.BaseController;
 import org.itmo.isLab1.common.framework.dto.ClientDto;
 
 @AllArgsConstructor
@@ -25,7 +26,7 @@ public abstract class CrudController<
   TCreateDto extends ClientDto,
   TUpdateDto extends ClientDto,
   TService extends CrudService<T, ?, ?, ?, TDto, TCreateDto, TUpdateDto>
-  > {
+  > implements BaseController{
   private TService service;
 
   @GetMapping

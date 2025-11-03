@@ -10,11 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.itmo.isLab1.adminrequests.dto.AdminRequestDto;
+import org.itmo.isLab1.common.entity.BaseController;
 
 @RestController
 @RequestMapping(value = "/api/admin-requests", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-public class AdminRequestController {
+public class AdminRequestController implements BaseController{
 
     private final AdminRequestService service;
 

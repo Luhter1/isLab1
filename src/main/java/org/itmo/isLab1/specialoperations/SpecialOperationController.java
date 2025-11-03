@@ -4,13 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.itmo.isLab1.common.entity.BaseController;
 import org.itmo.isLab1.specialoperations.dto.*;
 
 
 @RestController
 @RequestMapping(value = "/api/special-operations", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-public class SpecialOperationController {
+public class SpecialOperationController implements BaseController{
 
   private final SpecialOperationService service;
 
