@@ -3,6 +3,7 @@ package org.itmo.isLab1.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -44,6 +45,19 @@ public class SecurityConfiguration {
     );
 
     @Bean
+    @Order(1)
+    public SecurityFilterChain websocketSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/ws/**")
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(AbstractHttpConfigurer::disable)
+            .sessionManagement(AbstractHttpConfigurer::disable);
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
             // Отключаем CORS
@@ -62,10 +76,6 @@ public class SecurityConfiguration {
             }))
             .authorizeHttpRequests(request -> {
                 request
-                    // WebSockets
-                    .requestMatchers("/ws/**").permitAll()
-                    .requestMatchers("/ws").permitAll()
-
                     // Доступ к методам /api/auth/** открыт для всех
                     .requestMatchers("/api/auth/**").permitAll();
 
