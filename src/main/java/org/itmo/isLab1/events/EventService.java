@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.itmo.isLab1.common.entity.BaseEntity;
+import org.itmo.isLab1.common.entity.BaseService;
 import org.itmo.isLab1.common.entity.ResourceExtractor;
 import org.itmo.isLab1.common.ws.WebSocketHandler;
 import org.itmo.isLab1.events.dto.EventDto;
@@ -22,7 +23,7 @@ import java.time.ZonedDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class EventService<T extends BaseEntity> {
+public class EventService<T extends BaseEntity> implements BaseService{
     private static final Logger logger = LoggerFactory.getLogger(EventService.class);
 
     private final EventRepository repository;

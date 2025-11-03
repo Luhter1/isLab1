@@ -9,11 +9,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
+import org.itmo.isLab1.common.entity.BaseService;
 import org.itmo.isLab1.common.errors.UserWithThisUsernameAlreadyExists;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements BaseService{
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository repository;
 

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.itmo.isLab1.adminrequests.dto.AdminRequestDto;
 import org.itmo.isLab1.adminrequests.mapper.AdminRequestMapper;
 import org.itmo.isLab1.adminrequests.policy.AdminRequestPolicy;
+import org.itmo.isLab1.common.entity.BaseService;
 import org.itmo.isLab1.common.errors.AdminRequestAlreadyProcessed;
 import org.itmo.isLab1.common.errors.ResourceNotFoundException;
 import org.itmo.isLab1.common.errors.SomePendingRequestsExists;
@@ -24,7 +25,7 @@ import java.time.ZonedDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class AdminRequestService {
+public class AdminRequestService implements BaseService{
 
     private final AdminRequestRepository repository;
     private final AdminRequestMapper mapper;

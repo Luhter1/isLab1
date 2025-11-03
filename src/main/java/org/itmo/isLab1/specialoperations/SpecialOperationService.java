@@ -2,14 +2,14 @@ package org.itmo.isLab1.specialoperations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.itmo.isLab1.common.entity.BaseService;
 import org.itmo.isLab1.dragons.*;
 import org.itmo.isLab1.dragons.mapper.DragonMapper;
 import org.itmo.isLab1.specialoperations.dto.*;
 
 @Service
 @RequiredArgsConstructor
-public class SpecialOperationService {
+public class SpecialOperationService implements BaseService{
   private final DragonRepository repository;
   private final DragonMapper mapper;
 

@@ -12,6 +12,7 @@ import org.itmo.isLab1.common.framework.dto.CrudDto;
 import org.itmo.isLab1.common.framework.dto.ClientDto;
 import org.itmo.isLab1.common.framework.mapper.CrudMapper;
 import org.itmo.isLab1.common.framework.policy.CrudPolicy;
+import org.itmo.isLab1.common.entity.BaseService;
 import org.itmo.isLab1.common.errors.ResourceNotFoundException;
 import org.itmo.isLab1.events.EventService;
 import org.itmo.isLab1.events.EventType;
@@ -29,7 +30,7 @@ public abstract class CrudService<
     TPolicy extends CrudPolicy<T>,
     TDto extends CrudDto,
     TCreateDto extends ClientDto,
-    TUpdateDto extends ClientDto> {
+    TUpdateDto extends ClientDto> implements BaseService{
 
     private TRepository repository;
     private TMapper mapper;

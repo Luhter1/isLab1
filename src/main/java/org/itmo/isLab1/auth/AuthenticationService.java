@@ -9,13 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.itmo.isLab1.auth.dto.AuthenticationDto;
 import org.itmo.isLab1.auth.dto.SignInUpDto;
+import org.itmo.isLab1.common.entity.BaseService;
 import org.itmo.isLab1.users.User;
 import org.itmo.isLab1.users.Role;
 import org.itmo.isLab1.users.UserService;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthenticationService implements BaseService{
     private final UserService userService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
