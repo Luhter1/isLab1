@@ -1,5 +1,3 @@
-// File: GenericGetByIdForm.vue
-
 <script lang="ts" setup generic="TCreateDto, TDto extends { id: any }">
 import { ref } from 'vue'
 import { ElNotification } from 'element-plus'

@@ -1,5 +1,3 @@
-// File: GenericGetByIdForm.vue
-
 <script lang="ts" setup generic="TDto extends { id: any }">
 import { reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
