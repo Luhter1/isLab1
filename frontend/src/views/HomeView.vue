@@ -521,7 +521,7 @@ watch(selectedDataType, () => {
               </el-button>
 
               <el-button
-                v-if="userStore.isLoggedIn"
+                v-if="(userStore.isLoggedIn && userStore.getUsername == row.createdBy.username) || (userStore.getUserRole == 'ROLE_ADMIN')"
                 size="small"
                 type="primary"
                 tag="router-link"
@@ -531,7 +531,7 @@ watch(selectedDataType, () => {
               </el-button>
 
               <el-button
-                v-if="userStore.isLoggedIn"
+                v-if="(userStore.isLoggedIn && userStore.getUsername == row.createdBy.username) || (userStore.getUserRole == 'ROLE_ADMIN')"
                 size="small"
                 type="danger"
                 tag="router-link"

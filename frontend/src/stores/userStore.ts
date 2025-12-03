@@ -58,7 +58,7 @@ export const useUserStore = defineStore('user', {
 
         if (storedData) {
             const authData: AuthenticationDto = JSON.parse(storedData);
-            this.user = authData.user
+            this.currentUser = authData.user
             this.token = authData.token
             this.isAuthenticated = true
         }
