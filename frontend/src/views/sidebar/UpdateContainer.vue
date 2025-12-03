@@ -7,24 +7,31 @@ import GenericUpdate from '@/components/Common/GenericUpdate.vue'
 
 import LocationService from '@/services/LocationService'
 import LocationUpdateForm from '@/components/Location/UpdateForm.vue'
+import LocationTable from '@/components/Location/Table.vue'
 
 import CoordinateService from '@/services/CoordinatesService'
 import CoordinateUpdateForm from '@/components/Coordinates/UpdateForm.vue'
+import CoordinateTable from '@/components/Coordinates/Table.vue'
 
 import DragonHeadService from '@/services/DragonHeadService'
 import DragonHeadUpdateForm from '@/components/DragonHead/UpdateForm.vue'
+import DragonHeadTable from '@/components/DragonHead/Table.vue'
 
 import DragonCaveService from '@/services/DragonCaveService'
 import DragonCaveUpdateForm from '@/components/DragonCave/UpdateForm.vue'
+import DragonCaveTable from '@/components/DragonCave/Table.vue'
 
 import PersonService from '@/services/PeopleService'
 import PersonUpdateForm from '@/components/Person/UpdateForm.vue'
+import PeopleTable from '@/components/Person/Table.vue'
 
 import DragonService from '@/services/DragonService'
 import DragonUpdateForm from '@/components/Dragon/UpdateForm.vue'
-
+import DragonTable from '@/components/Dragon/Table.vue'
 
 interface ComponentConfig {
+  service,
+  tableComponent: Component,
   updateT: (id: number, location: any) => Promise<any>,
   formFieldsT: Component,
   formLabel: string,
@@ -35,12 +42,16 @@ const router = useRouter()
 
 const updateConfigs: Record<string, ComponentConfig> = {
   Dragon: {
+    service: DragonService,
+    tableComponent: DragonTable,
     updateT: DragonService.update,
     formFieldsT: DragonUpdateForm,
     formLabel: "Dragon",
   },
 
   Person: {
+    service: PersonService,
+    tableComponent: PeopleTable,
     updateT: PersonService.update,
     formFieldsT: PersonUpdateForm,
     formLabel: "Person",
@@ -48,24 +59,32 @@ const updateConfigs: Record<string, ComponentConfig> = {
   },
 
   DragonCave: {
+    service: DragonCaveService,
+    tableComponent: DragonCaveTable,
     updateT: DragonCaveService.update,
     formFieldsT: DragonCaveUpdateForm,
     formLabel: "DragonCave",
   },
 
   DragonHead: {
+    service: DragonHeadService,
+    tableComponent: DragonHeadTable,
     updateT: DragonHeadService.update,
     formFieldsT: DragonHeadUpdateForm,
     formLabel: "DragonHead",
   },
 
   Coordinate: {
+    service: CoordinateService,
+    tableComponent: CoordinateTable,
     updateT: CoordinateService.update,
     formFieldsT: CoordinateUpdateForm,
     formLabel: "Coordinate",
   },
 
   Location: {
+    service: LocationService,
+    tableComponent: LocationTable,
     updateT: LocationService.update,
     formFieldsT: LocationUpdateForm,
     formLabel: "Location",
@@ -124,6 +143,8 @@ watch(currentType, (type) => {
 
       <GenericUpdate
         :key="`${currentType}-${route.query.id || 'new'}`"
+        :service="currentConfig.service"
+        :tableComponent="currentConfig.tableComponent"
         :updateT="currentConfig.updateT"
         :formFieldsT="currentConfig.formFieldsT"
         :formLabel="currentConfig.formLabel"

@@ -1,6 +1,15 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { DragonCreateDto } from '@/interfaces/dto/dragons/DragonCreateDto'
+import EntitySelectField from '@/components/Common/EntitySelectField.vue'
+import PeopleService from '@/services/PeopleService'
+import PeopleTable from '@/components/Person/Table.vue'
+import DragonCaveService from '@/services/DragonCaveService'
+import DragonCaveTable from '@/components/DragonCave/Table.vue'
+import CoordinatesService from '@/services/CoordinatesService'
+import CoordinatesTable from '@/components/Coordinates/Table.vue'
+import DragonHeadService from '@/services/DragonHeadService'
+import DragonHeadTable from '@/components/DragonHead/Table.vue'
 
 const props = defineProps<{
   obj: DragonCreateDto
@@ -55,6 +64,10 @@ const fields = [
     label: "Character", 
     value: 8,
   },
+  {
+    label: "Head", 
+    value: 9,
+  },
 ]
 </script>
 
@@ -82,15 +95,33 @@ const fields = [
 
 
   <el-form-item label="Coordinates ID" prop="coordinatesId" v-if="value2.find((e) => e === 2)">
-    <el-input v-model="localObj.coordinatesId" type="number" placeholder="Coordinates ID" clearable/>
+    <EntitySelectField
+      v-model="localObj.coordinatesId"
+      label="Select coordinates"
+      placeholder="Нажмите для выбора координат"
+      :service="CoordinatesService"
+      :table-component="CoordinatesTable"
+    />
   </el-form-item>
 
   <el-form-item label="Cave ID" prop="caveId" v-if="value2.find((e) => e === 3)">
-    <el-input v-model="localObj.caveId" type="number" placeholder="Cave ID" clearable/>
+    <EntitySelectField
+      v-model="localObj.caveId"
+      label="Select cave"
+      placeholder="Нажмите для выбора пещеры"
+      :service="DragonCaveService"
+      :table-component="DragonCaveTable"
+    />
   </el-form-item>
 
   <el-form-item label="Killer ID" prop="killerId" v-if="value2.find((e) => e === 4)">
-    <el-input v-model="localObj.killerId" type="number" placeholder="Killer ID" clearable/>
+    <EntitySelectField
+      v-model="localObj.killerId"
+      label="Select killer"
+      placeholder="Нажмите для выбора убийцы"
+      :service="PeopleService"
+      :table-component="PeopleTable"
+    />
   </el-form-item>
 
   <el-form-item label="Age" prop="age" v-if="value2.find((e) => e === 5)">
@@ -121,5 +152,15 @@ const fields = [
       <el-option label="CHAOTIC EVIL" value="CHAOTIC_EVIL" />
       <el-option label="FICKLE" value="FICKLE" />
     </el-select>
+  </el-form-item>
+
+  <el-form-item label="Head ID" prop="headId" v-if="value2.find((e) => e === 9)">
+    <EntitySelectField
+      v-model="localObj.headId"
+      label="Select head"
+      placeholder="Нажмите для выбора головы дракона"
+      :service="DragonHeadService"
+      :table-component="DragonHeadTable"
+    />
   </el-form-item>
 </template>
