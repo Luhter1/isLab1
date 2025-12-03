@@ -87,6 +87,25 @@ const handleSelectClick = (row: any) => {
       <!-- Динамические колонки конкретной сущности -->
       <component :is="tableComponent" />
 
+        <!-- Created By -->
+        <el-table-column 
+          label="Created By" 
+          align="center"
+        >
+          <template #header>
+            <span>
+              <el-icon><User /></el-icon>
+              Created By
+            </span>
+          </template>
+          <template #default="{ row }">
+            <div v-if="row.createdBy" class="user-cell">
+              <span>{{ row.createdBy.username }}</span>
+            </div>
+            <span v-else class="empty-value">System</span>
+          </template>
+        </el-table-column>
+
       <!-- Кнопка выбора -->
       <el-table-column label="Выбрать" width="120" align="center">
         <template #default="{ row }">

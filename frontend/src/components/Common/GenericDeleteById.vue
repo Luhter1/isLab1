@@ -1,13 +1,17 @@
 <script lang="ts" setup generic="TDto extends { id: any }">
 import { reactive, ref, watch } from 'vue'
+import type { Component } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { FormInstance, FormRules } from 'element-plus'
+import EntitySelectField from '@/components/Common/EntitySelectField.vue'
 
 interface DeleteId {
   id: number;
 }
 
 const props = defineProps<{
+  service,
+  tableComponent: Component,
   deleteT: (id: number) => Promise<TDto>,
   formLabel?: string,
 }>()
@@ -94,7 +98,13 @@ watch(() => route.query.id, async (newId) => {
     label-width="auto"
   >
     <el-form-item label="ID" prop="id">
-      <el-input v-model.number="Delete.id" type="number" placeholder="Enter ID"/>
+      <EntitySelectField
+      v-model="Delete.id"
+      label="Select ID"
+      placeholder="Нажмите для выбора ID обьекта"
+      :service="service"
+      :table-component="tableComponent"
+      />
     </el-form-item>
 
     <el-form-item>

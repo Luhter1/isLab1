@@ -4,20 +4,28 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericDeleteById from '@/components/Common/GenericDeleteById.vue'
 
 import LocationService from '@/services/LocationService'
+import LocationTable from '@/components/Location/Table.vue'
 
 import CoordinateService from '@/services/CoordinatesService'
+import CoordinateTable from '@/components/Coordinates/Table.vue'
 
 import DragonHeadService from '@/services/DragonHeadService'
+import DragonHeadTable from '@/components/DragonHead/Table.vue'
 
 import DragonCaveService from '@/services/DragonCaveService'
+import DragonCaveTable from '@/components/DragonCave/Table.vue'
 
 import PersonService from '@/services/PeopleService'
+import PeopleTable from '@/components/Person/Table.vue'
 
 import DragonService from '@/services/DragonService'
+import DragonTable from '@/components/Dragon/Table.vue'
 
 
 
 interface ComponentConfig {
+  service,
+  tableComponent,
   deleteT: (id: number) => Promise<any>,
   formLabel: string,
 }
@@ -27,32 +35,44 @@ const router = useRouter()
 
 const deleteConfigs: Record<string, ComponentConfig> = {
   Dragon: {
+    service: DragonService,
+    tableComponent: DragonTable,
     deleteT: DragonService.delete,
     formLabel: "Dragon",
   },
 
   Person: {
+    service: PersonService,
+    tableComponent: PeopleTable,
     deleteT: PersonService.delete,
     formLabel: "Person",
 
   },
 
   DragonCave: {
+    service: DragonCaveService,
+    tableComponent: DragonCaveTable,
     deleteT: DragonCaveService.delete,
     formLabel: "DragonCave",
   },
 
   DragonHead: {
+    service: DragonHeadService,
+    tableComponent: DragonHeadTable,
     deleteT: DragonHeadService.delete,
     formLabel: "DragonHead",
   },
 
   Coordinate: {
+    service: CoordinateService,
+    tableComponent: CoordinateTable,
     deleteT: CoordinateService.delete,
     formLabel: "Coordinate",
   },
 
   Location: {
+    service: LocationService,
+    tableComponent: LocationTable,
     deleteT: LocationService.delete,
     formLabel: "Location",
   },
@@ -112,6 +132,8 @@ watch(currentType, (type) => {
       <el-divider />
 
       <GenericDeleteById
+        :service="currentConfig.service"
+        :tableComponent="currentConfig.tableComponent"
         :key="`${currentType}-${route.query.id || 'new'}`"
         :deleteT="currentConfig.deleteT"
         :formLabel="currentConfig.formLabel"
