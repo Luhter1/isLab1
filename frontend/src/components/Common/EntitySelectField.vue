@@ -101,7 +101,6 @@ const handleSelectClick = (row: any) => {
       </el-table-column>
     </el-table>
 
-    <!-- Пагинация, если сервис её поддерживает -->
     <el-pagination
       v-if="props.service.state.totalObjects !== undefined"
       v-model:current-page="currentPage"

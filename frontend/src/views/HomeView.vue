@@ -511,21 +511,35 @@ watch(selectedDataType, () => {
         <!-- Actions column -->
         <el-table-column label="Actions" align="center" width="200px" fixed="right">
           <template #default="{ row }">
-            <el-button size="small">
-              <router-link :to="`/view/${name}?id=${row.id}`">
+            <div class="action-buttons">
+              <el-button
+                size="small"
+                tag="router-link"
+                :to="`/view/${name}?id=${row.id}`"
+              >
                 <el-icon><View /></el-icon>
-              </router-link>
-            </el-button>
-            <el-button size="small" type="primary" v-if="userStore.isLoggedIn">
-              <router-link :to="`/update/${name}?id=${row.id}`">
+              </el-button>
+
+              <el-button
+                v-if="userStore.isLoggedIn"
+                size="small"
+                type="primary"
+                tag="router-link"
+                :to="`/update/${name}?id=${row.id}`"
+              >
                 <el-icon><Edit /></el-icon>
-              </router-link>
-            </el-button>
-            <el-button size="small" type="danger" v-if="userStore.isLoggedIn">
-              <router-link :to="`/delete/${name}?id=${row.id}`">
+              </el-button>
+
+              <el-button
+                v-if="userStore.isLoggedIn"
+                size="small"
+                type="danger"
+                tag="router-link"
+                :to="`/delete/${name}?id=${row.id}`"
+              >
                 <el-icon><Delete /></el-icon>
-              </router-link>
-            </el-button>
+              </el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -544,6 +558,16 @@ watch(selectedDataType, () => {
 </template>
 
 <style scoped lang="scss">
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-buttons a {
+  display: inline-flex !important;
+}
+
 .data-table {
   .card-header {
     display: flex;
