@@ -34,12 +34,33 @@ public class CrudSpecification {
                 try {
                     Path<?> fieldPath = parsePath(root, fieldName);
                     Class<?> fieldType = fieldPath.getJavaType();
+                    String[] parts = value.split(":", 2);
+                    String operator = parts.length > 1 ? parts[0] : "eq";
+                    String operand  = parts.length > 1 ? parts[1] : parts[0];
 
                     if (String.class.isAssignableFrom(fieldType)) {
-                        if(fieldName.equals("name")){
-                            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(fieldPath.as(String.class)), "%" + value + "%"));
-                        }else{
-                            predicates.add(criteriaBuilder.equal(criteriaBuilder.lower(fieldPath.as(String.class)), value));
+                        switch (operator) {
+                            case "starts":
+                                predicates.add(criteriaBuilder.like(
+                                    criteriaBuilder.lower(fieldPath.as(String.class)),
+                                    operand.toLowerCase() + "%"
+                                ));
+                                break;
+
+                            case "contains":
+                                predicates.add(criteriaBuilder.like(
+                                    criteriaBuilder.lower(fieldPath.as(String.class)),
+                                    "%" + operand.toLowerCase() + "%"
+                                ));
+                                break;
+
+                            case "eq":
+                            default:
+                                predicates.add(criteriaBuilder.equal(
+                                    criteriaBuilder.lower(fieldPath.as(String.class)),
+                                    operand.toLowerCase()
+                                ));
+                                break;
                         }
                     } else if (Enum.class.isAssignableFrom(fieldType)) {
                         try {
