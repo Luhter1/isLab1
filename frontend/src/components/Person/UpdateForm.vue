@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { PersonUpdateDto } from '@/interfaces/dto/people/PersonUpdateDto'
+import EntitySelectField from '@/components/Common/EntitySelectField.vue'
+import LocationService from '@/services/LocationService'
+import LocationTable from '@/components/Location/Table.vue'
 
 const props = defineProps<{
   obj: PersonUpdateDto
@@ -98,7 +101,13 @@ const fields = [
   </el-form-item>
 
   <el-form-item label="Location ID" prop="locationId" v-if="value2.find((e) => e === 4)">
-    <el-input v-model="localObj.locationId" type="number" placeholder="Location ID" clearable/>
+    <EntitySelectField
+      v-model="localObj.locationId"
+      label="Select location"
+      placeholder="Нажмите для выбора локации"
+      :service="LocationService"
+      :table-component="LocationTable"
+    />
   </el-form-item>
 
   <el-form-item label="Birthday" prop="birthday" v-if="value2.find((e) => e === 5)">

@@ -4,9 +4,13 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { Component } from 'vue'
+import EntitySelectField from '@/components/Common/EntitySelectField.vue'
+
 
 
 const props = defineProps<{
+  service,
+  tableComponent: Component,
   updateT: (id: number, location: TUpdateDto) => Promise<TDto>,
   formFieldsT: Component,
   formLabel?: string,
@@ -105,7 +109,13 @@ watch(() => route.query.id, async (newId) => {
     label-width="auto"
   >
     <el-form-item label="ID" prop="UpdateId">
-      <el-input v-model.number="UpdateId" type="number" placeholder="Enter ID"/>
+      <EntitySelectField
+      v-model="UpdateId"
+      label="Select ID"
+      placeholder="Нажмите для выбора ID обьекта"
+      :service="service"
+      :table-component="tableComponent"
+      />
     </el-form-item>
 
     <component
