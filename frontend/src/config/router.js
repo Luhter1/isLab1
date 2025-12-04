@@ -8,6 +8,7 @@ import CreateContainer from '@/views/sidebar/CreateContainer.vue'
 import UpdateContainer from '@/views/sidebar/UpdateContainer.vue'
 import Analitics from '@/views/Analitics.vue'
 import KillerTeam from '@/views/KillerTeam.vue'
+import SearchByName from '@/views/SearchByName.vue'
 import { logout } from '@/services/AuthService'
 import { useUserStore } from '@/stores/userStore'
 
@@ -87,6 +88,11 @@ const router = createRouter({
       path: '/killer-team',
       name: 'killer-team',
       component: KillerTeam,
+    },
+    {
+      path: '/search-by-name',
+      name: 'search-by-name',
+      component: SearchByName,
     },
   ],
 })
