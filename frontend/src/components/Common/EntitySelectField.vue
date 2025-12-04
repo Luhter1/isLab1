@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import type { Component } from 'vue'
+import { useUserStore } from '@/stores/userStore'
+
+const userStore = useUserStore()
 
 const props = defineProps<{
   modelValue: number | null | undefined
@@ -21,7 +24,9 @@ const value = computed({
   set: (val) => emit('update:modelValue', val ?? null),
 })
 
-const tableData = computed(() => props.service.state.objects)
+const filteredTableData = computed(() =>
+  props.service.state.objects?.filter((row) => (userStore.isLoggedIn && userStore.getUsername == row.createdBy.username) || (userStore.getUserRole == 'ROLE_ADMIN'))
+)
 const loading = computed(() => props.service.state.loading)
 
 const currentPage = computed({
@@ -71,7 +76,7 @@ const handleSelectClick = (row: any) => {
     width="80%"
   >
     <el-table
-      :data="tableData"
+      :data="filteredTableData"
       v-loading="loading"
       style="width: 100%"
       @row-dblclick="handleRowDblClick"
