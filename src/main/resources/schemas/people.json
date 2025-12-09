@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/Person",
+
+  "definitions": {
+    "Person": {
+      "title": "Person",
+      "description": "Person DTO",
+
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "eyeColor": {
+          "type": "string",
+          "enum": ["RED", "BLUE", "YELLOW", "ORANGE"]
+        },
+        "hairColor": {
+          "type": "string",
+          "enum": ["RED", "BLUE", "YELLOW", "ORANGE"]
+        },
+        "birthday": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "height": {
+          "type": "number",
+          "minimum": 0
+        },
+        "weight": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "passportId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 23
+        },
+        "location": {
+          "$ref": "classpath:///schemas/locations.json#/definitions/Location"
+        },
+        "locationId": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": ["name", "eyeColor", "hairColor", "birthday", "height", "passportId"],
+      "oneOf": [
+        {
+          "required": ["location"]
+        },
+        {
+          "required": ["locationId"]
+        }
+      ]
+    }
+  }
+}

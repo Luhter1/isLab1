@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/Dragon",
+
+  "definitions": {
+    "Dragon": {
+      "title": "Dragon",
+      "description": "Dragon DTO",
+
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "type": {
+          "type": "string",
+          "enum": ["WATER", "UNDERGROUND", "AIR", "FIRE"]
+        },
+        "character": {
+          "type": "string",
+          "enum": ["EVIL", "CHAOTIC_EVIL", "FICKLE"]
+        },
+        "age": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "color": {
+          "type": ["string", "null"],
+          "enum": ["RED", "BLUE", "YELLOW", "ORANGE", null]
+        },
+        "coordinates": {
+          "$ref": "classpath:///schemas/coordinates.json#/definitions/Coordinate"
+        },
+        "coordinatesId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "cave": {
+          "$ref": "classpath:///schemas/dragon-caves.json#/definitions/DragonCave"
+        },
+        "caveId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "killer": {
+          "$ref": "classpath:///schemas/people.json#/definitions/Person"
+        },
+        "killerId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "head": {
+          "$ref": "classpath:///schemas/dragon-heads.json#/definitions/DragonHead"
+        },
+        "headId": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "dependencies": {
+        "cave": {
+          "not": { "required": ["caveId"] }
+        },
+        "caveId": {
+          "not": { "required": ["cave"] }
+        },
+        "killer": {
+          "not": { "required": ["killerId"] }
+        },
+        "killerId": {
+          "not": { "required": ["killer"] }
+        }
+      },
+      "required": ["name", "type", "character"],
+      "oneOf": [
+        { "required": ["head", "coordinates"] },
+        { "required": ["head", "coordinatesId"] },
+        { "required": ["headId", "coordinates"] },
+        { "required": ["headId", "coordinatesId"] }
+      ],
+      "not": {
+        "allOf": [
+          { "required": ["killer", "killerId"] },
+          { "required": ["cave", "caveId"] }
+        ]
+      }
+    }
+  }
+}

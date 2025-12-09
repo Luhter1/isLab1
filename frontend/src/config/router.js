@@ -9,6 +9,7 @@ import UpdateContainer from '@/views/sidebar/UpdateContainer.vue'
 import Analitics from '@/views/Analitics.vue'
 import KillerTeam from '@/views/KillerTeam.vue'
 import SearchByName from '@/views/SearchByName.vue'
+import BatchImport from '@/views/BatchImport.vue'
 import { logout } from '@/services/AuthService'
 import { useUserStore } from '@/stores/userStore'
 
@@ -93,6 +94,12 @@ const router = createRouter({
       path: '/search-by-name',
       name: 'search-by-name',
       component: SearchByName,
+    },
+    {
+      path: '/batch-import',
+      name: 'batch-import',
+      component: BatchImport,
+      meta: { requiresAuth: true }
     },
   ],
 })
