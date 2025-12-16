@@ -6,6 +6,7 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
+import com.networknt.schema.ValidatorTypeCode;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -26,34 +27,22 @@ public class JsonSchemaValidationService {
     public Set<ValidationMessage> validateBatchOperation(JsonNode jsonNode) {
         Set<ValidationMessage> allErrors = new HashSet<>();
         
-        // Validate basic structure: array with min 1, max 1024 items
-        // We'll validate structure manually and create error messages as strings
-        // then convert them to ValidationMessage format
         if (!jsonNode.isArray()) {
-            // Create a simple validation by validating against a schema that expects array
-            try {
-                String arraySchema = "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"array\"}";
-                JsonNode schemaNode = objectMapper.readTree(arraySchema);
-                JsonSchema schema = schemaFactory.getSchema(schemaNode);
-                allErrors.addAll(schema.validate(jsonNode));
-            } catch (Exception e) {
-                // Fallback: create error message manually
-                allErrors.add(createSimpleValidationMessage("type", "Expected array", "$"));
-            }
+            allErrors.add(error("type", "Expected JSON array", "$"
+            ));
             return allErrors;
         }
         
         int arraySize = jsonNode.size();
         if (arraySize < 1) {
-            allErrors.add(createSimpleValidationMessage("minItems", "Array must have at least 1 item", "$"));
+            allErrors.add(error("minItems", "Array must have at least 1 item", "$"));
             return allErrors;
         }
         if (arraySize > 1024) {
-            allErrors.add(createSimpleValidationMessage("maxItems", "Array must have at most 1024 items", "$"));
+            allErrors.add(error("maxItems", "Array must have at most 1024 items", "$"));
             return allErrors;
         }
 
-        // Validate each operation
         for (int i = 0; i < jsonNode.size(); i++) {
             JsonNode operation = jsonNode.get(i);
             Set<ValidationMessage> operationErrors = validateOperation(operation, i);
@@ -65,26 +54,27 @@ public class JsonSchemaValidationService {
 
     private Set<ValidationMessage> validateOperation(JsonNode operation, int index) {
         Set<ValidationMessage> errors = new HashSet<>();
-        String basePath = "$[" + index + "]";
+        String operIndex = "$[" + index + "]";
         
-        // Validate operation is an object
+        // Проверяем, что обьект, а не список
         if (!operation.isObject()) {
-            errors.add(createSimpleValidationMessage("type", "Expected object", basePath));
+            errors.add(error("type", "Expected object", operIndex));
             return errors;
         }
 
-        // Validate required fields
+        // Проверяем тип операции
         if (!operation.has("type")) {
-            errors.add(createSimpleValidationMessage("required", "Missing required property: type", basePath));
+            errors.add(error("required", "Missing required property: type", operIndex));
         } else {
             String type = operation.get("type").asText();
             if (!"CREATE".equals(type) && !"UPDATE".equals(type) && !"DELETE".equals(type)) {
-                errors.add(createSimpleValidationMessage("enum", "type must be one of: CREATE, UPDATE, DELETE", basePath + ".type"));
+                errors.add(error("enum", "type must be one of: CREATE, UPDATE, DELETE", operIndex + ".type"));
             }
         }
 
+        // Проверяем тип данных
         if (!operation.has("resourceType")) {
-            errors.add(createSimpleValidationMessage("required", "Missing required property: resourceType", basePath));
+            errors.add(error("required", "Missing required property: resourceType", operIndex));
         } else {
             String resourceType = operation.get("resourceType").asText();
             String[] validTypes = {"coordinates", "dragon-caves", "dragon-heads", "dragons", "locations", "people"};
@@ -96,13 +86,13 @@ public class JsonSchemaValidationService {
                 }
             }
             if (!isValid) {
-                errors.add(createSimpleValidationMessage("enum", "resourceType must be one of: coordinates, dragon-caves, dragon-heads, dragons, locations, people", basePath + ".resourceType"));
+                errors.add(error("enum", "resourceType must be one of: coordinates, dragon-caves, dragon-heads, dragons, locations, people", operIndex + ".resourceType"));
             } else {
                 // Validate body for CREATE operations
                 String operationType = operation.has("type") ? operation.get("type").asText() : "";
                 if ("CREATE".equals(operationType)) {
                     if (operation.has("resourceId")) {
-                        errors.add(createSimpleValidationMessage("validation", "CREATE operation should not have resourceId", basePath));
+                        errors.add(error("validation", "CREATE operation should not have resourceId", operIndex));
                     }
                     if (operation.has("body")) {
                         JsonNode body = operation.get("body");
@@ -113,21 +103,21 @@ public class JsonSchemaValidationService {
                             errors.addAll(bodyErrors);
                         }
                     } else {
-                        errors.add(createSimpleValidationMessage("required", "CREATE operation requires body", basePath));
+                        errors.add(error("required", "CREATE operation requires body", operIndex));
                     }
                 } else if ("UPDATE".equals(operationType)) {
                     if (!operation.has("resourceId")) {
-                        errors.add(createSimpleValidationMessage("required", "UPDATE operation requires resourceId", basePath));
+                        errors.add(error("required", "UPDATE operation requires resourceId", operIndex));
                     }
                     if (!operation.has("body")) {
-                        errors.add(createSimpleValidationMessage("required", "UPDATE operation requires body", basePath));
+                        errors.add(error("required", "UPDATE operation requires body", operIndex));
                     }
                 } else if ("DELETE".equals(operationType)) {
                     if (!operation.has("resourceId")) {
-                        errors.add(createSimpleValidationMessage("required", "DELETE operation requires resourceId", basePath));
+                        errors.add(error("required", "DELETE operation requires resourceId", operIndex));
                     }
                     if (operation.has("body")) {
-                        errors.add(createSimpleValidationMessage("validation", "DELETE operation should not have body", basePath));
+                        errors.add(error("validation", "DELETE operation should not have body", operIndex));
                     }
                 }
             }
@@ -217,7 +207,7 @@ public class JsonSchemaValidationService {
             }
         } catch (Exception e) {
             // If schema validation fails, add a generic error
-            errors.add(createSimpleValidationMessage(
+            errors.add(error(
                 "validation.error",
                 "$[" + index + "].body: Failed to validate against schema for " + resourceType + ": " + e.getMessage(),
                 "$[" + index + "].body"
@@ -251,56 +241,14 @@ public class JsonSchemaValidationService {
         };
     }
 
-    // Helper method to create validation messages for structure validation
-    // We create a simple schema that will fail and generate a ValidationMessage
-    private ValidationMessage createSimpleValidationMessage(String code, String message, String path) {
-        try {
-            // Create a schema that requires a property that will never exist
-            // This will generate a ValidationMessage we can use
-            String requiredSchema = "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"required\":[\"__never_exists__\"]}";
-            JsonNode schemaNode = objectMapper.readTree(requiredSchema);
-            JsonSchema schema = schemaFactory.getSchema(schemaNode);
-            JsonNode emptyNode = objectMapper.createObjectNode();
-            Set<ValidationMessage> msgs = schema.validate(emptyNode);
-            if (!msgs.isEmpty()) {
-                // Return the first validation message - it will have the right structure
-                // The actual message content will be handled when we format errors
-                return msgs.iterator().next();
-            }
-        } catch (Exception e) {
-            // Fall through to next approach
-        }
-        
-        // Alternative: use a type mismatch to generate an error
-        try {
-            String typeSchema = "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"array\"}";
-            JsonNode schemaNode = objectMapper.readTree(typeSchema);
-            JsonSchema schema = schemaFactory.getSchema(schemaNode);
-            JsonNode objectNode = objectMapper.createObjectNode();
-            Set<ValidationMessage> msgs = schema.validate(objectNode);
-            if (!msgs.isEmpty()) {
-                return msgs.iterator().next();
-            }
-        } catch (Exception e) {
-            // Fall through
-        }
-        
-        // If we still can't create one, validate against a schema that always fails
-        try {
-            String alwaysFailSchema = "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"const\":\"__must_fail__\"}";
-            JsonNode schemaNode = objectMapper.readTree(alwaysFailSchema);
-            JsonSchema schema = schemaFactory.getSchema(schemaNode);
-            JsonNode anyNode = objectMapper.createObjectNode();
-            Set<ValidationMessage> msgs = schema.validate(anyNode);
-            if (!msgs.isEmpty()) {
-                return msgs.iterator().next();
-            }
-        } catch (Exception e) {
-            // If all approaches fail, we'll handle it in the service layer
-        }
-        
-        // Last resort: throw exception which will be caught and converted to error message
-        throw new IllegalArgumentException(message);
+    private ValidationMessage error(
+            String keyword,
+            String message,
+            String instanceLocation
+    ) {
+        return ValidationMessage.builder()
+                .message(message)
+                .build();
     }
 }
 
