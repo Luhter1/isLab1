@@ -1,25 +1,15 @@
 [
   {
-    "type": "CREATE",
-    "resourceType": "coordinates",
-    "body": {
-      "x": 100,
-      "y": 200.5
-    }
-  },
-  {
-    "type": "CREATE",
+    "type": "UPDATE",
     "resourceType": "dragons",
+    "resourceId": 9,
     "body": {
       "name": "Dragon Name",
       "type": "FIRE",
       "character": "EVIL",
       "coordinates": {
-        "x": 150,
-        "y": 250.5
-      },
-      "head": {
-        "size": 10.5
+        "x": 100,
+        "y": 200.5
       }
     }
   }

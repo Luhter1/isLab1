@@ -2,6 +2,7 @@ package org.itmo.isLab1.batchimport.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.itmo.isLab1.batchimport.dto.BatchImportResponseDto;
 import org.itmo.isLab1.batchimport.dto.BatchOperationDto;
 import org.itmo.isLab1.coordinates.CoordinateService;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class BatchImportService {
     private final JsonSchemaValidationService validationService;
     private final ObjectMapper objectMapper;
@@ -40,32 +42,11 @@ public class BatchImportService {
     private final LocationService locationService;
     private final PersonService personService;
 
-    public BatchImportService(
-            JsonSchemaValidationService validationService,
-            ObjectMapper objectMapper,
-            CoordinateService coordinateService,
-            DragonCaveService dragonCaveService,
-            DragonHeadService dragonHeadService,
-            DragonService dragonService,
-            LocationService locationService,
-            PersonService personService
-    ) {
-        this.validationService = validationService;
-        this.objectMapper = objectMapper;
-        this.coordinateService = coordinateService;
-        this.dragonCaveService = dragonCaveService;
-        this.dragonHeadService = dragonHeadService;
-        this.dragonService = dragonService;
-        this.locationService = locationService;
-        this.personService = personService;
-    }
-
     @Transactional(rollbackFor = Exception.class)
     public BatchImportResponseDto importBatch(JsonNode jsonNode) {
-        // Validate schema
         var validationMessages = validationService.validateBatchOperation(jsonNode);
         if (!validationMessages.isEmpty()) {
-            StringBuilder errorMsg = new StringBuilder("Schema validation failed: ");
+            StringBuilder errorMsg = new StringBuilder("JSON Schema validation failed: ");
             validationMessages.forEach(msg -> errorMsg.append(msg.getMessage()).append("; "));
             throw new IllegalArgumentException(errorMsg.toString());
         }
@@ -73,7 +54,6 @@ public class BatchImportService {
         List<BatchOperationDto> operations = parseOperations(jsonNode);
         List<BatchImportResponseDto.OperationResult> results = new ArrayList<>();
         int successfulCount = 0;
-        int failedCount = 0;
 
         for (int i = 0; i < operations.size(); i++) {
             BatchOperationDto operation = operations.get(i);
@@ -83,8 +63,6 @@ public class BatchImportService {
                 successfulCount++;
             } catch (Exception e) {
                 results.add(new BatchImportResponseDto.OperationResult(i, false, e.getMessage()));
-                failedCount++;
-                // Rollback entire transaction on any error
                 throw new RuntimeException("Operation " + i + " failed: " + e.getMessage(), e);
             }
         }
@@ -92,7 +70,7 @@ public class BatchImportService {
         return new BatchImportResponseDto(
                 operations.size(),
                 successfulCount,
-                failedCount,
+                0,
                 results
         );
     }
@@ -108,185 +86,132 @@ public class BatchImportService {
     }
 
     private void processOperation(BatchOperationDto operation) {
-        BatchOperationDto.ResourceType resourceType = BatchOperationDto.ResourceType.fromString(operation.getResourceType());
-        BatchOperationDto.OperationType operationType = operation.getType();
+        var resourceType = BatchOperationDto.ResourceType.fromString(operation.getResourceType());
+        var operationType = operation.getType();
 
         switch (resourceType) {
-            case COORDINATES:
-                processCoordinateOperation(operationType, operation);
-                break;
-            case DRAGON_CAVES:
-                processDragonCaveOperation(operationType, operation);
-                break;
-            case DRAGON_HEADS:
-                processDragonHeadOperation(operationType, operation);
-                break;
-            case DRAGONS:
-                processDragonOperation(operationType, operation);
-                break;
-            case LOCATIONS:
-                processLocationOperation(operationType, operation);
-                break;
-            case PEOPLE:
-                processPersonOperation(operationType, operation);
-                break;
+            case COORDINATES -> processCoordinateOperation(operationType, operation);
+            case DRAGON_CAVES -> processDragonCaveOperation(operationType, operation);
+            case DRAGON_HEADS -> processDragonHeadOperation(operationType, operation);
+            case DRAGONS -> processDragonOperation(operationType, operation);
+            case LOCATIONS -> processLocationOperation(operationType, operation);
+            case PEOPLE -> processPersonOperation(operationType, operation);
+            default -> throw new IllegalArgumentException("Unknown resource type: " + resourceType);
         }
     }
 
     private void processCoordinateOperation(BatchOperationDto.OperationType type, BatchOperationDto operation) {
         switch (type) {
-            case CREATE:
-                CoordinateCreateDto createDto = objectMapper.convertValue(operation.getBody(), CoordinateCreateDto.class);
-                coordinateService.create(createDto);
-                break;
-            case UPDATE:
-                CoordinateUpdateDto updateDto = objectMapper.convertValue(operation.getBody(), CoordinateUpdateDto.class);
-                coordinateService.update(updateDto, operation.getResourceId());
-                break;
-            case DELETE:
-                coordinateService.delete(operation.getResourceId());
-                break;
+            case CREATE -> coordinateService.create(convertBody(operation, CoordinateCreateDto.class));
+            case UPDATE -> coordinateService.update(convertBody(operation, CoordinateUpdateDto.class), operation.getResourceId());
+            case DELETE -> coordinateService.delete(operation.getResourceId());
         }
     }
 
     private void processDragonCaveOperation(BatchOperationDto.OperationType type, BatchOperationDto operation) {
         switch (type) {
-            case CREATE:
-                DragonCaveCreateDto createDto = objectMapper.convertValue(operation.getBody(), DragonCaveCreateDto.class);
-                dragonCaveService.create(createDto);
-                break;
-            case UPDATE:
-                DragonCaveUpdateDto updateDto = objectMapper.convertValue(operation.getBody(), DragonCaveUpdateDto.class);
-                dragonCaveService.update(updateDto, operation.getResourceId());
-                break;
-            case DELETE:
-                dragonCaveService.delete(operation.getResourceId());
-                break;
+            case CREATE -> dragonCaveService.create(convertBody(operation, DragonCaveCreateDto.class));
+            case UPDATE -> dragonCaveService.update(convertBody(operation, DragonCaveUpdateDto.class), operation.getResourceId());
+            case DELETE -> dragonCaveService.delete(operation.getResourceId());
         }
     }
 
     private void processDragonHeadOperation(BatchOperationDto.OperationType type, BatchOperationDto operation) {
         switch (type) {
-            case CREATE:
-                DragonHeadCreateDto createDto = objectMapper.convertValue(operation.getBody(), DragonHeadCreateDto.class);
-                dragonHeadService.create(createDto);
-                break;
-            case UPDATE:
-                DragonHeadUpdateDto updateDto = objectMapper.convertValue(operation.getBody(), DragonHeadUpdateDto.class);
-                dragonHeadService.update(updateDto, operation.getResourceId());
-                break;
-            case DELETE:
-                dragonHeadService.delete(operation.getResourceId());
-                break;
+            case CREATE -> dragonHeadService.create(convertBody(operation, DragonHeadCreateDto.class));
+            case UPDATE -> dragonHeadService.update(convertBody(operation, DragonHeadUpdateDto.class), operation.getResourceId());
+            case DELETE -> dragonHeadService.delete(operation.getResourceId());
         }
     }
 
     private void processLocationOperation(BatchOperationDto.OperationType type, BatchOperationDto operation) {
         switch (type) {
-            case CREATE:
-                LocationCreateDto createDto = objectMapper.convertValue(operation.getBody(), LocationCreateDto.class);
-                locationService.create(createDto);
-                break;
-            case UPDATE:
-                LocationUpdateDto updateDto = objectMapper.convertValue(operation.getBody(), LocationUpdateDto.class);
-                locationService.update(updateDto, operation.getResourceId());
-                break;
-            case DELETE:
-                locationService.delete(operation.getResourceId());
-                break;
+            case CREATE -> locationService.create(convertBody(operation, LocationCreateDto.class));
+            case UPDATE -> locationService.update(convertBody(operation, LocationUpdateDto.class), operation.getResourceId());
+            case DELETE -> locationService.delete(operation.getResourceId());
         }
     }
 
     private void processPersonOperation(BatchOperationDto.OperationType type, BatchOperationDto operation) {
         Map<String, Object> body = operation.getBody();
         
-        // Handle nested location object
-        if (body.containsKey("location") && body.get("location") instanceof Map) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> locationMap = (Map<String, Object>) body.get("location");
-            LocationCreateDto locationDto = objectMapper.convertValue(locationMap, LocationCreateDto.class);
-            var createdLocation = locationService.create(locationDto);
-            body.put("locationId", createdLocation.getId());
-            body.remove("location");
+        // Рекурсивное создание Location, если она есть в теле
+        if (body.containsKey("location")) {
+            LocationCreateDto dto = extractNestedDto(body.get("location"), LocationCreateDto.class);
+            var created = locationService.create(dto);
+            replaceNestedWithId(body, "location", "locationId", created.getId());
         }
 
         switch (type) {
-            case CREATE:
-                PersonCreateDto createDto = objectMapper.convertValue(body, PersonCreateDto.class);
-                personService.create(createDto);
-                break;
-            case UPDATE:
-                PersonUpdateDto updateDto = objectMapper.convertValue(body, PersonUpdateDto.class);
-                personService.update(updateDto, operation.getResourceId());
-                break;
-            case DELETE:
-                personService.delete(operation.getResourceId());
-                break;
+            case CREATE -> personService.create(extractNestedDto(body, PersonCreateDto.class));
+            case UPDATE -> personService.update(extractNestedDto(body, PersonUpdateDto.class), operation.getResourceId());
+            case DELETE -> personService.delete(operation.getResourceId());
         }
     }
 
     private void processDragonOperation(BatchOperationDto.OperationType type, BatchOperationDto operation) {
         Map<String, Object> body = operation.getBody();
-        
-        // Handle nested objects - create them first in the same transaction
-        if (body.containsKey("coordinates") && body.get("coordinates") instanceof Map) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> coordinatesMap = (Map<String, Object>) body.get("coordinates");
-            CoordinateCreateDto coordinatesDto = objectMapper.convertValue(coordinatesMap, CoordinateCreateDto.class);
-            var createdCoordinates = coordinateService.create(coordinatesDto);
-            body.put("coordinatesId", createdCoordinates.getId());
-            body.remove("coordinates");
+
+        // 1. Обработка координат
+        if (body.containsKey("coordinates")) {
+            CoordinateCreateDto dto = extractNestedDto(body.get("coordinates"), CoordinateCreateDto.class);
+            var created = coordinateService.create(dto);
+            replaceNestedWithId(body, "coordinates", "coordinatesId", created.getId());
         }
 
-        if (body.containsKey("head") && body.get("head") instanceof Map) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> headMap = (Map<String, Object>) body.get("head");
-            DragonHeadCreateDto headDto = objectMapper.convertValue(headMap, DragonHeadCreateDto.class);
-            var createdHead = dragonHeadService.create(headDto);
-            body.put("headId", createdHead.getId());
-            body.remove("head");
+        // 2. Обработка головы
+        if (body.containsKey("head")) {
+            DragonHeadCreateDto dto = extractNestedDto(body.get("head"), DragonHeadCreateDto.class);
+            var created = dragonHeadService.create(dto);
+            replaceNestedWithId(body, "head", "headId", created.getId());
         }
 
-        if (body.containsKey("cave") && body.get("cave") instanceof Map) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> caveMap = (Map<String, Object>) body.get("cave");
-            DragonCaveCreateDto caveDto = objectMapper.convertValue(caveMap, DragonCaveCreateDto.class);
-            var createdCave = dragonCaveService.create(caveDto);
-            body.put("caveId", createdCave.getId());
-            body.remove("cave");
+        // 3. Обработка пещеры
+        if (body.containsKey("cave")) {
+            DragonCaveCreateDto dto = extractNestedDto(body.get("cave"), DragonCaveCreateDto.class);
+            var created = dragonCaveService.create(dto);
+            replaceNestedWithId(body, "cave", "caveId", created.getId());
         }
 
-        if (body.containsKey("killer") && body.get("killer") instanceof Map) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> killerMap = (Map<String, Object>) body.get("killer");
-            // Killer is a Person, which might have nested location
-            if (killerMap.containsKey("location") && killerMap.get("location") instanceof Map) {
-                @SuppressWarnings("unchecked")
-                Map<String, Object> locationMap = (Map<String, Object>) killerMap.get("location");
-                LocationCreateDto locationDto = objectMapper.convertValue(locationMap, LocationCreateDto.class);
-                var createdLocation = locationService.create(locationDto);
-                killerMap.put("locationId", createdLocation.getId());
-                killerMap.remove("location");
+        // 4. Обработка убийцы
+        if (body.containsKey("killer")) {
+            Map<String, Object> killerMap = extractMap(body.get("killer"));
+            
+            if (killerMap.containsKey("location")) {
+                LocationCreateDto dto = extractNestedDto(killerMap.get("location"), LocationCreateDto.class);
+                var created = locationService.create(dto);
+                replaceNestedWithId(killerMap, "location", "locationId", created.getId());
             }
-            PersonCreateDto killerDto = objectMapper.convertValue(killerMap, PersonCreateDto.class);
+
+            PersonCreateDto killerDto = extractNestedDto(killerMap, PersonCreateDto.class);
             var createdKiller = personService.create(killerDto);
-            body.put("killerId", createdKiller.getId());
-            body.remove("killer");
+            
+            replaceNestedWithId(body, "killer", "killerId", createdKiller.getId());
         }
 
         switch (type) {
-            case CREATE:
-                DragonCreateDto createDto = objectMapper.convertValue(body, DragonCreateDto.class);
-                dragonService.create(createDto);
-                break;
-            case UPDATE:
-                DragonUpdateDto updateDto = objectMapper.convertValue(body, DragonUpdateDto.class);
-                dragonService.update(updateDto, operation.getResourceId());
-                break;
-            case DELETE:
-                dragonService.delete(operation.getResourceId());
-                break;
+            case CREATE -> dragonService.create(extractNestedDto(body, DragonCreateDto.class));
+            case UPDATE -> dragonService.update(extractNestedDto(body, DragonUpdateDto.class), operation.getResourceId());
+            case DELETE -> dragonService.delete(operation.getResourceId());
         }
+    }
+
+    private <T> T convertBody(BatchOperationDto operation, Class<T> clazz) {
+        return objectMapper.convertValue(operation.getBody(), clazz);
+    }
+
+    private <T> T extractNestedDto(Object nestedObject, Class<T> clazz) {
+        return objectMapper.convertValue(nestedObject, clazz);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> extractMap(Object object) {
+        return objectMapper.convertValue(object, Map.class);
+    }
+
+    private void replaceNestedWithId(Map<String, Object> map, String objectKey, String idKey, int idValue) {
+        map.put(idKey, idValue);
+        map.remove(objectKey);
     }
 }
 
