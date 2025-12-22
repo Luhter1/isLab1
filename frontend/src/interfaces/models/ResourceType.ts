@@ -5,5 +5,6 @@ export enum ResourceType {
     DRAGON_HEADS = 'dragon-heads',
     DRAGONS = 'dragons',
     LOCATIONS = 'locations',
-    PEOPLE = 'people'
+    PEOPLE = 'people',
+    BATCH_IMPORT_HISTORY = "batch-import-history"
 }

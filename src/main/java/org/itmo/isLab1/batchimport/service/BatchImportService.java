@@ -1,10 +1,14 @@
 package org.itmo.isLab1.batchimport.service;
 
+import com.networknt.schema.ValidationMessage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+
 import org.itmo.isLab1.batchimport.dto.BatchImportResponseDto;
 import org.itmo.isLab1.batchimport.dto.BatchOperationDto;
+import org.itmo.isLab1.batchimporthistory.BatchImportHistoryService;
+import org.itmo.isLab1.batchimporthistory.enums.ImportStatus;
 import org.itmo.isLab1.coordinates.CoordinateService;
 import org.itmo.isLab1.coordinates.dto.CoordinateCreateDto;
 import org.itmo.isLab1.coordinates.dto.CoordinateUpdateDto;
@@ -27,8 +31,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -41,37 +47,42 @@ public class BatchImportService {
     private final DragonService dragonService;
     private final LocationService locationService;
     private final PersonService personService;
+    private final BatchImportHistoryService historyService;
 
     @Transactional(rollbackFor = Exception.class)
     public BatchImportResponseDto importBatch(JsonNode jsonNode) {
-        var validationMessages = validationService.validateBatchOperation(jsonNode);
+        ImportStatus status = ImportStatus.FAILED;
+        Set<ValidationMessage> validationMessages = validationService.validateBatchOperation(jsonNode);
         if (!validationMessages.isEmpty()) {
             StringBuilder errorMsg = new StringBuilder("JSON Schema validation failed: ");
             validationMessages.forEach(msg -> errorMsg.append(msg.getMessage()).append("; "));
+            historyService.saveImportHistory(0, status);
             throw new IllegalArgumentException(errorMsg.toString());
         }
 
         List<BatchOperationDto> operations = parseOperations(jsonNode);
-        List<BatchImportResponseDto.OperationResult> results = new ArrayList<>();
         int successfulCount = 0;
+        status = ImportStatus.SUCCESS;
 
-        for (int i = 0; i < operations.size(); i++) {
-            BatchOperationDto operation = operations.get(i);
-            try {
-                processOperation(operation);
-                results.add(new BatchImportResponseDto.OperationResult(i, true, "Success"));
-                successfulCount++;
-            } catch (Exception e) {
-                results.add(new BatchImportResponseDto.OperationResult(i, false, e.getMessage()));
-                throw new RuntimeException("Operation " + i + " failed: " + e.getMessage(), e);
+        try {
+            for (int i = 0; i < operations.size(); i++) {
+                BatchOperationDto operation = operations.get(i);
+                try {
+                    processOperation(operation);
+                    successfulCount++;
+                } catch (Exception e) {
+                    status = ImportStatus.FAILED;
+                    throw new RuntimeException("Operation " + i + " failed: " + e.getMessage(), e);
+                }
             }
+        } finally {
+            // Сохраняем историю импорта независимо от результата
+            historyService.saveImportHistory(successfulCount, status);
         }
 
         return new BatchImportResponseDto(
-                operations.size(),
                 successfulCount,
-                0,
-                results
+                operations.size() - successfulCount
         );
     }
 

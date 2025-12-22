@@ -16,7 +16,7 @@
           "maxLength": 255
         },
         "type": {
-          "type": "string",
+          "type": ["string", "null"],
           "enum": ["WATER", "UNDERGROUND", "AIR", "FIRE"]
         },
         "character": {
@@ -25,7 +25,7 @@
         },
         "age": {
           "type": ["integer", "null"],
-          "minimum": 0
+          "minimum": 1
         },
         "color": {
           "type": ["string", "null"],
@@ -61,32 +61,23 @@
         }
       },
       "dependencies": {
-        "cave": {
-          "not": { "required": ["caveId"] }
-        },
-        "caveId": {
-          "not": { "required": ["cave"] }
-        },
-        "killer": {
-          "not": { "required": ["killerId"] }
-        },
-        "killerId": {
-          "not": { "required": ["killer"] }
-        }
+        "cave": { "not": { "required": ["caveId"] } },
+        "caveId": { "not": { "required": ["cave"] } },
+        
+        "killer": { "not": { "required": ["killerId"] } },
+        "killerId": { "not": { "required": ["killer"] } },
+        
+        "head": { "not": { "required": ["headId"] } },
+        "headId": { "not": { "required": ["head"] } },
+
+        "coordinates": { "not": { "required": ["coordinatesId"] } },
+        "coordinatesId": { "not": { "required": ["coordinates"] } }
       },
-      "required": ["name", "type", "character"],
+      "required": ["name", "character"],
       "oneOf": [
-        { "required": ["head", "coordinates"] },
-        { "required": ["head", "coordinatesId"] },
-        { "required": ["headId", "coordinates"] },
-        { "required": ["headId", "coordinatesId"] }
-      ],
-      "not": {
-        "allOf": [
-          { "required": ["killer", "killerId"] },
-          { "required": ["cave", "caveId"] }
-        ]
-      }
+        { "required": ["coordinates"] },
+        { "required": ["coordinatesId"] }
+      ]
     }
   }
 }

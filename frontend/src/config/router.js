@@ -10,6 +10,7 @@ import Analitics from '@/views/Analitics.vue'
 import KillerTeam from '@/views/KillerTeam.vue'
 import SearchByName from '@/views/SearchByName.vue'
 import BatchImport from '@/views/BatchImport.vue'
+import BatchImportHistory from '@/views/BatchImportHistory.vue'
 import { logout } from '@/services/AuthService'
 import { useUserStore } from '@/stores/userStore'
 
@@ -99,6 +100,12 @@ const router = createRouter({
       path: '/batch-import',
       name: 'batch-import',
       component: BatchImport,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/batch-import/history',
+      name: 'batch-import-history',
+      component: BatchImportHistory,
       meta: { requiresAuth: true }
     },
   ],

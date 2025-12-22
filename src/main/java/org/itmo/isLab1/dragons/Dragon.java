@@ -49,7 +49,7 @@ public class Dragon extends CrudEntity {
     @JoinColumn(name = "killer_id")
     private Person killer;
 
-    @Min(0)
+    @Min(1)
     @Column(name = "age")
     private Integer age;
 

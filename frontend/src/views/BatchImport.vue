@@ -7,6 +7,14 @@
             <el-icon><Upload /></el-icon>
             Batch Import
           </h2>
+          <div class="header-actions">
+            <el-button type="primary" link>
+              <router-link to="/batch-import/history">
+                <el-icon><Clock /></el-icon>
+                View History
+              </router-link>
+            </el-button>
+          </div>
         </div>
       </template>
 
@@ -81,64 +89,16 @@
           </el-button>
         </div>
 
-        <div v-if="importResult" class="import-result">
-          <el-divider content-position="left">
-            <el-icon><Document /></el-icon>
-            Import Results
-          </el-divider>
-
-          <el-descriptions :column="3" border>
-            <el-descriptions-item label="Total Operations">
-              <el-tag>{{ importResult.totalOperations }}</el-tag>
-            </el-descriptions-item>
-            <el-descriptions-item label="Successful">
-              <el-tag type="success">{{ importResult.successfulOperations }}</el-tag>
-            </el-descriptions-item>
-            <el-descriptions-item label="Failed">
-              <el-tag type="danger">{{ importResult.failedOperations }}</el-tag>
-            </el-descriptions-item>
-          </el-descriptions>
-
-          <div v-if="importResult.results && importResult.results.length > 0" class="results-list">
-            <el-table :data="importResult.results" style="width: 100%" max-height="400">
-              <el-table-column prop="index" label="Index" width="80" />
-              <el-table-column label="Status" width="100">
-                <template #default="{ row }">
-                  <el-tag :type="row.success ? 'success' : 'danger'">
-                    {{ row.success ? 'Success' : 'Failed' }}
-                  </el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="message" label="Message" />
-            </el-table>
-          </div>
-        </div>
-
         <el-divider>
-          <el-icon><InfoFilled /></el-icon>
-          Instructions
         </el-divider>
 
         <el-card shadow="never" class="instructions-card">
-          <h3>File Format</h3>
-          <p>The JSON file should contain an array of operations. Each operation must have:</p>
-          <ul>
-            <li><strong>type</strong>: "CREATE", "UPDATE", or "DELETE"</li>
-            <li><strong>resourceType</strong>: "coordinates", "dragon-caves", "dragon-heads", "dragons", "locations", or "people"</li>
-            <li><strong>resourceId</strong>: (required for UPDATE/DELETE) - ID of the resource</li>
-            <li><strong>body</strong>: (required for CREATE/UPDATE) - Object data</li>
-          </ul>
-
-          <h3>Nested Objects</h3>
-          <p>When creating objects with nested objects (e.g., Dragon with coordinates, head, cave, killer), 
-          you can provide the nested object directly in the body. The system will create nested objects 
-          in the same transaction.</p>
-
           <h3>Example</h3>
           <pre><code>[
   {
-    "type": "CREATE",
+    "type": "UPDATE",
     "resourceType": "coordinates",
+    "resourceId": 1,
     "body": {
       "x": 100,
       "y": 200.5
@@ -169,13 +129,12 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { Upload, UploadFilled, RefreshLeft, Document, InfoFilled } from '@element-plus/icons-vue'
+import { Upload, UploadFilled, RefreshLeft, Document, InfoFilled, Clock } from '@element-plus/icons-vue'
 import api from '@/controllers/api'
 import { API_BASE_URL } from '@/config/constants'
 import type { UploadFile, UploadFiles, UploadInstance } from 'element-plus'
 
 interface ImportResult {
-  totalOperations: number
   successfulOperations: number
   failedOperations: number
   results: Array<{
@@ -274,12 +233,18 @@ const handleImport = async () => {
   .card-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
 
     h2 {
       margin: 0;
       display: flex;
       align-items: center;
+      gap: 10px;
+    }
+
+    .header-actions {
+      display: flex;
       gap: 10px;
     }
   }

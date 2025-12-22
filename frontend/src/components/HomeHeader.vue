@@ -13,6 +13,7 @@ const userStore = useUserStore()
     <el-menu-item index="/analytics">Analytics</el-menu-item>
     <el-menu-item index="/killer-team">Killer Team</el-menu-item>
     <el-menu-item index="/search-by-name">Search By Name</el-menu-item>
+    <el-menu-item index="/batch-import">Batch Import</el-menu-item>
   </el-menu>
 
   <el-space wrap v-if="!userStore.isLoggedIn">

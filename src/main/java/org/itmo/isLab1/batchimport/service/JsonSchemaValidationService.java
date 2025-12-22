@@ -15,7 +15,7 @@ import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Service
@@ -60,7 +60,7 @@ public class JsonSchemaValidationService {
 
     public Set<ValidationMessage> validateBatchOperation(JsonNode jsonNode) {
         if (batchOperationSchema == null) {
-            Set<ValidationMessage> errors = new HashSet<>();
+            Set<ValidationMessage> errors = new LinkedHashSet<>();
             errors.add(ValidationMessage.builder()
                     .message("Schema validation service not initialized")
                     .build());
