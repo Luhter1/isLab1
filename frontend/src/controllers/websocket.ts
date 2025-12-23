@@ -7,6 +7,7 @@ import PersonService from '@/services/PeopleService'
 import type { Event } from '@/interfaces/events/Event'
 import { ResourceType } from '@/interfaces/models/ResourceType';
 import { WS_BASE_URL } from '@/config/constants';
+import { getHistory } from '@/services/BatchImportHistoryService'
 class WebSocketService {
   socket: WebSocket | null
 
@@ -17,7 +18,7 @@ class WebSocketService {
       console.log('WebSocket connected')
     }
 
-    this.socket.onmessage = (rawEvent) => {
+    this.socket.onmessage = async (rawEvent) => {
       try {
         const event: Event<any> = JSON.parse(rawEvent.data);
         
@@ -36,6 +37,8 @@ class WebSocketService {
             return LocationService.handleObjectEvent(event)
           case ResourceType.PEOPLE:
             return PersonService.handleObjectEvent(event)
+          case ResourceType.BATCH_IMPORT_HISTORY:
+            return await getHistory()
           default:
             return console.log('Invalid event received')
         }
