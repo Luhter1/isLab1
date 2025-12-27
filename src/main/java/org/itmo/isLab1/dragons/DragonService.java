@@ -7,6 +7,7 @@ import org.itmo.isLab1.dragons.mapper.DragonMapper;
 import org.itmo.isLab1.dragons.policy.DragonPolicy;
 import org.itmo.isLab1.events.EventService;
 import org.itmo.isLab1.users.UserService;
+import org.itmo.isLab1.common.errors.EntityDuplicateException;
 
 @Service
 public class DragonService
@@ -28,4 +29,13 @@ public class DragonService
     ) {
         super(repository, mapper, policy, userService, eventService);
     }
+
+    @Override
+    protected void checkUniqueness(Dragon obj){
+        if(obj.getHead() == null) return;
+
+        if(repository.existsByHead_IdAndIdNot(obj.getHead().getId(), obj.getId())){
+            throw new EntityDuplicateException("headId is not uniq");
+        }
+    };
 }

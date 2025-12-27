@@ -1,6 +1,7 @@
 package org.itmo.isLab1.people;
 
 import org.springframework.stereotype.Service;
+import org.itmo.isLab1.common.errors.EntityDuplicateException;
 import org.itmo.isLab1.common.framework.CrudService;
 import org.itmo.isLab1.events.EventService;
 import org.itmo.isLab1.people.dto.*;
@@ -28,4 +29,11 @@ public class PersonService
     ) {
         super(repository, mapper, policy, userService, eventService);
     }
+
+    @Override
+    protected void checkUniqueness(Person obj){
+        if(repository.existsByPassportIdAndIdNot(obj.getPassportId(), obj.getId())){
+            throw new EntityDuplicateException("passportId is not uniq");
+        }
+    };
 }

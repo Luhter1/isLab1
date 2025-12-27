@@ -30,11 +30,13 @@ public abstract class CrudService<
     TCreateDto,
     TUpdateDto> {
 
-    private TRepository repository;
+    protected TRepository repository;
     private TMapper mapper;
     private TPolicy policy;
     private UserService userService;
     private EventService<T> eventService;
+
+    protected void checkUniqueness(T obj){};
 
     public Page<TDto> getAll(Pageable pageable) {
         return getAll(pageable, null);
@@ -59,6 +61,8 @@ public abstract class CrudService<
         policy.create(currentUser());
 
         var obj = mapper.map(objData);
+        checkUniqueness(obj);
+
         obj.setCreatedBy(currentUser());
         obj.setCreatedAt(ZonedDateTime.now());
         repository.save(obj);
@@ -79,6 +83,8 @@ public abstract class CrudService<
         policy.update(currentUser(), obj);
 
         mapper.update(objData, obj);
+        checkUniqueness(obj);
+
         obj.setUpdatedBy(currentUser());
         obj.setUpdatedAt(ZonedDateTime.now());
         repository.save(obj);

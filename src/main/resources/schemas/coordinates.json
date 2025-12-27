@@ -12,11 +12,11 @@
       "properties": {
         "x": {
           "type": "integer",
-          "minimum": -998,
-          "maximum": 844
+          "minimum": -998
         },
         "y": {
-          "type": "number"
+          "type": "number",
+          "maximum": 844
         }
       },
       "required": ["x", "y"]

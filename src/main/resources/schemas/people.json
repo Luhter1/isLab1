@@ -5,7 +5,7 @@
   "definitions": {
     "Person": {
       "title": "Person",
-      "description": "Person DTO",
+      "description": "Person",
 
       "type": "object",
       "additionalProperties": false,
@@ -16,24 +16,24 @@
           "maxLength": 255
         },
         "eyeColor": {
-          "type": "string",
-          "enum": ["RED", "BLUE", "YELLOW", "ORANGE"]
+          "type": ["string", "null"],
+          "enum": ["RED", "BLUE", "YELLOW", "ORANGE", null]
         },
         "hairColor": {
           "type": "string",
           "enum": ["RED", "BLUE", "YELLOW", "ORANGE"]
         },
         "birthday": {
-          "type": "string",
+          "type": ["string", "null"],
           "format": "date-time"
         },
         "height": {
           "type": "number",
-          "minimum": 0
+          "exclusiveMinimum": 0
         },
         "weight": {
           "type": ["integer", "null"],
-          "minimum": 0
+          "minimum": 1
         },
         "passportId": {
           "type": "string",
@@ -48,15 +48,13 @@
           "minimum": 1
         }
       },
-      "required": ["name", "eyeColor", "hairColor", "birthday", "height", "passportId"],
-      "oneOf": [
-        {
-          "required": ["location"]
-        },
-        {
-          "required": ["locationId"]
-        }
-      ]
+      
+      "dependencies": {
+        "location": { "not": { "required": ["locationId"] } },
+        "locationId": { "not": { "required": ["location"] } }
+      },
+
+      "required": ["name", "hairColor", "height", "passportId"]
     }
   }
 }

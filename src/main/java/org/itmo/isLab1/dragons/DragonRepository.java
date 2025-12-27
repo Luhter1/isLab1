@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DragonRepository extends CrudRepository<Dragon> {
+    boolean existsByHead_IdAndIdNot(Integer headId, Integer dragonId);
+    
     @Query("SELECT AVG(d.age) FROM Dragon d")
     Optional<Double> getAverageAge();
 
@@ -23,7 +25,4 @@ public interface DragonRepository extends CrudRepository<Dragon> {
     default Optional<Dragon> findDragonInDeepestCave() {
         return findDragonsInDeepestCave().stream().findFirst();
     }
-
-//     @Query("SELECT d FROM Dragon d JOIN d.cave dc WHERE dc.depth = (SELECT MAX(c.depth) FROM DragonCave c)")
-//     Optional<Dragon> findDragonInDeepestCave();
 }

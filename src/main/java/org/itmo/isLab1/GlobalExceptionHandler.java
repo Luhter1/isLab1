@@ -3,6 +3,7 @@ package org.itmo.isLab1;
 import lombok.*;
 
 import org.itmo.isLab1.common.errors.AdminRequestAlreadyProcessed;
+import org.itmo.isLab1.common.errors.EntityDuplicateException;
 import org.itmo.isLab1.common.errors.PolicyViolationError;
 import org.itmo.isLab1.common.errors.ResourceNotFoundException;
 import org.itmo.isLab1.common.errors.SomePendingRequestsExists;
@@ -24,6 +25,16 @@ public class GlobalExceptionHandler {
         private int status;
         private String message;
         private long timestamp;
+    }
+
+    @ExceptionHandler(EntityDuplicateException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateException(EntityDuplicateException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+            HttpStatus.CONFLICT.value(),
+            ex.getMessage(),
+            System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
