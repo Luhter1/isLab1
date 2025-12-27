@@ -11,6 +11,7 @@ import KillerTeam from '@/views/KillerTeam.vue'
 import SearchByName from '@/views/SearchByName.vue'
 import BatchImport from '@/views/BatchImport.vue'
 import BatchImportHistory from '@/views/BatchImportHistory.vue'
+import AdminRequests from '@/views/AdminRequests.vue'
 import { logout } from '@/services/AuthService'
 import { useUserStore } from '@/stores/userStore'
 
@@ -106,6 +107,12 @@ const router = createRouter({
       path: '/batch-import/history',
       name: 'batch-import-history',
       component: BatchImportHistory,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/admin-requests',
+      name: 'admin-requests',
+      component: AdminRequests,
       meta: { requiresAuth: true }
     },
   ],
