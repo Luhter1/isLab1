@@ -30,6 +30,7 @@ public class LocationService
         super(repository, mapper, policy, userService, eventService);
     }
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     protected void checkUniqueness(Location obj){
         if(repository.existsByXAndYAndZAndNameAndIdNot(obj.getX(), obj.getY(), obj.getZ(), obj.getName(), obj.getId())){
             throw new EntityDuplicateException("location is not uniq");

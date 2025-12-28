@@ -1,6 +1,8 @@
 package org.itmo.isLab1.dragons;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
 import org.itmo.isLab1.common.framework.CrudService;
 import org.itmo.isLab1.dragons.dto.*;
 import org.itmo.isLab1.dragons.mapper.DragonMapper;
@@ -31,6 +33,7 @@ public class DragonService
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     protected void checkUniqueness(Dragon obj){
         if(obj.getHead() == null) return;
 
