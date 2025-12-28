@@ -9,21 +9,9 @@
       "coordinates": {
         "x": 1000,
         "y": 200
-      }
-    }
-  },
-  {
-    "type": "CREATE",
-    "resourceType": "dragons",
-    "body": {
-      "name": "Dragon2",
-      "type": "FIRE",
-      "age": 500,
-      "killerId": 1,
-      "coordinates": {
-        "x": 1500,
-        "y": 250
-      }
+      },
+      "character": "EVIL",
+      "headId": 10
     }
   }
 ]

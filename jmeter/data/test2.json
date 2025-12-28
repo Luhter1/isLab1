@@ -9,48 +9,12 @@
   },
   {
     "type": "CREATE",
-    "resourceType": "locations",
-    "body": {
-      "name": "test",
-      "x": 250,
-      "y": 300,
-      "z": 100.11
-    }
-  },
-  {
-    "type": "UPDATE",
-    "resourceType": "locations",
-    "resourceId": 1,
-    "body": {
-      "name": "update_jmeter",
-      "x": 550
-    }
-  },
-  {
-    "type": "CREATE",
     "resourceType": "people",
     "body": {
       "name": "people_jmeter",
       "hairColor": "YELLOW",
       "height": 150.59,
-      "location": {
-        "name": "home_jmeter",
-        "x": 10,
-        "y": 10,
-        "z": 10
-      },
-      "passportId": "12345dfgh"
-    }
-  },
-
-  {
-    "type": "UPDATE",
-    "resourceType": "people",
-    "resourceId": 1,
-    "body": {
-      "name": "qwerty",
-      "locationId": 1,
-      "passportId": "abpupupu"
+      "passportId": "5rqw5121267dfgh"
     }
   },
   {
