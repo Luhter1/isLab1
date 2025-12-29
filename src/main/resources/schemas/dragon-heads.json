@@ -11,7 +11,9 @@
       "additionalProperties": false,
       "properties": {
         "size": {
-          "type": ["number", "null"]
+          "type": ["number", "null"],
+          "minimum": -2000000000,
+          "maximum": 2000000000
         }
       }
     }

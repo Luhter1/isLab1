@@ -12,10 +12,12 @@
       "properties": {
         "x": {
           "type": "integer",
-          "minimum": -998
+          "minimum": -998,
+          "maximum": 2000000000
         },
         "y": {
           "type": "number",
+          "minimum": -2000000000,
           "maximum": 844
         }
       },

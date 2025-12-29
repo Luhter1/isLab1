@@ -10,7 +10,7 @@ export class ValidationFactory {
       case 'Location':
         return this.locationRules()
       case 'DragonHead':
-        return {}
+        return this.dragonheadRules()
       case 'DragonCave':
         return this.dragoncaveRules()
       case 'Person':
@@ -30,6 +30,8 @@ export class ValidationFactory {
           validator: (rule, value, callback) => {
             if (value.length < 1) {
               callback(new Error('Name must be not blank'))
+            }else if (value.length > 200) {
+              callback(new Error('Name must be less than 200 symbols'))
             } else {
               callback()
             }
@@ -82,6 +84,8 @@ export class ValidationFactory {
           validator: (rule, value, callback) => {
             if (value < 1) {
               callback(new Error('Age must be grater than 0'))
+            }else if (value >= 2000000000) {
+              callback(new Error('Age must be less than 2000000000'))
             } else {
               callback()
             }
@@ -103,6 +107,8 @@ export class ValidationFactory {
           validator: (rule, value, callback) => {
             if (value.length < 1) {
               callback(new Error('Name must be not blank'))
+            }else if (value.length > 200) {
+              callback(new Error('Name must be less than 200 symbols'))
             } else {
               callback()
             }
@@ -128,8 +134,16 @@ export class ValidationFactory {
       birthday: [
         { 
           validator: (rule, value: DateTime, callback) => {
-            if (value && (DateTime.now() < value)) {
-              callback(new Error('Date must be in past'))
+            if (value) {
+              const now = DateTime.now()
+              
+              if (value > now) {
+                callback(new Error('Date must be in past'))
+              } else if (value < now.minus({ years: 100 })) {
+                callback(new Error('Date must be within last 100 years'))
+              } else {
+                callback()
+              }
             } else {
               callback()
             }
@@ -142,7 +156,9 @@ export class ValidationFactory {
         { 
           validator: (rule, value, callback) => {
             if (value < 1) {
-              callback(new Error('Weight must be grater than 0'))
+              callback(new Error('Height must be grater than 0'))
+            }else if (value > 2000000000) {
+              callback(new Error('Height must be less than 2000000000 m'))
             } else {
               callback()
             }
@@ -155,6 +171,8 @@ export class ValidationFactory {
           validator: (rule, value, callback) => {
             if (value < 1) {
               callback(new Error('Weight must be grater than 0'))
+            }else if (value > 2000000000) {
+              callback(new Error('Weight must be less than 2000000000 kg'))
             } else {
               callback()
             }
@@ -181,7 +199,38 @@ export class ValidationFactory {
   private static dragoncaveRules(): FormRules {
     return {
       depth: [
+        { 
+          validator: (rule, value, callback) => {
+            if (value < 1) {
+              callback(new Error('Size must be grater than 0'))
+            }else if (value > 2000000000) {
+              callback(new Error('Size must be less than 2000000000 m'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        },
+      ],
+    }
+  }
+
+  private static dragonheadRules(): FormRules {
+    return {
+      size: [
         { required: true, message: 'Depth is required', trigger: 'blur' },
+        { 
+          validator: (rule, value, callback) => {
+            if (value < 1) {
+              callback(new Error('Depth must be grater than 0'))
+            }else if (value > 2000000000) {
+              callback(new Error('Depth must be less than 2000000000 m'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        },
       ],
     }
   }
@@ -190,9 +239,47 @@ export class ValidationFactory {
     return {
       x: [
         { required: true, message: 'X coordinate is required', trigger: 'blur' },
+        { 
+          validator: (rule, value, callback) => {
+            if (value < -2000000000) {
+              callback(new Error('X must be grater than -2000000000'))
+            }else if (value > 2000000000) {
+              callback(new Error('X must be less than 2000000000'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        },
+      ],
+      y: [
+        { 
+          validator: (rule, value, callback) => {
+            if (value < -2000000000) {
+              callback(new Error('Y must be grater than -2000000000'))
+            }else if (value > 2000000000) {
+              callback(new Error('Y must be less than 2000000000'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        },
       ],
       z: [
         { required: true, message: 'Z coordinate is required', trigger: 'blur' },
+        { 
+          validator: (rule, value, callback) => {
+            if (value < -2000000000) {
+              callback(new Error('Z must be grater than -2000000000'))
+            }else if (value > 2000000000) {
+              callback(new Error('Z must be less than 2000000000'))
+            } else {
+              callback()
+            }
+          }, 
+          trigger: 'change' 
+        },
       ],
       name: [
         { required: true, message: 'Name is required', trigger: 'blur' },
@@ -218,6 +305,8 @@ export class ValidationFactory {
           validator: (rule, value, callback) => {
             if (value < -999) {
               callback(new Error('X must be greater than -999'))
+            }else if (value > 2000000000) {
+              callback(new Error('X must be less than 2000000000'))
             } else {
               callback()
             }
@@ -231,6 +320,8 @@ export class ValidationFactory {
           validator: (rule, value, callback) => {
             if (value >845) {
               callback(new Error('Y must be less than 845'))
+            }else if (value < -2000000000) {
+              callback(new Error('Y must be less than -2000000000'))
             } else {
               callback()
             }

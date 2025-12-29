@@ -25,7 +25,8 @@
         },
         "age": {
           "type": ["integer", "null"],
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 2000000000
         },
         "color": {
           "type": ["string", "null"],
@@ -36,28 +37,32 @@
         },
         "coordinatesId": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 2000000000
         },
         "cave": {
           "$ref": "classpath:///schemas/dragon-caves.json#/definitions/DragonCave"
         },
         "caveId": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 2000000000
         },
         "killer": {
           "$ref": "classpath:///schemas/people.json#/definitions/Person"
         },
         "killerId": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 2000000000
         },
         "head": {
           "$ref": "classpath:///schemas/dragon-heads.json#/definitions/DragonHead"
         },
         "headId": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 2000000000
         }
       },
       "dependencies": {

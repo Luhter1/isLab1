@@ -11,13 +11,19 @@
       "additionalProperties": false,
       "properties": {
         "x": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2000000000,
+          "maximum": 2000000000
         },
         "y": {
-          "type": ["integer", "null"]
+          "type": ["integer", "null"],
+          "minimum": -2000000000,
+          "maximum": 2000000000
         },
         "z": {
-          "type": "number"
+          "type": "number",
+          "minimum": -2000000000,
+          "maximum": 2000000000
         },
         "name": {
           "type": "string",
