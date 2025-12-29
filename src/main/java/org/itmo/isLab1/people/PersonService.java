@@ -31,8 +31,8 @@ public class PersonService
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
     protected void checkUniqueness(Person obj){
+        repository.lockByPassportId(obj.getPassportId());
         if(repository.existsByPassportIdAndIdNot(obj.getPassportId(), obj.getId())){
             throw new EntityDuplicateException("passportId is not uniq");
         }
