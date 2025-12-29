@@ -7,7 +7,6 @@ import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SchemaValidatorsConfig;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
-import com.networknt.schema.resource.InputStreamSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
