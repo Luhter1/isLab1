@@ -86,6 +86,7 @@ public class BatchImportService {
                     successfulCount++;
                 } catch (Exception e) {
                     status = ImportStatus.FAILED;
+                    successfulCount = 0;
                     throw new RuntimeException("Operation " + i + " failed: " + e.getMessage(), e);
                 }
             }

@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { Upload, UploadFilled, RefreshLeft, Clock } from '@element-plus/icons-vue'
 import api from '@/controllers/api'
-import { API_BASE_URL } from '@/config/constants'
+import { API_BASE_URL, MAX_FILE_SIZE } from '@/config/constants'
 import type { UploadFile, UploadFiles, UploadInstance } from 'element-plus'
 
 interface OperationResult {
@@ -29,7 +29,6 @@ interface ImportError {
 }
 
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
 const ALLOWED_EXTENSIONS = ['.json']
 const MESSAGES = {
   NO_FILE: 'Please select a file first',
@@ -169,14 +168,43 @@ const handleImport = async (): Promise<void> => {
   }
 }
 
+const parseError = (message: string): string => {
+  const header = "JSON Schema validation failed:";
+  const MAX_LINES = 5; // Порог, после которого включается обрезка
+  const regex = /\$\[(\d+)\]\.(.*?):\s*(.*?;)/g;
+  const errors = [];
+  let match;
+  
+  while ((match = regex.exec(message)) !== null) {
+    errors.push(`  - operation ${match[1]} in ${match[2]}: ${match[3]}`);
+  }
+
+  if (errors.length === 0) return message;
+
+  if (1 + errors.length > MAX_LINES) {
+    const visibleErrors = errors.slice(0, MAX_LINES); 
+    const hiddenCount = errors.length - MAX_LINES;
+    
+    return `${header}\n${visibleErrors.join('\n')}\n  ... (скрыто еще ${hiddenCount} ошибок)`;
+  }
+
+  return `${header}\n${errors.join('\n')}`;
+}
+
 const handleImportError = (error: ImportError): void => {
   const responseData = error.response?.data
 
   if (responseData?.results?.length) {
     importResult.value = responseData as ImportResult
     errorMessage.value = `Import failed: ${responseData.failedOperations} operations failed`
+  } else if(responseData?.message){
+    if(responseData.message.startsWith("JSON Schema validation failed: ")){
+      errorMessage.value = parseError(responseData.message)
+    }else{
+      errorMessage.value = responseData.message
+    }
   } else {
-    errorMessage.value = responseData?.message ?? error.message ?? MESSAGES.IMPORT_FAILED
+    errorMessage.value = error.message ?? MESSAGES.IMPORT_FAILED
   }
 }
 </script>
@@ -337,6 +365,7 @@ const handleImportError = (error: ImportError): void => {
 
 .import-content {
   .alert-message {
+    white-space: pre-wrap;
     margin-bottom: 20px;
   }
 
