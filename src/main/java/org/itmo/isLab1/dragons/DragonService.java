@@ -2,7 +2,6 @@ package org.itmo.isLab1.dragons;
 
 import org.springframework.stereotype.Service;
 import org.itmo.isLab1.common.framework.CrudService;
-import org.itmo.isLab1.dragonheads.DragonHeadRepository;
 import org.itmo.isLab1.dragons.dto.*;
 import org.itmo.isLab1.dragons.mapper.DragonMapper;
 import org.itmo.isLab1.dragons.policy.DragonPolicy;
@@ -21,26 +20,20 @@ public class DragonService
         DragonCreateDto,
         DragonUpdateDto> {
 
-    private final DragonHeadRepository headRepository;
-
     public DragonService(
         DragonRepository repository,
         DragonMapper mapper,
         DragonPolicy policy,
         UserService userService,
-        EventService<Dragon> eventService,
-        DragonHeadRepository headRepository
+        EventService<Dragon> eventService
     ) {
         super(repository, mapper, policy, userService, eventService);
-        this.headRepository = headRepository;
     }
 
     @Override
     protected void checkUniqueness(Dragon obj) {
         if(obj.getHead() == null) return;
         Integer headId = obj.getHead().getId();
-
-        headRepository.findByIdWithLock(headId);
 
         if(repository.existsByHead_IdAndIdNot(headId, obj.getId())){
             throw new EntityDuplicateException("headId is not uniq");

@@ -32,7 +32,6 @@ public class PersonService
 
     @Override
     protected void checkUniqueness(Person obj){
-        repository.lockByPassportId(obj.getPassportId());
         if(repository.existsByPassportIdAndIdNot(obj.getPassportId(), obj.getId())){
             throw new EntityDuplicateException("passportId is not uniq");
         }

@@ -35,6 +35,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.retry:spring-retry'
 
 	// JSON
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5-jakarta:2.18.0'

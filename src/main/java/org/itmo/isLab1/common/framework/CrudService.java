@@ -1,12 +1,17 @@
 package org.itmo.isLab1.common.framework;
 
 import lombok.AllArgsConstructor;
+
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.retry.annotation.Backoff;
 
 import org.itmo.isLab1.common.framework.dto.CrudDto;
 import org.itmo.isLab1.common.framework.mapper.CrudMapper;
@@ -17,6 +22,7 @@ import org.itmo.isLab1.events.EventType;
 import org.itmo.isLab1.users.User;
 import org.itmo.isLab1.users.UserService;
 
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
@@ -56,7 +62,15 @@ public abstract class CrudService<
         return objs.map(mapper::map);
     }
 
-    @Transactional
+    @Transactional(
+        propagation = Propagation.REQUIRED, 
+        isolation = Isolation.SERIALIZABLE
+    )
+    @Retryable(
+        retryFor = { SQLException.class, CannotAcquireLockException.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 100)
+    )
     public TDto create(TCreateDto objData) {
         policy.create(currentUser());
 
@@ -77,7 +91,15 @@ public abstract class CrudService<
         return mapper.map(obj);
     }
 
-    @Transactional
+    @Transactional(
+        propagation = Propagation.REQUIRED, 
+        isolation = Isolation.SERIALIZABLE
+    )
+    @Retryable(
+        retryFor = { SQLException.class, CannotAcquireLockException.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 100)
+    )
     public TDto update(TUpdateDto objData, int id) {
         var obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found: id=" + id));
         policy.update(currentUser(), obj);

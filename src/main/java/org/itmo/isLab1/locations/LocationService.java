@@ -32,7 +32,6 @@ public class LocationService
 
     @Override
     protected void checkUniqueness(Location obj){
-        repository.lockByLocation(obj.getX().toString(), obj.getY().toString(), obj.getZ().toString(), obj.getName());
         if(repository.existsByXAndYAndZAndNameAndIdNot(obj.getX(), obj.getY(), obj.getZ(), obj.getName(), obj.getId())){
             throw new EntityDuplicateException("location is not uniq");
         }
