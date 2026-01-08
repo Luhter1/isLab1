@@ -27,9 +27,15 @@ import org.itmo.isLab1.locations.dto.LocationUpdateDto;
 import org.itmo.isLab1.people.PersonService;
 import org.itmo.isLab1.people.dto.PersonCreateDto;
 import org.itmo.isLab1.people.dto.PersonUpdateDto;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.retry.annotation.Backoff;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +54,16 @@ public class BatchImportService {
     private final PersonService personService;
     private final BatchImportHistoryService historyService;
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(
+        rollbackFor = Exception.class,
+        propagation = Propagation.REQUIRED, 
+        isolation = Isolation.SERIALIZABLE
+    )
+    @Retryable(
+        retryFor = { SQLException.class, CannotAcquireLockException.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 100)
+    )
     public BatchImportResponseDto importBatch(JsonNode jsonNode) {
         ImportStatus status = ImportStatus.FAILED;
         Set<ValidationMessage> validationMessages = validationService.validateBatchOperation(jsonNode);
