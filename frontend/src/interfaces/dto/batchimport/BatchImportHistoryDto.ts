@@ -7,5 +7,6 @@ export interface BatchImportHistoryDto {
     createdAt: DateTime;
     status: 'SUCCESS' | 'FAILED';
     successfulOperations: number;
+    filePath?: string;
 }
 

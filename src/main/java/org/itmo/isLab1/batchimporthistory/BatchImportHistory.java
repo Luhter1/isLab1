@@ -44,6 +44,9 @@ public class BatchImportHistory implements BaseEntity {
     @Column(name = "successful_operations")
     private Integer successfulOperations;
 
+    @Column(name = "file_path", length = 255)
+    private String filePath;
+
     @PrePersist
     private void prePersist() {
         if (createdAt == null) {

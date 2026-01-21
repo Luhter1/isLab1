@@ -2,6 +2,7 @@ package org.itmo.isLab1;
 
 import lombok.*;
 
+import org.itmo.isLab1.batchimport.exception.BatchImportException;
 import org.itmo.isLab1.common.errors.AdminRequestAlreadyProcessed;
 import org.itmo.isLab1.common.errors.EntityDuplicateException;
 import org.itmo.isLab1.common.errors.PolicyViolationError;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.persistence.EntityNotFoundException;
 
+/**
+ * Глобальный обработчик исключений для REST API
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -126,5 +130,19 @@ public class GlobalExceptionHandler {
             System.currentTimeMillis()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Обработчик исключений пакетного импорта
+     * Предоставляет детальную информацию об ошибках импорта
+     */
+    @ExceptionHandler(BatchImportException.class)
+    public ResponseEntity<ErrorResponse> handleBatchImportException(BatchImportException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+            HttpStatus.BAD_REQUEST.value(),
+            ex.getMessage(),
+            System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

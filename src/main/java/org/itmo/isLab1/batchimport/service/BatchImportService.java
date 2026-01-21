@@ -4,11 +4,14 @@ import com.networknt.schema.ValidationMessage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.itmo.isLab1.batchimport.dto.BatchImportResponseDto;
 import org.itmo.isLab1.batchimport.dto.BatchOperationDto;
+import org.itmo.isLab1.batchimport.exception.BatchImportException;
 import org.itmo.isLab1.batchimporthistory.BatchImportHistoryService;
 import org.itmo.isLab1.batchimporthistory.enums.ImportStatus;
+import org.itmo.isLab1.common.minIO.MinioService;
 import org.itmo.isLab1.coordinates.CoordinateService;
 import org.itmo.isLab1.coordinates.dto.CoordinateCreateDto;
 import org.itmo.isLab1.coordinates.dto.CoordinateUpdateDto;
@@ -41,6 +44,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Сервис для пакетного импорта данных с механизмом отката при ошибках
+ */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BatchImportService {
@@ -53,10 +60,20 @@ public class BatchImportService {
     private final LocationService locationService;
     private final PersonService personService;
     private final BatchImportHistoryService historyService;
+    private final MinioService minioService;
 
+    /**
+     * Выполняет пакетный импорт данных из JSON с механизмом отката при ошибках
+     *
+     * @param jsonNode JSON-данные для импорта
+     * @param filePath путь к файлу в MinIO
+     * @return результат импорта с количеством успешных и неудачных операций
+     * @throws IllegalArgumentException при ошибках валидации
+     * @throws RuntimeException при ошибках обработки операций
+     */
     @Transactional(
         rollbackFor = Exception.class,
-        propagation = Propagation.REQUIRED, 
+        propagation = Propagation.REQUIRED,
         isolation = Isolation.SERIALIZABLE
     )
     @Retryable(
@@ -64,41 +81,85 @@ public class BatchImportService {
         maxAttempts = 3,
         backoff = @Backoff(delay = 100)
     )
-    public BatchImportResponseDto importBatch(JsonNode jsonNode) {
+    public BatchImportResponseDto importBatch(JsonNode jsonNode, String filePath) {
+        log.info("Начало пакетного импорта из файла: {}", filePath);
         ImportStatus status = ImportStatus.FAILED;
+        
+        // Валидация JSON схемы
         Set<ValidationMessage> validationMessages = validationService.validateBatchOperation(jsonNode);
         if (!validationMessages.isEmpty()) {
             StringBuilder errorMsg = new StringBuilder("JSON Schema validation failed: ");
             validationMessages.forEach(msg -> errorMsg.append(msg.getMessage()).append("; "));
-            historyService.saveImportHistory(0, status);
-            throw new IllegalArgumentException(errorMsg.toString());
+            log.warn("Ошибка валидации JSON схемы для файла {}: {}", filePath, errorMsg);
+            // При ошибке валидации удаляем файл из MinIO
+            rollbackFileUpload(filePath);
+            historyService.saveImportHistory(0, status, filePath);
+            throw new BatchImportException(errorMsg.toString());
         }
 
         List<BatchOperationDto> operations = parseOperations(jsonNode);
         int successfulCount = 0;
         status = ImportStatus.SUCCESS;
+        log.info("Получено {} операций для импорта", operations.size());
 
         try {
             for (int i = 0; i < operations.size(); i++) {
                 BatchOperationDto operation = operations.get(i);
                 try {
+                    log.debug("Обработка операции {}/{}: тип={}, ресурс={}",
+                            i + 1, operations.size(), operation.getType(), operation.getResourceType());
                     processOperation(operation);
                     successfulCount++;
+                    log.debug("Операция {}/{} успешно выполнена", i + 1, operations.size());
                 } catch (Exception e) {
                     status = ImportStatus.FAILED;
                     successfulCount = 0;
-                    throw new RuntimeException("Operation " + i + " failed: " + e.getMessage(), e);
+                    log.error("Операция {}/{} не удалась: тип={}, ресурс={}, ошибка={}",
+                            i + 1, operations.size(), operation.getType(), operation.getResourceType(), e.getMessage(), e);
+                    throw new BatchImportException("Operation " + i + " failed: " + e.getMessage(), e);
                 }
             }
+            log.info("Все {} операций успешно выполнены", operations.size());
+        } catch (Exception e) {
+            // При любой ошибке удаляем файл из MinIO
+            log.error("Ошибка при импорте файла {}, выполняется откат", filePath);
+            rollbackFileUpload(filePath);
+            throw e;
         } finally {
             // Сохраняем историю импорта независимо от результата
-            historyService.saveImportHistory(successfulCount, status);
+            try {
+                historyService.saveImportHistory(successfulCount, status, filePath);
+                log.info("История импорта сохранена: статус={}, успешных={}, файл={}",
+                        status, successfulCount, filePath);
+            } catch (Exception e) {
+                log.error("Ошибка при сохранении истории импорта: {}", e.getMessage(), e);
+                // Не прерываем основной поток выполнения
+            }
         }
 
         return new BatchImportResponseDto(
                 successfulCount,
                 operations.size() - successfulCount
         );
+    }
+
+    /**
+     * Откатывает загрузку файла в MinIO при ошибке импорта
+     * Метод безопасен - ошибки при удалении не прерывают основной поток выполнения
+     *
+     * @param filePath путь к файлу в MinIO
+     */
+    private void rollbackFileUpload(String filePath) {
+        if (filePath != null && !filePath.isEmpty()) {
+            try {
+                minioService.deleteFile(filePath);
+                log.info("Файл успешно удален из MinIO при откате: {}", filePath);
+            } catch (Exception e) {
+                // Логируем ошибку, но не прерываем транзакцию
+                // Файл может быть удален вручную администратором или через фоновые задачи
+                log.warn("Не удалось удалить файл из MinIO при откате: {}. Причина: {}", filePath, e.getMessage());
+            }
+        }
     }
 
     private List<BatchOperationDto> parseOperations(JsonNode jsonNode) {

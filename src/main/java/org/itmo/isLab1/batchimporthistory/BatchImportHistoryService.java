@@ -47,13 +47,55 @@ public class BatchImportHistoryService {
         eventService.notify(EventType.CREATE, history);
     }
 
+    /**
+     * Сохраняет историю импорта с указанием пути к файлу.
+     * Использует REQUIRES_NEW для гарантированного сохранения истории
+     * независимо от результата основной транзакции импорта.
+     *
+     * @param successfulOperations количество успешных операций
+     * @param status статус импорта
+     * @param filePath путь к файлу в MinIO
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveImportHistory(int successfulOperations, ImportStatus status, String filePath) {
+        var currentUser = userService.getCurrentUser();
+        var history = BatchImportHistory.builder()
+                .createdBy(currentUser)
+                .status(status)
+                .successfulOperations(successfulOperations)
+                .filePath(filePath)
+                .build();
+        repository.save(history);
+        eventService.notify(EventType.CREATE, history);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateImportHistory(int historyId, ImportStatus status, int successfulOperations) {
+        var history = repository.findById(historyId)
+                .orElseThrow(() -> new IllegalArgumentException("Import history not found with id: " + historyId));
+        history.setStatus(status);
+        history.setSuccessfulOperations(successfulOperations);
+        repository.save(history);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateImportHistory(int historyId, ImportStatus status, int successfulOperations, String filePath) {
+        var history = repository.findById(historyId)
+                .orElseThrow(() -> new IllegalArgumentException("Import history not found with id: " + historyId));
+        history.setStatus(status);
+        history.setSuccessfulOperations(successfulOperations);
+        history.setFilePath(filePath);
+        repository.save(history);
+    }
+
     private BatchImportHistoryDto mapToDto(BatchImportHistory history) {
         return new BatchImportHistoryDto(
                 history.getId(),
                 history.getCreatedBy(),
                 history.getCreatedAt(),
                 history.getStatus(),
-                history.getSuccessfulOperations()
+                history.getSuccessfulOperations(),
+                history.getFilePath()
         );
     }
 }
