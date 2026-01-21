@@ -75,6 +75,8 @@ dependencies {
 	implementation 'org.infinispan:infinispan-jcache'
 	compileOnly("org.eclipse.microprofile.config:microprofile-config-api:3.0.3")
 
+	implementation 'io.minio:minio:8.5.14'
+
 	// Flyway
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-database-postgresql'
