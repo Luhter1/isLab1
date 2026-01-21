@@ -15,7 +15,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(
+        usage = CacheConcurrencyStrategy.READ_WRITE,
+        region = "entity"
+)
 @Table(name = "dragon_heads")
 public class DragonHead extends CrudEntity {
     @Id

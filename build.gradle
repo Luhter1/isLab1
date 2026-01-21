@@ -70,7 +70,10 @@ dependencies {
 
 	implementation("org.infinispan:infinispan-hibernate-cache-v66:16.0.2")
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
-
+	implementation 'org.hibernate.orm:hibernate-jcache'
+	implementation 'javax.cache:cache-api'
+	implementation 'org.infinispan:infinispan-jcache'
+	compileOnly("org.eclipse.microprofile.config:microprofile-config-api:3.0.3")
 
 	// Flyway
 	implementation 'org.flywaydb:flyway-core'

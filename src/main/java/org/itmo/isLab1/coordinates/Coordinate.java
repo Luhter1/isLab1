@@ -17,7 +17,10 @@ import org.itmo.isLab1.common.framework.CrudEntity;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(
+        usage = CacheConcurrencyStrategy.READ_WRITE,
+        region = "entity"
+)
 @Table(name = "coordinates")
 public class Coordinate extends CrudEntity {
     @Id
