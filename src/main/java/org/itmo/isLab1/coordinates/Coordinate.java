@@ -3,6 +3,8 @@ package org.itmo.isLab1.coordinates;
 import lombok.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.itmo.isLab1.common.framework.CrudEntity;
@@ -14,6 +16,7 @@ import org.itmo.isLab1.common.framework.CrudEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "coordinates")
 public class Coordinate extends CrudEntity {
     @Id

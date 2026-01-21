@@ -3,8 +3,10 @@ package org.itmo.isLab1;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.cache.annotation.EnableCaching;
 
 @EnableRetry
+@EnableCaching
 @SpringBootApplication
 public class IsLab1Application {
 

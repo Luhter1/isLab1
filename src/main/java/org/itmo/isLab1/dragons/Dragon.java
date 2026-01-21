@@ -16,6 +16,8 @@ import org.itmo.isLab1.people.Person;
 import org.itmo.isLab1.people.enums.Color;
 import org.itmo.isLab1.dragons.enums.DragonCharacter;
 import org.itmo.isLab1.dragons.enums.DragonType;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Getter
@@ -24,6 +26,7 @@ import org.itmo.isLab1.dragons.enums.DragonType;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dragons")
 public class Dragon extends CrudEntity {
     @Id

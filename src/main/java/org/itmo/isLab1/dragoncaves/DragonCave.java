@@ -4,6 +4,9 @@ import lombok.*;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.itmo.isLab1.common.framework.CrudEntity;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 @Entity
 @Getter
@@ -12,6 +15,7 @@ import org.itmo.isLab1.common.framework.CrudEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dragon_caves")
 public class DragonCave extends CrudEntity {
     @Id

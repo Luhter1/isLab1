@@ -4,8 +4,10 @@ import lombok.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Length;
 import org.itmo.isLab1.common.framework.CrudEntity;
+import org.hibernate.annotations.Cache;
 
 @Entity
 @Getter
@@ -14,6 +16,7 @@ import org.itmo.isLab1.common.framework.CrudEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "locations")
 public class Location extends CrudEntity {
     @Id
