@@ -58,6 +58,7 @@ dependencies {
 	// Database
 	runtimeOnly 'org.postgresql:postgresql'
 	implementation 'org.hibernate:hibernate-core:6.6.0.Final'
+	implementation 'com.alibaba:druid-spring-boot-starter:1.2.20'
 
 	// Utils
 	implementation 'org.apache.commons:commons-lang3:3.17.0'
