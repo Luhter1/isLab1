@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<infinispan xmlns="urn:infinispan:config:14.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:infinispan:config:14.0
+                                http://www.infinispan.org/schemas/infinispan-config-14.0.xsd">
+
+    <cache-container name="hibernate-cache" statistics="true">
+
+        <!-- шаблон для сущностей -->
+        <local-cache-configuration name="entity-cache-template">
+            <memory max-count="1000"/>
+            <expiration lifespan="600000"/>
+        </local-cache-configuration>
+
+        <!-- шаблон для коллекций -->
+        <local-cache-configuration name="collection-cache-template">
+            <memory max-count="500"/>
+            <expiration lifespan="600000"/>
+        </local-cache-configuration>
+
+        <!-- шаблон для query -->
+        <local-cache-configuration name="query-cache-template">
+            <memory max-count="200"/>
+            <expiration lifespan="300000"/>
+        </local-cache-configuration>
+
+        <!-- шаблон для timestamps -->
+        <local-cache-configuration name="timestamps-cache-template">
+            <!-- Пусто, без eviction и лимитов -->
+        </local-cache-configuration>
+
+        <!-- Region для сущностей -->
+        <local-cache name="entity" configuration="entity-cache-template"/>
+        <local-cache name="collection" configuration="collection-cache-template"/>
+        <local-cache name="query" configuration="query-cache-template"/>
+        <local-cache name="timestamps" configuration="timestamps-cache-template"/>
+    </cache-container>
+</infinispan>

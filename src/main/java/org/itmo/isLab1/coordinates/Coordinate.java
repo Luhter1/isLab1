@@ -16,6 +16,7 @@ import org.itmo.isLab1.common.framework.CrudEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "coordinates")
 public class Coordinate extends CrudEntity {

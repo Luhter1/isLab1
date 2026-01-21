@@ -69,7 +69,6 @@ dependencies {
 
 	implementation("org.infinispan:infinispan-hibernate-cache-v66:16.0.2")
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
-	implementation 'org.infinispan:infinispan-spring-boot-starter-embedded:14.0.35.Final'
 
 
 	// Flyway

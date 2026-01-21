@@ -16,6 +16,7 @@ import org.hibernate.annotations.Cache;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "locations")
 public class Location extends CrudEntity {
