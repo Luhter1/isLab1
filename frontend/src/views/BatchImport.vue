@@ -36,25 +36,6 @@ const MESSAGES = {
   IMPORT_FAILED: 'Import failed',
   INVALID_JSON: 'Invalid JSON file',
 }
-const exampleJson = `[
-  {
-    "type": "UPDATE",
-    "resourceType": "coordinates",
-    "resourceId": 1,
-    "body": { "x": 100, "y": 200.5 }
-  },
-  {
-    "type": "CREATE",
-    "resourceType": "dragons",
-    "body": {
-      "name": "Dragon Name",
-      "type": "FIRE",
-      "character": "EVIL",
-      "coordinates": { "x": 150, "y": 250.5 },
-      "head": { "size": 10.5 }
-    }
-  }
-]`
 
 
 const uploadRef = ref<UploadInstance>()
@@ -324,16 +305,6 @@ const handleImportError = (error: ImportError): void => {
             </el-table>
           </div>
         </Transition>
-
-        <el-divider />
-
-        <!-- Инструкции -->
-        <el-card shadow="never" class="instructions-card">
-          <template #header>
-            <h3>JSON Format Example</h3>
-          </template>
-          <pre><code>{{ exampleJson }}</code></pre>
-        </el-card>
       </div>
     </el-card>
   </div>

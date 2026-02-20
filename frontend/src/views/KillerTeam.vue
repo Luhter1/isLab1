@@ -380,11 +380,11 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .dragon-slayers-page {
   min-height: 100vh;
-  /* background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); */
   padding: 20px;
+  background-color: var(--dm-bg-primary);
 }
 
 .container {
@@ -394,14 +394,44 @@ onMounted(() => {
 
 h1 {
   text-align: center;
-  color: grey;
   font-size: 2.5rem;
   margin-bottom: 30px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  &::before {
+    content: '⚔️';
+    font-size: 3rem;
+    filter: drop-shadow(0 0 15px var(--dm-accent-cyan-glow));
+    animation: swing 2s ease-in-out infinite;
+  }
+
+  &::after {
+    content: '🐉';
+    font-size: 3rem;
+    filter: drop-shadow(0 0 15px var(--dm-accent-danger-glow));
+    animation: float 3s ease-in-out infinite;
+  }
+}
+
+@keyframes swing {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(10deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 .main-card {
   margin-bottom: 20px;
+
+  :deep(.el-card__body) {
+    background-color: var(--dm-bg-secondary);
+  }
 }
 
 .team-info-section,
@@ -411,69 +441,226 @@ h1 {
 
 .team-info-section h2,
 .members-section h2 {
-  color: #2a5298;
+  color: var(--dm-accent-cyan);
   margin-bottom: 20px;
-  border-bottom: 2px solid #e4e7ed;
+  border-bottom: 2px solid var(--dm-border-default);
   padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-shadow: 0 0 10px var(--dm-accent-cyan-glow);
 }
 
 .member-form {
-  padding: 20px;
-  background: #f5f7fa;
-  border-radius: 8px;
+  padding: 25px;
+  background: var(--dm-bg-tertiary);
+  border-radius: 12px;
+  border: 1px solid var(--dm-border-default);
+
+  :deep(.el-form-item__label) {
+    color: var(--dm-text-secondary);
+    font-weight: 600;
+  }
+
+  :deep(.el-input__wrapper) {
+    background-color: var(--dm-bg-elevated);
+    border-color: var(--dm-border-default);
+    color: var(--dm-text-primary);
+
+    &:hover {
+      border-color: var(--dm-accent-cyan);
+    }
+
+    &.is-focus {
+      border-color: var(--dm-accent-cyan);
+      box-shadow: var(--dm-glow-cyan);
+    }
+  }
+
+  :deep(.el-select .el-select__wrapper) {
+    background-color: var(--dm-bg-elevated);
+    border-color: var(--dm-border-default);
+    color: var(--dm-text-primary);
+
+    &:hover {
+      border-color: var(--dm-accent-cyan);
+    }
+
+    &.is-focus {
+      border-color: var(--dm-accent-cyan);
+      box-shadow: var(--dm-glow-cyan);
+    }
+  }
+
+  :deep(.el-input-number) {
+    width: 200px;
+
+    .el-input__wrapper {
+      background-color: var(--dm-bg-elevated);
+      border-color: var(--dm-border-default);
+    }
+  }
+
+  :deep(.el-date-picker) {
+    .el-input__wrapper {
+      background-color: var(--dm-bg-elevated);
+      border-color: var(--dm-border-default);
+    }
+  }
 }
 
 .actions-section {
   text-align: center;
   padding-top: 20px;
-  border-top: 1px solid #e4e7ed;
+  border-top: 1px solid var(--dm-border-default);
 }
 
 .actions-section .el-button {
   margin: 0 10px;
   min-width: 150px;
+  transition: all var(--dm-transition-normal);
+
+  &.el-button--primary {
+    background: var(--dm-gradient-cyan);
+    border-color: var(--dm-accent-cyan);
+    color: white;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--dm-glow-cyan);
+    }
+  }
 }
 
 .preview-card {
-  background: white;
-}
+  background: var(--dm-bg-secondary);
+  border-color: var(--dm-border-default);
 
-.preview-card h2 {
-  color: #67c23a;
-  margin-bottom: 20px;
+  :deep(.el-card__body) {
+    background-color: var(--dm-bg-secondary);
+  }
+
+  h2 {
+    color: var(--dm-accent-success);
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px var(--dm-accent-success-glow);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &::before {
+      content: '✅';
+    }
+  }
 }
 
 .team-preview h3 {
-  color: #2a5298;
+  color: var(--dm-accent-cyan);
   margin-bottom: 15px;
   font-size: 1.5rem;
+  text-shadow: 0 0 10px var(--dm-accent-cyan-glow);
 }
 
-/* Кастомизация Element UI компонентов */
-:deep(.el-tabs__item.is-active) {
-  color: #2a5298;
+/* Custom table for preview */
+:deep(.el-table) {
+  background-color: var(--dm-bg-tertiary);
+  color: var(--dm-text-primary);
+
+  th.el-table__cell {
+    background-color: var(--dm-bg-elevated);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-default);
+  }
+
+  td.el-table__cell {
+    border-color: var(--dm-border-default);
+  }
+
+  .el-table__body tr {
+    background-color: var(--dm-bg-tertiary);
+
+    & > td {
+      background-color: var(--dm-bg-tertiary);
+    }
+
+    &:hover > td {
+      background-color: var(--dm-bg-elevated);
+    }
+  }
 }
 
-:deep(.el-tabs__active-bar) {
-  background-color: #2a5298;
+/* Tabs customization */
+:deep(.el-tabs) {
+  .el-tabs__item {
+    color: var(--dm-text-secondary);
+    transition: all var(--dm-transition-normal);
+
+    &:hover {
+      color: var(--dm-accent-cyan);
+    }
+
+    &.is-active {
+      color: var(--dm-accent-cyan);
+      text-shadow: 0 0 10px var(--dm-accent-cyan-glow);
+    }
+  }
+
+  .el-tabs__active-bar {
+    background: var(--dm-gradient-cyan);
+    box-shadow: var(--dm-glow-cyan);
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: var(--dm-border-default);
+  }
 }
 
-:deep(.el-form-item__label) {
-  font-weight: 600;
+/* Tag customization */
+:deep(.el-tag) {
+  &.el-tag--danger {
+    background-color: var(--dm-accent-danger-dim);
+    color: var(--dm-accent-danger);
+    border-color: var(--dm-accent-danger);
+  }
+
+  &.el-tag--info {
+    background-color: var(--dm-bg-elevated);
+    color: var(--dm-text-secondary);
+    border-color: var(--dm-border-default);
+  }
 }
 
+/* Input number styling */
 :deep(.el-input-number) {
-  width: 200px;
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    background-color: var(--dm-bg-tertiary);
+    color: var(--dm-text-secondary);
+    border-color: var(--dm-border-default);
+
+    &:hover {
+      color: var(--dm-accent-cyan);
+    }
+  }
 }
 
-/* Адаптивность */
+/* Responsive */
 @media (max-width: 768px) {
   h1 {
     font-size: 1.8rem;
+
+    &::before,
+    &::after {
+      font-size: 2rem;
+    }
   }
-  
+
   .el-col {
     margin-bottom: 10px;
+  }
+
+  .member-form {
+    padding: 15px;
   }
 }
 </style>
