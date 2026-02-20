@@ -3,6 +3,7 @@ package org.itmo.isLab1.batchimporthistory;
 import lombok.AllArgsConstructor;
 import org.itmo.isLab1.batchimporthistory.dto.BatchImportHistoryDto;
 import org.itmo.isLab1.batchimporthistory.enums.ImportStatus;
+import org.itmo.isLab1.common.minIO.MinioService;
 import org.itmo.isLab1.events.EventService;
 import org.itmo.isLab1.events.EventType;
 import org.itmo.isLab1.users.User;
@@ -19,6 +20,7 @@ public class BatchImportHistoryService {
     private final BatchImportHistoryRepository repository;
     private final UserService userService;
     private EventService<BatchImportHistory> eventService;
+    private final MinioService minioService;
 
     public Page<BatchImportHistoryDto> getHistory(Pageable pageable, boolean isAdmin) {
         Page<BatchImportHistory> history;
@@ -32,7 +34,14 @@ public class BatchImportHistoryService {
             history = repository.findByCreatedByOrderByCreatedAtDesc(currentUser, pageable);
         }
         
-        return history.map(this::mapToDto);
+        // return history.map(this::mapToDto);
+        return history.map(media -> {
+                    String presignedUrl = "нет";
+                    if(media.getSuccessfulOperations()!=0 && media.getFilePath() != null && media.getFilePath() != ""){
+                        presignedUrl = minioService.generatePresignedUrl(media.getFilePath());
+                    }
+                    return this.mapToDto(media, presignedUrl);
+                });
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -88,14 +97,14 @@ public class BatchImportHistoryService {
         repository.save(history);
     }
 
-    private BatchImportHistoryDto mapToDto(BatchImportHistory history) {
+    private BatchImportHistoryDto mapToDto(BatchImportHistory history, String presignedUrl) {
         return new BatchImportHistoryDto(
                 history.getId(),
                 history.getCreatedBy(),
                 history.getCreatedAt(),
                 history.getStatus(),
                 history.getSuccessfulOperations(),
-                history.getFilePath()
+                presignedUrl
         );
     }
 }

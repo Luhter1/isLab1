@@ -41,11 +41,12 @@ public class MinioService {
      */
     public String uploadFile(MultipartFile file) {
         String objectName = String.format(
-                "name-%d/%s",
+                "name-%s/%s",
                 SecurityContextHolder.getContext().getAuthentication().getName(),
                 generateFileName(file.getOriginalFilename())
         );
 
+        System.out.println("\n\n\nHELLO");
         try (InputStream inputStream = file.getInputStream()) {
 
             ObjectWriteResponse response = minioClient.putObject(

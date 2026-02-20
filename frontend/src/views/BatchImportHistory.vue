@@ -81,6 +81,15 @@ onMounted(async () => {
           </template>
         </el-table-column>
 
+        <el-table-column prop="filePath" label="Successful Operations" width="180">
+          <template #default="{ row }">
+            <div v-if="row.filePath && row.filePath !== 'нет'" class="user-cell">
+              <a :href="row.filePath" target="_blank" rel="noopener noreferrer">файл</a>
+            </div>
+            <span v-else class="empty-value">-</span>
+          </template>
+        </el-table-column>
+
         <el-table-column prop="createdBy.username" label="User" width="150">
           <template #default="{ row }">
             <div v-if="row.createdBy" class="user-cell">
